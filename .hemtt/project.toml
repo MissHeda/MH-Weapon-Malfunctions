@@ -8,7 +8,6 @@ include = [
     "mod.cpp",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE.txt",
 ]
 
 [version]
