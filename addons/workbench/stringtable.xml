@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project name="MHWM">
+    <Package name="Workbench">
+        <Key ID="STR_mhwm_workbench_Action_Open">
+            <English>Clear malfunction</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Btn_Clear">
+            <English>CLEAR CHAMBER</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Btn_Drop">
+            <English>DROP MAG</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Btn_Insert">
+            <English>INSERT MAG</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Btn_Lock">
+            <English>LOCK BOLT</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Btn_Rack">
+            <English>RACK</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Btn_Release">
+            <English>RELEASE BOLT</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Btn_Sweep">
+            <English>SWEEP PORT</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Btn_Tap">
+            <English>TAP</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Close">
+            <English>CLOSE</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hands_Buttons">
+            <English>Use the buttons below - one hand movement each.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hands_Help">
+            <English>&lt;t color='#e0283f'&gt;Charging handle&lt;/t&gt; - drag it back all the way and let go to rack. Right click while it is all the way back to lock it open. Click the locked bolt to let it go.&lt;br/&gt;&lt;t color='#e0283f'&gt;Magazine&lt;/t&gt; - click to tap it home, on the beat of the ring. Drag it down to drop it, drag it up straight to insert it.&lt;br/&gt;&lt;t color='#e0283f'&gt;Ejection port&lt;/t&gt; - swipe a stuck case out.&lt;br/&gt;&lt;t color='#e0283f'&gt;Chamber&lt;/t&gt; - bolt locked: hold and wiggle to clear it.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Head_Hands">
+            <English>YOUR HANDS</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Head_Last">
+            <English>LAST</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Head_See">
+            <English>WHAT YOU SEE</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_Buttons">
+            <English>Drag: turn   ·   Wheel: zoom   ·   Buttons on the right: hand movements</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_Chamber">
+            <English>Hold and wiggle left and right</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_ChamberHeld">
+            <English>Wiggle - left, right, left...</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_Default">
+            <English>Left drag on a part: work it   ·   Drag elsewhere or right drag: turn   ·   Wheel: zoom</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_Handle">
+            <English>Drag back all the way and let go: rack</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_HandleHeld">
+            <English>Let go to rack   ·   Right click at the end: lock it open   ·   Only part way: short stroke</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_HandleLocked">
+            <English>Click: let the bolt go</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_Loading">
+            <English>Loading the weapon...</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_Mag">
+            <English>Click: tap   ·   Drag down: drop</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_MagHeld">
+            <English>Down all the way: drop   ·   Let go here: tap</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_MagInsertHeld">
+            <English>Up into the well, straight - off the line it will not click</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_MagOut">
+            <English>Drag it up into the well</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_Port">
+            <English>Swipe the case out of the port</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_PortHeld">
+            <English>Out and away</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Key_Open">
+            <English>Clear malfunction (3D view)</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Key_Open_Desc">
+            <English>Look at the jammed weapon and clear it by hand.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Last_None">
+            <English>Nothing done yet.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Chamber">
+            <English>Chamber</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Handle">
+            <English>Charging handle</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_HandleLocked">
+            <English>Bolt (locked)</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Mag">
+            <English>Magazine</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_MagLoose">
+            <English>Magazine (loose)</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_MagOut">
+            <English>Magazine (out)</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Port">
+            <English>Stuck case</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_WB_Cleared">
+            <English>Weapon cleared</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_WB_TapMissed">
+            <English>The tap missed - hit it when the ring closes on the magazine.</English>
+        </Key>
+    </Package>
+</Project>

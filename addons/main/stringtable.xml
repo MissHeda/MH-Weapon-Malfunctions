@@ -1,60 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project name="MHWM">
     <Package name="Main">
-        <Key ID="STR_mhwm_main_Enabled">
-            <English>Enable MH Weapon Malfunctions</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Enabled_Desc">
-            <English>Weapons can malfunction and have to be\ncleared by hand.\n\nOff: no new malfunctions, and every\nweapon that is jammed now works again.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Cat_Jamming">
-            <English>Jamming</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Cat_Types">
-            <English>Malfunction types</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Cat_Clearing">
-            <English>Clearing</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Cat_Player">
-            <English>Player</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Rate">
-            <English>Malfunctions per 1000 rounds</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Rate_Desc">
-            <English>How many malfunctions a weapon has on\naverage in 1000 rounds, before the\nfactors below.\n\n2 = a well kept service rifle.\n0 = never.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_SubsonicFactor">
-            <English>Subsonic ammunition factor</English>
-        </Key>
-        <Key ID="STR_mhwm_main_SubsonicFactor_Desc">
-            <English>Subsonic rounds have less gas to\ncycle the action.\n\nThe rate is multiplied by this for\nmagazines slower than sound.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_BigMagSize">
-            <English>Large magazine from</English>
-        </Key>
-        <Key ID="STR_mhwm_main_BigMagSize_Desc">
-            <English>Magazines with at least this many\nrounds count as large: drums and\ncasket magazines.\n\nBelts never count.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_BigMagFactor">
-            <English>Large magazine factor</English>
-        </Key>
-        <Key ID="STR_mhwm_main_BigMagFactor_Desc">
-            <English>The rate is multiplied by this for\nlarge magazines.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_HeatFactor">
-            <English>Heat factor (ACE)</English>
-        </Key>
-        <Key ID="STR_mhwm_main_HeatFactor_Desc">
-            <English>With ACE Overheating loaded, a hot\nbarrel makes malfunctions likelier.\n\nAt 500 degrees the rate is multiplied\nby 1 + this.\n\n0 = heat does not matter.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Handguns">
-            <English>Handguns malfunction</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Handguns_Desc">
-            <English>Off: only primary weapons malfunction.</English>
-        </Key>
         <Key ID="STR_mhwm_main_AI">
             <English>AI weapons malfunction</English>
         </Key>
@@ -64,80 +10,38 @@
         <Key ID="STR_mhwm_main_AceMode">
             <English>With ACE Overheating</English>
         </Key>
+        <Key ID="STR_mhwm_main_AceMode_Ace">
+            <English>ACE Overheating decides</English>
+        </Key>
         <Key ID="STR_mhwm_main_AceMode_Desc">
             <English>Who decides when a weapon jams while\nACE Overheating is loaded.\n\nThis mod: the rate set here. Jams\nfrom ACE are cleared at once.\n\nACE Overheating: heat and ACE's own\nchance. Each ACE jam becomes a\nmalfunction of this mod.</English>
         </Key>
         <Key ID="STR_mhwm_main_AceMode_Own">
             <English>This mod decides</English>
         </Key>
-        <Key ID="STR_mhwm_main_AceMode_Ace">
-            <English>ACE Overheating decides</English>
+        <Key ID="STR_mhwm_main_BigMagFactor">
+            <English>Large magazine factor</English>
         </Key>
-        <Key ID="STR_mhwm_main_WeaponRates">
-            <English>Weapon reliability</English>
+        <Key ID="STR_mhwm_main_BigMagFactor_Desc">
+            <English>The rate is multiplied by this for\nlarge magazines.</English>
         </Key>
-        <Key ID="STR_mhwm_main_WeaponRates_Desc">
-            <English>Factors for single weapons, as\nclass:factor, separated by commas.\n\nExample:\narifle_AKM_F:0.3, LMG_03_F:2\n\n0 = this weapon never jams.\nA weapon's config can set\nmhwm_reliability as well.</English>
+        <Key ID="STR_mhwm_main_BigMagSize">
+            <English>Large magazine from</English>
         </Key>
-        <Key ID="STR_mhwm_main_SubsonicMags">
-            <English>More subsonic magazines</English>
+        <Key ID="STR_mhwm_main_BigMagSize_Desc">
+            <English>Magazines with at least this many\nrounds count as large: drums and\ncasket magazines.\n\nBelts never count.</English>
         </Key>
-        <Key ID="STR_mhwm_main_SubsonicMags_Desc">
-            <English>Magazines slower than sound are found\nby themselves.\n\nAdd more magazine classes here,\nseparated by commas.</English>
+        <Key ID="STR_mhwm_main_Cat_Clearing">
+            <English>Clearing</English>
         </Key>
-        <Key ID="STR_mhwm_main_Weight_Feed">
-            <English>Failure to feed</English>
+        <Key ID="STR_mhwm_main_Cat_Jamming">
+            <English>Jamming</English>
         </Key>
-        <Key ID="STR_mhwm_main_Weight_Feed_Desc">
-            <English>No round went into the chamber,\noften a magazine not seated.\n\nClear: tap the magazine, rack.\n\n0 = never.</English>
+        <Key ID="STR_mhwm_main_Cat_Player">
+            <English>Player</English>
         </Key>
-        <Key ID="STR_mhwm_main_Weight_Dud">
-            <English>Dud</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Weight_Dud_Desc">
-            <English>The round in the chamber did not fire.\n\nClear: rack.\n\n0 = never.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Weight_Stovepipe">
-            <English>Stovepipe</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Weight_Stovepipe_Desc">
-            <English>The spent case is caught in the\nejection port.\n\nClear: rack, or sweep the case out.\n\n0 = never.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Weight_Double">
-            <English>Double feed</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Weight_Double_Desc">
-            <English>Two rounds are wedged in the chamber.\n\nClear: lock the bolt, drop the\nmagazine, clear the chamber, insert\nthe magazine, rack.\n\n0 = never.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Weight_Extract">
-            <English>Failure to extract</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Weight_Extract_Desc">
-            <English>The spent case is stuck in the chamber.\n\nClear: lock the bolt, drop the\nmagazine, pry the case out, insert\nthe magazine, rack.\n\n0 = never.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_QuickTime">
-            <English>Quick key time</English>
-        </Key>
-        <Key ID="STR_mhwm_main_QuickTime_Desc">
-            <English>How long the blind quick keys take,\nas a factor.\n\n1 = about as long as by hand.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Fumble">
-            <English>Quick key fumble chance</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Fumble_Desc">
-            <English>The chance that a blind quick key\nhandles it badly: a short stroke,\na magazine not seated.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_QuickKeys">
-            <English>Allow quick keys</English>
-        </Key>
-        <Key ID="STR_mhwm_main_QuickKeys_Desc">
-            <English>Clear a weapon blind with keys, without\nthe 3D view.\n\nOff: only the 3D view clears weapons.</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Minigames">
-            <English>Minigames in the 3D view</English>
-        </Key>
-        <Key ID="STR_mhwm_main_Minigames_Desc">
-            <English>Off: the 3D view shows buttons for\nevery hand movement instead.</English>
+        <Key ID="STR_mhwm_main_Cat_Types">
+            <English>Malfunction types</English>
         </Key>
         <Key ID="STR_mhwm_main_Diagnosis">
             <English>Show what is wrong</English>
@@ -145,17 +49,113 @@
         <Key ID="STR_mhwm_main_Diagnosis_Desc">
             <English>The 3D view says what the player sees\non the weapon.\n\nOff: players have to find out\nthemselves.</English>
         </Key>
+        <Key ID="STR_mhwm_main_Enabled">
+            <English>Enable MH Weapon Malfunctions</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Enabled_Desc">
+            <English>Weapons can malfunction and have to be\ncleared by hand.\n\nOff: no new malfunctions, and every\nweapon that is jammed now works again.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Fumble">
+            <English>Quick key fumble chance</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Fumble_Desc">
+            <English>The chance that a blind quick key\nhandles it badly: a short stroke,\na magazine not seated.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Handguns">
+            <English>Handguns malfunction</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Handguns_Desc">
+            <English>Off: only primary weapons malfunction.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_HeatFactor">
+            <English>Heat factor (ACE)</English>
+        </Key>
+        <Key ID="STR_mhwm_main_HeatFactor_Desc">
+            <English>With ACE Overheating loaded, a hot\nbarrel makes malfunctions likelier.\n\nAt 500 degrees the rate is multiplied\nby 1 + this.\n\n0 = heat does not matter.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Minigames">
+            <English>Minigames in the 3D view</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Minigames_Desc">
+            <English>Off: the 3D view shows buttons for\nevery hand movement instead.</English>
+        </Key>
         <Key ID="STR_mhwm_main_Notify">
             <English>Notify on malfunction</English>
         </Key>
         <Key ID="STR_mhwm_main_Notify_Desc">
             <English>A short note when the weapon stops.</English>
         </Key>
+        <Key ID="STR_mhwm_main_QuickKeys">
+            <English>Allow quick keys</English>
+        </Key>
+        <Key ID="STR_mhwm_main_QuickKeys_Desc">
+            <English>Clear a weapon blind with keys, without\nthe 3D view.\n\nOff: only the 3D view clears weapons.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_QuickTime">
+            <English>Quick key time</English>
+        </Key>
+        <Key ID="STR_mhwm_main_QuickTime_Desc">
+            <English>How long the blind quick keys take,\nas a factor.\n\n1 = about as long as by hand.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Rate">
+            <English>Malfunctions per 1000 rounds</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Rate_Desc">
+            <English>How many malfunctions a weapon has on\naverage in 1000 rounds, before the\nfactors below.\n\n2 = a well kept service rifle.\n0 = never.</English>
+        </Key>
         <Key ID="STR_mhwm_main_Sounds">
             <English>Sounds</English>
         </Key>
         <Key ID="STR_mhwm_main_Sounds_Desc">
             <English>The sounds of the bolt and magazine\nwhile clearing.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_SubsonicFactor">
+            <English>Subsonic ammunition factor</English>
+        </Key>
+        <Key ID="STR_mhwm_main_SubsonicFactor_Desc">
+            <English>Subsonic rounds have less gas to\ncycle the action.\n\nThe rate is multiplied by this for\nmagazines slower than sound.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_SubsonicMags">
+            <English>More subsonic magazines</English>
+        </Key>
+        <Key ID="STR_mhwm_main_SubsonicMags_Desc">
+            <English>Magazines slower than sound are found\nby themselves.\n\nAdd more magazine classes here,\nseparated by commas.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_WeaponRates">
+            <English>Weapon reliability</English>
+        </Key>
+        <Key ID="STR_mhwm_main_WeaponRates_Desc">
+            <English>Factors for single weapons, as\nclass:factor, separated by commas.\n\nExample:\narifle_AKM_F:0.3, LMG_03_F:2\n\n0 = this weapon never jams.\nA weapon's config can set\nmhwm_reliability as well.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Double">
+            <English>Double feed</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Double_Desc">
+            <English>Two rounds are wedged in the chamber.\n\nClear: lock the bolt, drop the\nmagazine, clear the chamber, insert\nthe magazine, rack.\n\n0 = never.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Dud">
+            <English>Dud</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Dud_Desc">
+            <English>The round in the chamber did not fire.\n\nClear: rack.\n\n0 = never.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Extract">
+            <English>Failure to extract</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Extract_Desc">
+            <English>The spent case is stuck in the chamber.\n\nClear: lock the bolt, drop the\nmagazine, pry the case out, insert\nthe magazine, rack.\n\n0 = never.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Feed">
+            <English>Failure to feed</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Feed_Desc">
+            <English>No round went into the chamber,\noften a magazine not seated.\n\nClear: tap the magazine, rack.\n\n0 = never.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Stovepipe">
+            <English>Stovepipe</English>
+        </Key>
+        <Key ID="STR_mhwm_main_Weight_Stovepipe_Desc">
+            <English>The spent case is caught in the\nejection port.\n\nClear: rack, or sweep the case out.\n\n0 = never.</English>
         </Key>
     </Package>
 </Project>

@@ -1,0 +1,12 @@
+PREP(act);
+PREP(camera);
+PREP(close);
+PREP(hotspots);
+PREP(onFrame);
+PREP(onMouse);
+PREP(open);
+PREP(points);
+PREP(project);
+PREP(refresh);
+PREP(scene);
+PREP(sync);
