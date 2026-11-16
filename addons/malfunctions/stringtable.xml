@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project name="MHWM">
+    <Package name="Malfunctions">
+        <Key ID="STR_mhwm_malfunctions_Jammed">
+            <English>Weapon malfunction</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Jammed_Hint">
+            <English>Tap-Rack, or open the weapon to see what is wrong.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Cleared">
+            <English>Weapon cleared</English>
+        </Key>
+
+        <Key ID="STR_mhwm_malfunctions_Key_TapRack">
+            <English>Tap-Rack (immediate action)</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_TapRack_Desc">
+            <English>Tap the magazine, then rack the bolt - blind, the first thing to try.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Tap">
+            <English>Tap the magazine</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Tap_Desc">
+            <English>Push the magazine home - blind.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Rack">
+            <English>Rack the bolt</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Rack_Desc">
+            <English>Pull the bolt all the way back and let it go - blind.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Lock">
+            <English>Lock / release the bolt</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Lock_Desc">
+            <English>Lock the bolt open, or let it go when it is locked - blind.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Mag">
+            <English>Drop / insert the magazine</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Mag_Desc">
+            <English>Drop the magazine, or put it back in when it is out - blind.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Clear">
+            <English>Clear the chamber</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Clear_Desc">
+            <English>Clear the chamber with the bolt locked, or sweep a stovepipe out of the port - blind.</English>
+        </Key>
+
+        <Key ID="STR_mhwm_malfunctions_Act_TapSeated">
+            <English>The magazine clicks home.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_TapNoMag">
+            <English>There is no magazine to tap.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_TapNothing">
+            <English>The magazine was seated already.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_Rack">
+            <English>The bolt cycles.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_RackStovepipe">
+            <English>The case flies out, the bolt runs home.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_RackDud">
+            <English>The dud flies out.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_RackEmpty">
+            <English>The bolt closes on an empty chamber - no rounds left.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_RackNoFeed">
+            <English>The bolt closes on an empty chamber - nothing fed.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_RackStuck">
+            <English>The bolt will not move - something is wedged in.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_RackSlips">
+            <English>The extractor slips - the case stays in the chamber.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_DoubleShaken">
+            <English>The loose rounds fall out of the open action.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_Short">
+            <English>Short stroke - the bolt did not go all the way back.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_Lock">
+            <English>The bolt is locked open.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_LockCase">
+            <English>The bolt is locked open - the case is still in the chamber.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_AlreadyLocked">
+            <English>The bolt is locked open already.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_Release">
+            <English>The bolt slams home.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_ReleaseStuck">
+            <English>The bolt runs forward and stops short.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_NotLocked">
+            <English>The bolt is not locked.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_Drop">
+            <English>The magazine is out.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_NoMag">
+            <English>The magazine is out already.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_Insert">
+            <English>The magazine clicks in.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_InsertLoose">
+            <English>The magazine is in, but did not click.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_MagThere">
+            <English>A magazine is in already.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_ClearNeedsLock">
+            <English>Lock the bolt open first.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_ClearDouble">
+            <English>The wedged rounds come out.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_ClearMagHolds">
+            <English>The magazine holds the rounds - drop it first.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_ClearCase">
+            <English>The stuck case comes out.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_ClearRound">
+            <English>The round comes out of the chamber.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_ClearNothing">
+            <English>The chamber is empty.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_Sweep">
+            <English>The case is swept out of the port.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_SweepNothing">
+            <English>Nothing in the port.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_Fumbled">
+            <English>Fumbled - try again.</English>
+        </Key>
+
+        <Key ID="STR_mhwm_malfunctions_See_Works">
+            <English>The weapon is ready.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_BoltClosed">
+            <English>The bolt is closed.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_BoltShort">
+            <English>The bolt is not fully forward.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_BoltLocked">
+            <English>The bolt is locked open.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_Stovepipe">
+            <English>A spent case is caught in the ejection port.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_ChamberRound">
+            <English>A round is in the chamber.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_ChamberEmpty">
+            <English>The chamber is empty.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_Dud">
+            <English>The hammer fell, the round did not fire.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_Double">
+            <English>Two rounds are wedged in the chamber.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_Case">
+            <English>A spent case is stuck in the chamber.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_MagIn">
+            <English>The magazine is seated.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_MagLoose">
+            <English>The magazine is not seated.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_See_MagOut">
+            <English>The magazine is out.</English>
+        </Key>
+    </Package>
+</Project>

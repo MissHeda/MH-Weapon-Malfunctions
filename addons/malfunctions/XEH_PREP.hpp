@@ -1,0 +1,14 @@
+PREP(act);
+PREP(aiClear);
+PREP(chance);
+PREP(clear);
+PREP(describe);
+PREP(isBlocked);
+PREP(jam);
+PREP(onAceJammed);
+PREP(onDryFire);
+PREP(onFired);
+PREP(onReloaded);
+PREP(playSound);
+PREP(quickAction);
+PREP(state);

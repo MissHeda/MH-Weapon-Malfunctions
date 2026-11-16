@@ -1,0 +1,33 @@
+name = "MH Weapon Malfunctions"
+prefix = "mhwm"
+author = "Miss Heda"
+mainprefix = "z"
+
+[files]
+include = [
+    "mod.cpp",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE.txt",
+]
+
+[version]
+git_hash = 0
+
+[hemtt.config]
+preset = "Hemtt"
+
+# Default test set: with ACE, to see the ACE Overheating hand-over.
+[hemtt.launch.default]
+workshop = [
+    "450814997",  # CBA_A3
+    "463939057",  # ACE3
+    "3499977893", # Advanced Developer Tools
+]
+
+# Without ACE: hemtt launch vanilla
+[hemtt.launch.vanilla]
+workshop = [
+    "450814997",  # CBA_A3
+    "3499977893", # Advanced Developer Tools
+]
