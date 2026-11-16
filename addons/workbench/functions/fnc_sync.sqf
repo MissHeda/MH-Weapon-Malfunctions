@@ -62,7 +62,7 @@ if (_phase != (_scene getOrDefault ["boltPhase", -1])) then {
 
 // ----- The magazine -----
 private _offset = switch (true) do {
-    case (_kind == "magDrop"): {([0, 0.012] select (_mag == "loose")) + _progress * TRAVEL_MAG};
+    case (_kind == "magPress"): {([0, 0.012] select (_mag == "loose")) + _progress * TRAVEL_MAG};
     case (_kind == "magInsert"): {TRAVEL_MAG * (1 - _progress)};
     case (_mag == "out"): {TRAVEL_MAG};
     case (_mag == "loose"): {0.012};

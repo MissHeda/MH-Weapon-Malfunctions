@@ -118,6 +118,9 @@
         <Key ID="STR_mhwm_workbench_Spot_Port">
             <English>Stuck case</English>
         </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Slide">
+            <English>Slide</English>
+        </Key>
         <Key ID="STR_mhwm_workbench_WB_Cleared">
             <English>Weapon cleared</English>
         </Key>

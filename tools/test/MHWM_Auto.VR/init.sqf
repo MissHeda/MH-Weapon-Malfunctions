@@ -7,7 +7,8 @@ if (!hasInterface) exitWith {};
 MHWMT_log = {diag_log text format ["MHWMTEST %1", _this]};
 MHWMT_shot = {diag_log text format ["MHWMTEST SHOT %1", _this]; sleep 3};
 MHWMT_state = {
-    private _s = [player, currentWeapon player] call mhwm_malfunctions_fnc_state;
+    private _weapon = [currentWeapon player, primaryWeapon player] select (currentWeapon player isEqualTo "");
+    private _s = [player, _weapon] call mhwm_malfunctions_fnc_state;
     if (count _s == 0) exitWith {"CLEARED"};
     format ["bolt=%1 chamber=%2 port=%3 mag=%4", _s get "bolt", _s get "chamber", _s get "port", _s get "mag"]
 };
@@ -19,7 +20,7 @@ MHWMT_spot = {
 };
 // Press on a part, move along its line by a fraction (plus a sideways offset), then let go - or right click at the end.
 MHWMT_drag = {
-    params ["_id", "_fraction", ["_rightClick", false], ["_offset", [0, 0]]];
+    params ["_id", "_fraction", ["_rightClick", false], ["_offset", [0, 0]], ["_shot", ""]];
 
     private _p = _id call MHWMT_spot;
     if (_p isEqualTo []) exitWith {format ["  no spot %1 (spots %2)", _id, mhwm_workbench_wb getOrDefault ["spotScreen", []]] call MHWMT_log};
@@ -40,7 +41,11 @@ MHWMT_drag = {
     };
 
     sleep 0.2;
-    format ["  %1 held: progress %2 dev %3", _id, (mhwm_workbench_wb get "drag") getOrDefault ["progress", -1], (mhwm_workbench_wb get "drag") getOrDefault ["maxDev", -1]] call MHWMT_log;
+    private _weaponObject = (mhwm_workbench_wb get "scene") getOrDefault ["weapon", objNull];
+    private _anims = ((mhwm_workbench_wb get "scene") getOrDefault ["points", createHashMap]) getOrDefault ["boltAnims", []];
+    format ["  %1 held: progress %2 dev %3 | anim phases %4", _id, (mhwm_workbench_wb get "drag") getOrDefault ["progress", -1], (mhwm_workbench_wb get "drag") getOrDefault ["maxDev", -1],
+        _anims apply {[_x, _weaponObject animationPhase _x]}] call MHWMT_log;
+    if (_shot isNotEqualTo "") then {_shot call MHWMT_shot};
 
     if (_rightClick) then {
         ["down", [displayNull, 1]] call mhwm_workbench_fnc_onMouse;
@@ -133,7 +138,7 @@ MHWMT_close = {
     player forceWeaponFire [_w, "Single"];
     sleep 0.5;
     mhwm_main_rate = 0;
-    format ["1 fired: %1 | ammo %2 -> %3 | blocked %4", call MHWMT_state, _ammo, player ammo _w, [player] call mhwm_malfunctions_fnc_isBlocked] call MHWMT_log;
+    format ["1 fired: %1 (current weapon '%5') | ammo %2 -> %3 | blocked %4", call MHWMT_state, _ammo, player ammo _w, [player] call mhwm_malfunctions_fnc_isBlocked, currentWeapon player] call MHWMT_log;
     _ammo = player ammo _w;
     player forceWeaponFire [_w, "Single"];
     sleep 0.5;
@@ -165,8 +170,9 @@ MHWMT_close = {
     // ----- 4. Workbench: double feed, the full drill -----
     ["double"] call MHWMT_open;
     "wb_double_open" call MHWMT_shot;
-    ["handle", 1, true] call MHWMT_drag;
+    ["handle", 1, true, [0, 0], "hold_handle_full"] call MHWMT_drag;
     "wb_double_locked" call MHWMT_shot;
+    ["mag", 0.5, false, [0, 0], "hold_mag_half"] call MHWMT_drag;
     ["mag", 1] call MHWMT_drag;
     "wb_double_magout" call MHWMT_shot;
     call MHWMT_wiggle;
@@ -212,6 +218,7 @@ MHWMT_close = {
     sleep 2;
     ["stovepipe"] call MHWMT_open;
     "wb_pistol_stovepipe" call MHWMT_shot;
+    ["port", 0.5, false, [0, 0], "hold_port_half"] call MHWMT_drag;
     ["port", 1] call MHWMT_drag;
     call MHWMT_close;
 
@@ -227,6 +234,32 @@ MHWMT_close = {
     "wb_rifle_turned" call MHWMT_shot;
     ["handle", 1] call MHWMT_drag;
     call MHWMT_close;
+
+    // ----- 10b. Close-up on the bolt: does it move? -----
+    ["dud"] call MHWMT_open;
+    private _sc = mhwm_workbench_wb get "scene";
+    private _pts = _sc get "points";
+    _sc set ["target", (_sc get "weapon") modelToWorldVisualWorld (_pts get "handle")];
+    _sc set ["dist", (_sc get "near")];
+    call mhwm_workbench_fnc_camera;
+    sleep 0.5;
+    "closeup_bolt_home" call MHWMT_shot;
+    ["handle", 0.8, false, [0, 0], "closeup_bolt_back"] call MHWMT_drag;
+    call MHWMT_close;
+    player selectWeapon handgunWeapon player;
+    sleep 2;
+    ["dud"] call MHWMT_open;
+    _sc = mhwm_workbench_wb get "scene";
+    _pts = _sc get "points";
+    _sc set ["target", (_sc get "weapon") modelToWorldVisualWorld (_pts get "handle")];
+    _sc set ["dist", (_sc get "near") * 1.5];
+    call mhwm_workbench_fnc_camera;
+    sleep 0.5;
+    "closeup_slide_home" call MHWMT_shot;
+    ["handle", 0.8, false, [0, 0], "closeup_slide_back"] call MHWMT_drag;
+    call MHWMT_close;
+    player selectWeapon _w;
+    sleep 2;
 
     // ----- 10. Buttons instead of minigames -----
     mhwm_main_minigames = false;

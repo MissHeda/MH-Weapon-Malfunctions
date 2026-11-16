@@ -135,7 +135,13 @@ if (_handleName isNotEqualTo "") then {
 };
 
 if (_handle isEqualTo []) then {
-    _handle = _port vectorAdd (_fwd vectorMultiply -0.06) vectorAdd (_up vectorMultiply 0.015);
+    // A rifle: at the ejection port, where the bolt shows when it moves (the MX's handle sits there; 6 cm behind it was on
+    // bare receiver). A handgun: the slide's rear serrations, clear of the port's own mark.
+    _handle = if (getNumber (_config >> "type") == 2) then {
+        _port vectorAdd (_fwd vectorMultiply -0.05) vectorAdd (_up vectorMultiply 0.01)
+    } else {
+        _port vectorAdd (_up vectorMultiply 0.01)
+    };
 };
 
 // The weapon's length gives the bolt's travel: a pistol's slide 3-4 cm, a rifle's bolt 8-10 cm.

@@ -35,7 +35,11 @@ private _spots = [];
 _spots pushBack [
     "handle",
     (_points get "handle") call _fnc_world,
-    [LLSTRING(Spot_Handle), LLSTRING(Spot_HandleLocked)] select (_bolt == "locked"),
+    switch (true) do {
+        case (_bolt == "locked"): {LLSTRING(Spot_HandleLocked)};
+        case (getNumber (configFile >> "CfgWeapons" >> (GVAR(wb) get "weapon") >> "type") == 2): {LLSTRING(Spot_Slide)};
+        default {LLSTRING(Spot_Handle)};
+    },
     _bolt != "closed" || {_chamber in ["empty", "dud"]}
 ];
 

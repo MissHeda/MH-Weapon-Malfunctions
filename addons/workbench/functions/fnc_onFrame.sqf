@@ -97,6 +97,7 @@ private _spots = call FUNC(hotspots);
 private _marks = _ctrls get "marks";
 private _spotScreen = [];
 private _hovered = "";
+private _placed = [];
 
 (GVAR(wb) get "viewRect") params ["_vx", "_vy", "_vw", "_vh"];
 
@@ -131,11 +132,38 @@ private _hovered = "";
         _ring ctrlShow true;
         _ring ctrlCommit 0;
 
-        _label ctrlSetPosition [(_screen select 0) + _w * 0.7, (_screen select 1) - 0.016 * safeZoneH, 0.16 * safeZoneW, 0.032 * safeZoneH];
+        // Labels of parts close together kept apart (the first test had "Bolt (locked)" across "Chamber"): right of the
+        // ring, else left of it (right-aligned), else above or below it - never further, pushing them down only put
+        // "Chamber" two labels below its ring. Each label takes about the first 60 % of its box.
+        private _lw = 0.16 * safeZoneW;
+        private _lh = 0.032 * safeZoneH;
+        private _used = _lw * 0.6;
+        private _sx = _screen select 0;
+        private _cy = (_screen select 1) - _lh / 2;
+        private _candidates = [
+            [_sx + _w * 0.7, _cy, "left", _sx + _w * 0.7],
+            [_sx - _w * 0.7 - _lw, _cy, "right", _sx - _w * 0.7 - _used],
+            [_sx + _w * 0.7, _cy - _lh, "left", _sx + _w * 0.7],
+            [_sx + _w * 0.7, _cy + _lh, "left", _sx + _w * 0.7]
+        ];
+        private _pick = _candidates findIf {
+            _x params ["", "_ty", "", "_tx"];
+            _placed findIf {
+                _x params ["_ox", "_oy"];
+                _tx < _ox + _used && {_ox < _tx + _used} && {abs (_ty - _oy) < _lh}
+            } < 0
+        };
+
+        (_candidates select (_pick max 0)) params ["_lx", "_ly", "_align", "_occupied"];
+
+        _placed pushBack [_occupied, _ly];
+
+        _label ctrlSetPosition [_lx, _ly, _lw, _lh];
         _label ctrlSetStructuredText parseText format [
-            "<t font='PuristaMedium' size='0.85' color='%1' shadow='2'>%2</t>",
+            "<t font='PuristaMedium' size='0.85' color='%1' shadow='2' align='%3'>%2</t>",
             [HEX_TEXT, HEX_RED] select (_attention || _over),
-            _text
+            _text,
+            _align
         ];
         _label ctrlShow true;
         _label ctrlCommit 0;
