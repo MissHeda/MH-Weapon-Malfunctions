@@ -25,7 +25,7 @@ private _lines = ([_state] call EFUNC(malfunctions,describe)) apply {
     format [
         "<t color='%1' size='1.1'>%2</t>  <t color='%3'>%4</t>",
         [HEX_DIM, HEX_RED] select _problem,
-        ["·", "■"] select _problem,
+        "•",
         HEX_TEXT,
         _text
     ]
@@ -45,6 +45,7 @@ private _text = switch (true) do {
 (_ctrls get "last") ctrlSetStructuredText parseText _text;
 
 // What the hands can do.
-(_ctrls get "hands") ctrlSetStructuredText parseText (
+(_ctrls get "hands") ctrlSetStructuredText parseText format [
+    "<t size='0.85' valign='top'>%1</t>",
     [LLSTRING(Hands_Help), LLSTRING(Hands_Buttons)] select (GVAR(wb) get "buttons")
-);
+];

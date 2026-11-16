@@ -16,7 +16,7 @@
 #define SCENE_ASPECT (getResolution select 4)
 // The camera's vertical half-view tangent: its FOV times the profile's own (fovTop), never a fixed 0.75.
 #define SCENE_TAN (SCENE_FOV * (((getResolution param [6, 0.75]) max 0.3) min 3))
-#define SCENE_LIGHT 50
+#define SCENE_LIGHT 28
 #define SCENE_LIGHT_REACH [0, 0, 0, 0, 30, 60]
 #define SCENE_SPHERE_COLOR "#(argb,8,8,3)color(0.045,0.03,0.033,1)"
 #define SCENE_PIP_DISTANCE 300
@@ -42,3 +42,6 @@
 #define TEX_CIRCLE "\A3\ui_f\data\map\markers\military\circle_CA.paa"
 #define TEX_DOT "\A3\ui_f\data\map\markers\military\dot_CA.paa"
 #define TRACK_DOTS 10
+
+// Where the mouse is - a test mission can stand in for it (mhwm_workbench_testMouse), the game never sets it.
+#define MOUSE_POS (missionNamespace getVariable [QGVAR(testMouse), getMousePosition])

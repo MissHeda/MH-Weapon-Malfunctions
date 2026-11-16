@@ -56,4 +56,5 @@ if (_cause isNotEqualTo "" && {(missionNamespace getVariable [format ["mhwm_main
 if !(_weapon in [primaryWeapon _unit, handgunWeapon _unit]) exitWith {};
 if (_weapon == handgunWeapon _unit && {!EGVAR(main,handguns)}) exitWith {};
 
-[_unit, _weapon, _cause] call FUNC(jam);
+// ACE stopped the burst itself (its rounds are at 0 for this frame).
+[_unit, _weapon, _cause, false] call FUNC(jam);

@@ -161,9 +161,13 @@ _ctrls set ["last", _last];
 _y = _y + 0.08 * safeZoneH + _pad;
 
 [LLSTRING(Head_Hands)] call _fnc_heading;
-private _hands = [QGVAR(structured), [_px + _pad, _y, _innerW, 0.2 * safeZoneH]] call _fnc_make;
+
+// The rest of the panel, less the buttons' rows when there are buttons (0.2 cut the help off in the first test).
+private _buttonsH = [0, 4 * (0.04 * safeZoneH + _pad / 2) + _pad] select (GVAR(wb) get "buttons");
+private _handsH = (_vy + _vh + _hintH - _y - _pad - _buttonsH) max (0.1 * safeZoneH);
+private _hands = [QGVAR(structured), [_px + _pad, _y, _innerW, _handsH]] call _fnc_make;
 _ctrls set ["hands", _hands];
-_y = _y + 0.2 * safeZoneH + _pad;
+_y = _y + _handsH + _pad;
 
 // The buttons: every hand movement, for the server without minigames or a player without Picture-in-Picture.
 if (GVAR(wb) get "buttons") then {

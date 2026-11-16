@@ -30,7 +30,7 @@ if (isNil QGVAR(wb) || {GVAR(wb) get "closing"}) exitWith {};
 
 private _scene = GVAR(wb) getOrDefault ["scene", createHashMap];
 private _drag = GVAR(wb) get "drag";
-private _mouse = getMousePosition;
+private _mouse = MOUSE_POS;
 
 if (_event == "wheel") exitWith {
     _args params ["", "_scroll"];

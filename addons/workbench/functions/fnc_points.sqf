@@ -74,6 +74,11 @@ _up = vectorNormalized (_right vectorCrossProduct _fwd);
 
 private _names = if (isNull _object) then {[]} else {(selectionNames _object) apply {toLowerANSI _x}};
 
+// The muzzle flash is part of the model: hidden (the first test showed it burning in front of the barrel).
+{
+    _object hideSelection [_x, true];
+} forEach (_names select {!("proxy:" in _x) && {"zasleh" in _x || {"flash" in _x}}});
+
 // The magazine: its proxy, else a selection of its own.
 private _magProxy = _names param [_names findIf {"proxy:" in _x && {"magazine" in _x}}, ""];
 private _mag = [];
@@ -189,7 +194,8 @@ if (!isNull _object) then {
     _scene set ["target", _object modelToWorldVisualWorld _centre];
 };
 
-private _dist = _size * 1.35;
+// Far enough that the whole weapon fits (1.35 cut the MX's stock and barrel off in the first test).
+private _dist = _size * 2.3;
 
 _scene set ["dist", _dist];
 // From the weapon's right side, where the ejection port mostly is (compass bearing of "right").

@@ -26,7 +26,7 @@
  * Public: Yes
  */
 
-params [["_unit", objNull, [objNull]], ["_weapon", "", [""]], ["_cause", "", [""]]];
+params [["_unit", objNull, [objNull]], ["_weapon", "", [""]], ["_cause", "", [""]], ["_stopBurst", true, [true]]];
 
 if (isNull _unit || {_weapon isEqualTo ""} || {!local _unit}) exitWith {false};
 if (count ([_unit, _weapon] call FUNC(state)) > 0) exitWith {false};
@@ -80,18 +80,21 @@ if (!_isPlayer) exitWith {
     true
 };
 
-// Stop the burst: no rounds for a frame, then the magazine as it was.
-private _ammo = _unit ammo _weapon;
+// Stop the burst: no rounds for a frame, then the magazine as it was. ACE's jam did that already - and its rounds are
+// at 0 for this frame, so taking them now would empty the magazine (seen in the ACE test).
+if (_stopBurst) then {
+    private _ammo = _unit ammo _weapon;
 
-_unit setAmmo [_weapon, 0];
+    _unit setAmmo [_weapon, 0];
 
-[{
-    params ["_unit", "_weapon", "_ammo"];
+    [{
+        params ["_unit", "_weapon", "_ammo"];
 
-    if (alive _unit && {_weapon in [primaryWeapon _unit, handgunWeapon _unit]}) then {
-        _unit setAmmo [_weapon, _ammo];
-    };
-}, [_unit, _weapon, _ammo]] call CBA_fnc_execNextFrame;
+        if (alive _unit && {_weapon in [primaryWeapon _unit, handgunWeapon _unit]}) then {
+            _unit setAmmo [_weapon, _ammo];
+        };
+    }, [_unit, _weapon, _ammo]] call CBA_fnc_execNextFrame;
+};
 
 // The trigger does nothing while the weapon in the hands is jammed (fnc_isBlocked) - one action per unit, as ACE adds it.
 if ((_unit getVariable [QGVAR(blockUnit), objNull]) != _unit) then {

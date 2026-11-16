@@ -28,7 +28,7 @@ private _scene = GVAR(wb) getOrDefault ["scene", createHashMap];
 private _ctrls = GVAR(wb) get "ctrls";
 private _drag = GVAR(wb) get "drag";
 private _kind = _drag getOrDefault ["kind", ""];
-private _mouse = getMousePosition;
+private _mouse = MOUSE_POS;
 
 if ("weapon" in _scene && {!("points" in _scene)}) then {
     call FUNC(points);

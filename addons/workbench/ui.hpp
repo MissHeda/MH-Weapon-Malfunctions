@@ -31,7 +31,7 @@ class GVAR(structured): RscStructuredText {
         font = "RobotoCondensed";
         color = HEX_TEXT;
         align = "left";
-        valign = "middle";
+        valign = "top";
         shadow = 0;
         size = 1;
     };

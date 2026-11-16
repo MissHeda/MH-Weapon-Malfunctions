@@ -61,6 +61,7 @@
 // A sound of the mod near the unit.
 // playSound3D wants an addon's path without the leading backslash.
 #define SOUND_PATH(name) QUOTE(z\mhwm\addons\malfunctions\sounds\name.ogg)
-#define SOUND_BOLT "A3\Sounds_F_Arsenal\weapons\LongRangeRifles\M320\M320_bolt_01.wss"
-#define SOUND_BOLT_2 "A3\Sounds_F_Arsenal\weapons\LongRangeRifles\M320\M320_bolt_02.wss"
-#define SOUND_DRY "A3\Sounds_F_Arsenal\weapons\Rifles\Mk20\dry_Mk20.wss"
+// sounds_f_arsenal.pbo has the prefix a3\sounds_f\arsenal.
+#define SOUND_BOLT "A3\Sounds_F\arsenal\weapons\LongRangeRifles\M320\M320_bolt_01.wss"
+#define SOUND_BOLT_2 "A3\Sounds_F\arsenal\weapons\LongRangeRifles\M320\M320_bolt_02.wss"
+#define SOUND_DRY "A3\Sounds_F\arsenal\weapons\Rifles\Mk20\dry_Mk20.wss"
