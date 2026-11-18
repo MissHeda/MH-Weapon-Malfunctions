@@ -116,13 +116,13 @@
             <English>Subsonic ammunition factor</English>
         </Key>
         <Key ID="STR_mhwm_main_SubsonicFactor_Desc">
-            <English>Subsonic rounds have less gas to\ncycle the action.\n\nThe rate is multiplied by this for\nmagazines slower than sound.</English>
+            <English>Subsonic rounds have less gas to\ncycle the action.\n\nThe rate is multiplied by this for\nmagazines slower than sound - only in\nweapons made for faster rounds. A .45\nwith its own ammo is not affected.</English>
         </Key>
         <Key ID="STR_mhwm_main_SubsonicMags">
             <English>More subsonic magazines</English>
         </Key>
         <Key ID="STR_mhwm_main_SubsonicMags_Desc">
-            <English>Magazines slower than sound are found\nby themselves.\n\nAdd more magazine classes here,\nseparated by commas.</English>
+            <English>Magazines slower than sound are found\nby themselves.\n\nAdd more magazine classes here,\nseparated by commas.\n\nWildcards work: *_SD_*, rhs_mag_9x39*</English>
         </Key>
         <Key ID="STR_mhwm_main_TestKey">
             <English>Allow the test key for everyone</English>
@@ -141,7 +141,7 @@ On: every player may use it.</English>
             <English>Weapon reliability</English>
         </Key>
         <Key ID="STR_mhwm_main_WeaponRates_Desc">
-            <English>Factors for single weapons, as\nclass:factor, separated by commas.\n\nExample:\narifle_AKM_F:0.3, LMG_03_F:2\n\n0 = this weapon never jams.\nA weapon's config can set\nmhwm_reliability as well.</English>
+            <English>Factors for single weapons, as\nclass:factor, separated by commas.\n\nExample:\narifle_AKM_F:0.3, LMG_03_F:2\n\nWildcards work: rhs_weap_ak*:0.5\nAn exact class wins over a wildcard.\n\n0 = this weapon never jams.\nA weapon's config can set\nmhwm_reliability as well.</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Double">
             <English>Double feed</English>

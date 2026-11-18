@@ -161,7 +161,7 @@ MHWMT_entries = [
     ["Weapon: SPAR-16 (5.56, brass)", {["arifle_SPAR_01_blk_F", "30Rnd_556x45_Stanag"] call MHWMT_weapon}, "Weapons"],
     ["Weapon: AKM (7.62)", {["arifle_AKM_F", "30Rnd_762x39_Mag_F"] call MHWMT_weapon}, "Weapons"],
     ["Weapon: Mk200 (LMG, large magazine)", {["LMG_Mk200_F", "200Rnd_65x39_cased_Box"] call MHWMT_weapon}, "Weapons"],
-    ["Weapon: Vermin (.45, subsonic)", {["SMG_01_F", "30Rnd_45ACP_Mag_SMG_01"] call MHWMT_weapon}, "Weapons"],
+    ["Weapon: Vermin (.45, built for subsonic)", {["SMG_01_F", "30Rnd_45ACP_Mag_SMG_01"] call MHWMT_weapon}, "Weapons"],
     ["Pistol: P07", {["hgun_P07_F", "16Rnd_9x21_Mag", true] call MHWMT_weapon}, "Weapons"],
     ["Pistol: ACP-C2", {["hgun_ACPC2_F", "9Rnd_45ACP_Mag", true] call MHWMT_weapon}, "Weapons"],
 
