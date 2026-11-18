@@ -326,6 +326,16 @@ def build():
         d.rectangle([x, y, x + pw, y + ph], outline=INK, width=6)
         caption(d, (x, y + ph - 2, x + pw, y + ph + capH), i + 1, text, cap, num)
 
+    # The weapon cleared, for the side panel's last card: the rack's render with a green tick and "READY!".
+    pic, _ = ink(RENDERS / "r_rack.png", (pw, ph))
+    pd = ImageDraw.Draw(pic)
+    green = (40, 130, 60)
+    pd.line([(pw - 170, ph - 120), (pw - 120, ph - 60), (pw - 40, ph - 190)], fill=INK, width=30, joint="curve")
+    pd.line([(pw - 170, ph - 120), (pw - 120, ph - 60), (pw - 40, ph - 190)], fill=green, width=18, joint="curve")
+    burst(pd, (110, 62), "READY!", 46, sfx, rot=0.3)
+    ImageDraw.Draw(pic).rectangle([0, 0, pw - 1, ph - 1], outline=INK, width=6)
+    STEPS["r_cleared"] = pic
+
     # The strip at the bottom.
     d.line([640, H - 54, W - 40, H - 54], fill=INK, width=3)
     d.text((640, H - 46), "MH WEAPON MALFUNCTIONS  //  FIELD NOTES  //  TEST A JAM ANY TIME: CTRL + SHIFT + J", font=small, fill=INK)

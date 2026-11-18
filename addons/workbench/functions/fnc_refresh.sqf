@@ -72,7 +72,8 @@ private _tone = switch (true) do {
 {_x ctrlSetBackgroundColor (_theme get _tone)} forEach (_ctrls get "nowFrame");
 
 if (_cleared && {_view < 0}) then {
-    _pic ctrlShow false;
+    _pic ctrlShow true;
+    _pic ctrlSetText QPATHTOF(ui\step_cleared_co.paa);
     (_ctrls get "now") ctrlSetStructuredText parseText format [
         "<t font='%1' size='1.5' color='%2'>%3</t><br/><t size='0.9' color='%4'>%5</t>",
         _theme get "fontBold", "paperGood" call _hex, toUpperANSI LLSTRING(WB_Cleared), "paperInk" call _hex, LLSTRING(Step_Cleared_How)
