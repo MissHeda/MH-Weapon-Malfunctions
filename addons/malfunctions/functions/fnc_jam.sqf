@@ -50,10 +50,14 @@ switch (_cause) do {
         _state set ["bolt", "closed"];
         _state set ["chamber", "empty"];
         _state set ["mag", ["in", "loose"] select (random 1 < 0.6)];
+        // Seated and still nothing fed: the magazine's spring is weak - only a fresh magazine feeds.
+        _state set ["weakMag", (_state get "mag") == "in"];
     };
     case CAUSE_DUD: {
         _state set ["bolt", "closed"];
         _state set ["chamber", "dud"];
+        // It might yet be a hang fire: wait a moment, muzzle safe, before the bolt comes back.
+        _state set ["hang", true];
     };
     case CAUSE_STOVEPIPE: {
         _state set ["bolt", "short"];
@@ -63,6 +67,8 @@ switch (_cause) do {
     case CAUSE_DOUBLE: {
         _state set ["bolt", "short"];
         _state set ["chamber", "double"];
+        // Two rounds, pulled out one at a time.
+        _state set ["stuck", 2];
     };
     case CAUSE_EXTRACT: {
         _state set ["bolt", "short"];

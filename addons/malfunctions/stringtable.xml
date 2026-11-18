@@ -34,6 +34,9 @@
         <Key ID="STR_mhwm_malfunctions_Act_Insert">
             <English>The magazine clicks in.</English>
         </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_InsertFresh">
+            <English>A fresh magazine goes in and seats - this one feeds.</English>
+        </Key>
         <Key ID="STR_mhwm_malfunctions_Act_InsertLoose">
             <English>The magazine is in, but did not click.</English>
         </Key>
@@ -52,6 +55,9 @@
         <Key ID="STR_mhwm_malfunctions_Act_NotLocked">
             <English>The bolt is not locked.</English>
         </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_PullOne">
+            <English>One round pulled out - one more is wedged in.</English>
+        </Key>
         <Key ID="STR_mhwm_malfunctions_Act_Rack">
             <English>The bolt cycles.</English>
         </Key>
@@ -60,6 +66,9 @@
         </Key>
         <Key ID="STR_mhwm_malfunctions_Act_RackEmpty">
             <English>The bolt closes on an empty chamber - no rounds left.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_RackHang">
+            <English>Wait first - a hang fire can still go off. Keep the muzzle safe a moment.</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_Act_RackNoFeed">
             <English>The bolt closes on an empty chamber - nothing fed.</English>
@@ -72,6 +81,9 @@
         </Key>
         <Key ID="STR_mhwm_malfunctions_Act_RackStuck">
             <English>The bolt will not move - something is wedged in.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_RackWeakMag">
+            <English>The bolt closes on an empty chamber - the magazine does not feed. Swap it.</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_Act_Release">
             <English>The bolt slams home.</English>
@@ -96,6 +108,12 @@
         </Key>
         <Key ID="STR_mhwm_malfunctions_Act_TapSeated">
             <English>The magazine clicks home.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_Wait">
+            <English>Nothing happened - a dud, no hang fire. Rack it out.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Act_WaitNothing">
+            <English>Nothing to wait for.</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_Cleared">
             <English>Weapon cleared</English>

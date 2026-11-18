@@ -50,7 +50,7 @@ private _slide = getNumber (configFile >> "CfgWeapons" >> (GVAR(wb) get "weapon"
 private _fnc_title = {localize format ["STR_mhwm_workbench_Step_%1", [_this, "rackSlide"] select (_this == "rack" && _slide)]};
 private _pictures = createHashMapFromArray [
     ["tap", "tap"], ["rack", "rack"], ["lock", "locked"], ["release", "locked"], ["drop", "magout"], ["insert", "magout"],
-    ["clear", "chamber"], ["sweep", "sweep"], ["look", "chamber"]
+    ["clear", "chamber"], ["sweep", "sweep"], ["look", "chamber"], ["wait", "wait"], ["pull", "pull"]
 ];
 
 // The count over the page.

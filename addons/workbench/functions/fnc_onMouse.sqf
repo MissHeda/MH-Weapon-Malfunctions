@@ -10,7 +10,9 @@
  *   magInsert     up into the well all the way: in - seated if the hand kept to the well's line (INSERT_TOLERANCE),
  *                 else in but not seated
  *   port          swiped most of the way: the stovepipe is swept out
- *   chamber       wiggled until done (fnc_onFrame); let go before, nothing
+ *   chamber       a stuck case: wiggled until done (fnc_onFrame); a double feed with the magazine out: each round
+ *                 dragged out of the port on its own (pull); let go before, nothing
+ *   muzzle        a dud: held still, muzzle safe, until the bar is full (WAIT_HOLD, fnc_onFrame)
  * Anywhere else, or with the right button, the drag turns the camera; the wheel zooms.
  *
  * Arguments:
@@ -158,12 +160,26 @@ if (_event == "down") exitWith {
             [_at, _at vectorAdd (_out vectorMultiply (TRAVEL_SWEEP * 1.5))] call _fnc_line;
         };
 
+        case "muzzle": {
+            _new set ["kind", "muzzle"];
+            _new set ["since", diag_tickTime];
+        };
+
         case "chamber": {
             private _chamber = _state get "chamber";
 
             // Nothing to wiggle free: the hand finds out at once.
             if (_chamber == "empty" || {_chamber == "double" && {(_state get "mag") != "out"}}) exitWith {
                 [ACT_CLEAR] call FUNC(act);
+            };
+
+            // A double feed: the rounds come out one by one, each dragged up and out of the port.
+            if (_chamber == "double") exitWith {
+                private _at = ((_points get "port") vectorAdd ((_points get "fwd") vectorMultiply 0.02)) call _fnc_world;
+                private _out = vectorNormalized ((_object vectorModelToWorldVisual (_points get "right")) vectorAdd (_object vectorModelToWorldVisual (_points get "up")));
+
+                _new set ["kind", "pull"];
+                [_at, _at vectorAdd (_out vectorMultiply (TRAVEL_SWEEP * 1.5))] call _fnc_line;
             };
 
             _new set ["kind", "chamber"];
@@ -216,5 +232,9 @@ switch (_kind) do {
 
     case "port": {
         if (_progress >= 0.8) then {[ACT_SWEEP] call FUNC(act)};
+    };
+
+    case "pull": {
+        if (_progress >= 0.8) then {[ACT_CLEAR] call FUNC(act)};
     };
 };

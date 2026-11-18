@@ -16,6 +16,12 @@
  *   clear       fingers or a tool in the chamber, bolt locked: rounds of a double feed come out once the magazine is out, a
  *               stuck case is pried out
  *   sweep       a stovepipe case swept out of the port: the bolt runs forward and feeds
+ *   wait        a dud held muzzle safe for a moment: it is no hang fire, the bolt may come back now
+ *
+ * Each malfunction asks for its own hands (Mia: some minigames were nearly the same):
+ *   weakMag     a seated magazine that does not feed: racking brings nothing up, only a fresh one (drop, insert) feeds
+ *   hang        a dud: racking is refused until the wait
+ *   stuck       a double feed's rounds: each clear pulls one out
  *
  * Arguments:
  * 0: Unit <OBJECT>
@@ -58,7 +64,7 @@ private _fnc_forward = {
         _bolt = "short";
     };
 
-    if (_chamber == "empty" && {_mag == "in"} && {_ammo > 0}) then {
+    if (_chamber == "empty" && {_mag == "in"} && {_ammo > 0} && {!(_state getOrDefault ["weakMag", false])}) then {
         _chamber = "round";
     };
 
@@ -77,6 +83,11 @@ switch (_action) do {
 
     case ACT_RACK: {
         _sound = "bolt";
+
+        if (_state getOrDefault ["hang", false]) exitWith {
+            _sound = "";
+            _result = "Act_RackHang";
+        };
 
         if (_bolt == "locked") exitWith {
             call _fnc_forward;
@@ -114,7 +125,11 @@ switch (_action) do {
         call _fnc_forward;
 
         if (_bolt == "closed" && {_chamber == "empty"}) then {
-            _result = ["Act_RackEmpty", "Act_RackNoFeed"] select (_mag != "in" && {_ammo > 0});
+            _result = switch (true) do {
+                case (_mag == "in" && {_state getOrDefault ["weakMag", false]}): {"Act_RackWeakMag"};
+                case (_mag != "in" && {_ammo > 0}): {"Act_RackNoFeed"};
+                default {"Act_RackEmpty"};
+            };
         };
     };
 
@@ -172,6 +187,12 @@ switch (_action) do {
         _mag = ["in", "loose"] select (_action == ACT_INSERT_LOOSE);
         _sound = "seat";
         _result = ["Act_Insert", "Act_InsertLoose"] select (_action == ACT_INSERT_LOOSE);
+
+        // A fresh magazine: its spring feeds.
+        if (_state getOrDefault ["weakMag", false]) then {
+            _state set ["weakMag", false];
+            if (_action == ACT_INSERT) then {_result = "Act_InsertFresh"};
+        };
     };
 
     case ACT_CLEAR: {
@@ -183,8 +204,14 @@ switch (_action) do {
             case "double": {
                 if (_mag == "out") then {
                     call _fnc_loseRound;
-                    _chamber = "empty";
-                    _result = "Act_ClearDouble";
+                    private _left = (_state getOrDefault ["stuck", 1]) - 1;
+                    _state set ["stuck", _left];
+                    _result = "Act_PullOne";
+
+                    if (_left <= 0) then {
+                        _chamber = "empty";
+                        _result = "Act_ClearDouble";
+                    };
                 } else {
                     _sound = "";
                     _result = "Act_ClearMagHolds";
@@ -205,6 +232,13 @@ switch (_action) do {
                 _result = "Act_ClearNothing";
             };
         };
+    };
+
+    case ACT_WAIT: {
+        if !(_state getOrDefault ["hang", false]) exitWith {_result = "Act_WaitNothing"};
+
+        _state set ["hang", false];
+        _result = "Act_Wait";
     };
 
     case ACT_SWEEP: {

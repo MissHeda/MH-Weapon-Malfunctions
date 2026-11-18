@@ -28,6 +28,9 @@
         <Key ID="STR_mhwm_workbench_Btn_Tap">
             <English>TAP</English>
         </Key>
+        <Key ID="STR_mhwm_workbench_Btn_Wait">
+            <English>WAIT (HANG FIRE)</English>
+        </Key>
         <Key ID="STR_mhwm_workbench_Close">
             <English>Close</English>
         </Key>
@@ -73,11 +76,20 @@
         <Key ID="STR_mhwm_workbench_Hint_MagOut">
             <English>Drag it up into the well</English>
         </Key>
+        <Key ID="STR_mhwm_workbench_Hint_Muzzle">
+            <English>Hold: keep the muzzle safe a moment</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_MuzzleHeld">
+            <English>Keep holding - a hang fire can still go off</English>
+        </Key>
         <Key ID="STR_mhwm_workbench_Hint_Port">
             <English>Swipe the case out of the port</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_PortHeld">
             <English>Out and away</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Hint_PullHeld">
+            <English>Drag the round up and out of the port</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Key_Open">
             <English>Clear malfunction (3D view)</English>
@@ -130,6 +142,9 @@
         <Key ID="STR_mhwm_workbench_Spot_Do_lock">
             <English>Drag back + hold</English>
         </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_pull">
+            <English>Drag out</English>
+        </Key>
         <Key ID="STR_mhwm_workbench_Spot_Do_rack">
             <English>Drag back: rack</English>
         </Key>
@@ -141,6 +156,9 @@
         </Key>
         <Key ID="STR_mhwm_workbench_Spot_Do_tap">
             <English>Click: tap</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_wait">
+            <English>Hold: wait</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Spot_Handle">
             <English>Charging handle</English>
@@ -156,6 +174,9 @@
         </Key>
         <Key ID="STR_mhwm_workbench_Spot_MagOut">
             <English>Magazine (out)</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Muzzle">
+            <English>Muzzle</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Spot_Port">
             <English>Stuck case</English>
@@ -202,6 +223,12 @@
         <Key ID="STR_mhwm_workbench_Step_look_How">
             <English>With the bolt open you see what is stuck - the next steps show then.</English>
         </Key>
+        <Key ID="STR_mhwm_workbench_Step_pull">
+            <English>Pull out a round</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_pull_How">
+            <English>Grab the chamber and drag the round up and out of the port. Two are wedged in.</English>
+        </Key>
         <Key ID="STR_mhwm_workbench_Step_rack">
             <English>Rack the charging handle</English>
         </Key>
@@ -228,6 +255,12 @@
         </Key>
         <Key ID="STR_mhwm_workbench_Step_tap_How">
             <English>Click the magazine once.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_wait">
+            <English>Wait - muzzle safe</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_wait_How">
+            <English>A dud may still be a hang fire. Hold on the muzzle until the bar is full.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Tag_Done">
             <English>Done</English>

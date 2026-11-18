@@ -42,7 +42,9 @@ private _nextPart = switch (_next) do {
     case "lock";
     case "release": {"handle"};
     case "sweep": {"port"};
-    case "clear": {"chamber"};
+    case "clear";
+    case "pull": {"chamber"};
+    case "wait": {"muzzle"};
     default {""};
 };
 
@@ -85,6 +87,11 @@ if (_bolt == "locked") then {
         LLSTRING(Spot_Chamber),
         _nextPart == "chamber"
     ];
+};
+
+// A dud: the muzzle, held safe for a moment before the bolt comes back.
+if (_state getOrDefault ["hang", false]) then {
+    _spots pushBack ["muzzle", (_points get "muzzle") call _fnc_world, LLSTRING(Spot_Muzzle), _nextPart == "muzzle"];
 };
 
 // The marked part's label says what to do with it.

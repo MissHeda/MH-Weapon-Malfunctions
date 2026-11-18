@@ -307,7 +307,7 @@ if (_showPanel) then {
     _y = _y + _gap * 1.5;
 
     private _buttonH = 0.042 * safeZoneH;
-    private _buttonsH = [0, 4 * (_buttonH + _gap) + _pad] select (GVAR(wb) get "buttons");
+    private _buttonsH = [0, 5 * (_buttonH + _gap) + _pad] select (GVAR(wb) get "buttons");
     private _bottom = _bodyY + _bodyH - _pad - _buttonsH;
 
     if (GVAR(wb) get "notes") then {
@@ -400,7 +400,8 @@ if (_showPanel) then {
             [ACT_DROP, LLSTRING(Btn_Drop)],
             [ACT_INSERT, LLSTRING(Btn_Insert)],
             [ACT_CLEAR, LLSTRING(Btn_Clear)],
-            [ACT_SWEEP, LLSTRING(Btn_Sweep)]
+            [ACT_SWEEP, LLSTRING(Btn_Sweep)],
+            [ACT_WAIT, LLSTRING(Btn_Wait)]
         ];
     };
 };

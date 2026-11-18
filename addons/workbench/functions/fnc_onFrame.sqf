@@ -103,6 +103,16 @@ switch (true) do {
         };
     };
 
+    case (_kind == "muzzle"): {
+        private _hold = (diag_tickTime - (_drag get "since")) / WAIT_HOLD;
+        _drag set ["progress", _hold min 1];
+
+        if (_hold >= 1) then {
+            GVAR(wb) set ["drag", createHashMap];
+            [ACT_WAIT] call FUNC(act);
+        };
+    };
+
     case (_kind == "chamber"): {
         private _mx = _mouse select 0;
         private _anchor = _drag get "anchor";
@@ -190,6 +200,7 @@ private _placed = [];
         private _active = switch (_id) do {
             case "handle": {_kind in ["handle", "handleLocked"]};
             case "mag": {_kind in ["magPress", "magInsert"]};
+            case "chamber": {_kind in ["chamber", "pull"]};
             default {_kind == _id};
         };
 
@@ -329,9 +340,11 @@ private _barBack = _ctrls get "barBack";
 private _chamberScreen = _spotScreen param [_spotScreen findIf {(_x select 0) == "chamber"}, []];
 
 private _handleScreen = _spotScreen param [_spotScreen findIf {(_x select 0) == "handle"}, []];
+private _muzzleScreen = _spotScreen param [_spotScreen findIf {(_x select 0) == "muzzle"}, []];
 private _barAt = switch (true) do {
     case (_kind == "chamber" && {_chamberScreen isNotEqualTo []}): {[_chamberScreen select 1, _drag getOrDefault ["progress", 0]]};
     case (_kind == "handle" && {(_drag getOrDefault ["hold", 0]) > 0} && {_handleScreen isNotEqualTo []}): {[_handleScreen select 1, _drag get "hold"]};
+    case (_kind == "muzzle" && {_muzzleScreen isNotEqualTo []}): {[_muzzleScreen select 1, _drag getOrDefault ["progress", 0]]};
     default {[]};
 };
 
@@ -359,6 +372,9 @@ private _hintKey = switch (true) do {
     case (_kind == "magInsert"): {"Hint_MagInsertHeld"};
     case (_kind == "port"): {"Hint_PortHeld"};
     case (_kind == "chamber"): {"Hint_ChamberHeld"};
+    case (_kind == "pull"): {"Hint_PullHeld"};
+    case (_kind == "muzzle"): {"Hint_MuzzleHeld"};
+    case (_hovered == "muzzle"): {"Hint_Muzzle"};
     case (_hovered == "handle"): {["Hint_Handle", "Hint_HandleLocked"] select ((_state getOrDefault ["bolt", ""]) == "locked")};
     case (_hovered == "mag"): {["Hint_Mag", "Hint_MagOut"] select ((_state getOrDefault ["mag", ""]) == "out")};
     case (_hovered == "port"): {"Hint_Port"};

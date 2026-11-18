@@ -23,7 +23,11 @@ private _before = [] call FUNC(steps);
 
 // The step that was up is done when the hands did it and the list moved on (the side panel ticks it off).
 private _after = [] call FUNC(steps);
-private _did = [_action, ACT_INSERT] select (_action == ACT_INSERT_LOOSE);
+private _did = switch (_action) do {
+    case ACT_INSERT_LOOSE: {ACT_INSERT};
+    case ACT_CLEAR: {["clear", "pull"] select ((_before param [0, ""]) == "pull")};
+    default {_action};
+};
 
 if ((_before param [0, ""]) == _did && {_works || {_after isNotEqualTo _before}}) then {
     (GVAR(wb) get "done") pushBack (_before select 0);

@@ -62,12 +62,12 @@ MHWMT_drills = [];
     MHWMT_drills pushBack [toString [65 + _forEachIndex], _cause, _mag, false, "Rifle - " + _name];
     MHWMT_drills pushBack [toString [71 + _forEachIndex], _cause, _mag, true, "Pistol - " + _name];
 } forEach [
-    ["feed", "loose", "failure to feed, magazine loose (tap)"],
-    ["feed", "in", "failure to feed, magazine seated (tap, rack)"],
-    ["dud", "", "dud (tap, rack)"],
+    ["feed", "loose", "failure to feed, magazine loose (tap, rack)"],
+    ["feed", "in", "failure to feed, weak magazine (swap it, rack)"],
+    ["dud", "", "dud (wait at the muzzle, rack)"],
     ["stovepipe", "", "stovepipe (sweep the case)"],
-    ["double", "", "double feed (lock, drop, rack, insert)"],
-    ["extract", "", "failure to extract (lock, clear, insert)"]
+    ["double", "", "double feed (lock, drop, pull 2 rounds, insert, release)"],
+    ["extract", "", "stuck case (lock, drop, wiggle it free, insert, release)"]
 ];
 MHWMT_drills sort true;
 

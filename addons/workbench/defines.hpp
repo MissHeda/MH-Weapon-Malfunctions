@@ -37,6 +37,8 @@
 #define INSERT_TOLERANCE 0.45
 // Held all the way back this long, the bolt locks open (Mia: right click while dragging was too much).
 #define LOCK_HOLD 0.7
+// A dud held muzzle safe this long before the bolt may come back: no hang fire.
+#define WAIT_HOLD 2
 
 // Hotspots on the picture: how near the mouse has to be, their size.
 #define HOTSPOT_RADIUS (0.024 * safeZoneH)

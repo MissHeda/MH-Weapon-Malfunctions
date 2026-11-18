@@ -7,7 +7,8 @@
  * The weapon is played through on a copy of its state, one step at a time, until it would work again. Without "Show what
  * is wrong" the chamber is hidden while the bolt is closed: then the list stops after locking the bolt open with "look".
  *
- * Steps: tap, rack, lock, release, drop, insert, clear, sweep, look
+ * Steps: wait, tap, rack, lock, release, drop, insert, clear (wiggle a stuck case), pull (one round of a double feed),
+ * sweep, look
  *
  * Arguments:
  * 0: State <HASHMAP> (default: the open bench's weapon)
@@ -38,15 +39,19 @@ for "_i" from 1 to 10 do {
     private _chamber = _s get "chamber";
     private _mag = _s get "mag";
 
+    private _weak = _s getOrDefault ["weakMag", false];
+
     private _step = switch (true) do {
+        case (_s getOrDefault ["hang", false]): {"wait"};
         case ((_s get "port") == "stovepipe"): {"sweep"};
         case (_chamber in ["double", "case"]): {
             switch (true) do {
                 case (_bolt != "locked"): {"lock"};
                 case (_mag != "out"): {"drop"};
-                default {"clear"};
+                default {["clear", "pull"] select (_chamber == "double")};
             }
         };
+        case (_weak && {_mag == "in"}): {"drop"};
         case (_bolt == "locked"): {["release", "insert"] select (_mag == "out")};
         case (_mag == "out"): {"insert"};
         case (_mag == "loose"): {"tap"};
@@ -62,6 +67,12 @@ for "_i" from 1 to 10 do {
     if (_hidden && {_step == "lock"}) exitWith {_steps pushBack "look"};
 
     switch (_step) do {
+        case "wait": {_s set ["hang", false]};
+        case "pull": {
+            private _left = (_s getOrDefault ["stuck", 1]) - 1;
+            _s set ["stuck", _left];
+            if (_left <= 0) then {_s set ["chamber", "empty"]};
+        };
         case "sweep": {_s set ["port", "clear"]; _s set ["bolt", "closed"]; _s set ["chamber", "round"]};
         case "lock": {
             _s set ["bolt", "locked"];
@@ -69,7 +80,7 @@ for "_i" from 1 to 10 do {
         };
         case "drop": {_s set ["mag", "out"]};
         case "clear": {_s set ["chamber", "empty"]};
-        case "insert": {_s set ["mag", "in"]};
+        case "insert": {_s set ["mag", "in"]; _s set ["weakMag", false]};
         case "tap": {_s set ["mag", "in"]};
         case "release";
         case "rack": {_s set ["bolt", "closed"]; _s set ["chamber", "round"]};

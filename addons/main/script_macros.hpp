@@ -42,6 +42,7 @@
 #define ACT_INSERT_LOOSE "insertLoose"
 #define ACT_CLEAR "clear"
 #define ACT_SWEEP "sweep"
+#define ACT_WAIT "wait"
 
 // Raised locally whenever a unit's malfunction changed: [unit, weapon, state or nil when cleared].
 #define EVENT_CHANGED "mhwm_malfunctions_changed"

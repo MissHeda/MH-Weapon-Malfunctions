@@ -38,7 +38,10 @@ if (count _state == 0) exitWith {false};
 private _steps = switch (_action) do {
     case ACT_TAP: {[[ACT_TAP, 0.5, ""]]};
     case ACT_RACK: {[[ACT_RACK, 0.9, ACT_SHORT]]};
-    case "tapRack": {[[ACT_TAP, 0.5, ""], [ACT_RACK, 0.9, ACT_SHORT]]};
+    case "tapRack": {
+        // Blind, a dud is waited out too before the rack.
+        [[[ACT_TAP, 0.5, ""], [ACT_RACK, 0.9, ACT_SHORT]], [[ACT_TAP, 0.5, ""], [ACT_WAIT, 1.5, ""], [ACT_RACK, 0.9, ACT_SHORT]]] select (_state getOrDefault ["hang", false])
+    };
     case "lockToggle": {
         [[[ACT_LOCK, 1.2, ACT_SHORT]], [[ACT_RELEASE, 0.5, ""]]] select ((_state get "bolt") == "locked")
     };

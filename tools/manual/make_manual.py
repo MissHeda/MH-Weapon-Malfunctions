@@ -326,6 +326,32 @@ def build():
         d.rectangle([x, y, x + pw, y + ph], outline=INK, width=6)
         caption(d, (x, y + ph - 2, x + pw, y + ph + capH), i + 1, text, cap, num)
 
+    # Two more for the side panel only: a dud waited out at the muzzle, and a double feed's round pulled out.
+    pic, (kx, ky) = ink(RENDERS / "r_tap.png", (pw, ph))
+    pd = ImageDraw.Draw(pic)
+    cx, cy = pw - 95, 105
+    pd.ellipse([cx - 60, cy - 60, cx + 60, cy + 60], fill=(250, 244, 226), outline=INK, width=8)
+    pd.line([(cx, cy), (cx, cy - 42)], fill=INK, width=8)
+    pd.line([(cx, cy), (cx + 30, cy + 14)], fill=RED, width=8)
+    pd.rectangle([cx - 12, cy - 78, cx + 12, cy - 62], fill=INK)
+    mouse(pd, pw - 70, ph - 92, "left", 1.0)
+    burst(pd, (110, 62), "HANG ON!", 40, font("impact.ttf", 34), rot=0.2)
+    ImageDraw.Draw(pic).rectangle([0, 0, pw - 1, ph - 1], outline=INK, width=6)
+    STEPS["r_wait"] = pic
+
+    pic, (kx, ky) = ink(RENDERS / "r_chamber.png", (pw, ph))
+    pd = ImageDraw.Draw(pic)
+    ccx, ccy = sp["r_chamber"]["chamber"]
+    ccx, ccy = ccx * kx, ccy * ky
+    for j, (dx, dy) in enumerate([(-18, 0), (22, 10)]):
+        rx, ry = ccx + dx, ccy + dy - 30
+        pd.rounded_rectangle([rx - 9, ry - 34, rx + 9, ry + 14], radius=8, fill=(214, 168, 70), outline=INK, width=4)
+    arrow(pd, (ccx + 30, ccy - 75), (ccx + 120, ccy - 160))
+    mouse(pd, pw - 70, ph - 92, "left", 1.0)
+    burst(pd, (100, 62), "PLINK!", 46, sfx, rot=0.6)
+    ImageDraw.Draw(pic).rectangle([0, 0, pw - 1, ph - 1], outline=INK, width=6)
+    STEPS["r_pull"] = pic
+
     # The weapon cleared, for the side panel's last card: the rack's render with a green tick and "READY!".
     pic, _ = ink(RENDERS / "r_rack.png", (pw, ph))
     pd = ImageDraw.Draw(pic)
