@@ -4,10 +4,9 @@
  * The mouse on the workbench. A left press on a part (fnc_hotspots, placed on the screen by fnc_onFrame) takes hold of it;
  * the drag itself is followed every frame (fnc_onFrame), the release decides what the hand did:
  *   handle        back past RACK_FULL: rack; past RACK_SHORT: a short stroke; less: let go gently, nothing.
- *                 A right click while it is all the way back locks the bolt open.
+ *                 Held all the way back for LOCK_HOLD (fnc_onFrame), or a right click there: the bolt locks open.
  *   handleLocked  a click on the locked bolt: released, it runs forward
- *   magPress      dragged down most of the way: the magazine drops; a click: a tap - a loose magazine only seats when
- *                 the pulsing ring meets the magazine's mark (TAP_WINDOW)
+ *   magPress      dragged down most of the way: the magazine drops; a click: a tap
  *   magInsert     up into the well all the way: in - seated if the hand kept to the well's line (INSERT_TOLERANCE),
  *                 else in but not seated
  *   port          swiped most of the way: the stovepipe is swept out
@@ -206,19 +205,7 @@ switch (_kind) do {
         if (_progress >= 0.8) exitWith {[ACT_DROP] call FUNC(act)};
 
         // A click, not a drag: the tap.
-        if (_progress < 0.2) then {
-            if ((_state getOrDefault ["mag", "in"]) != "loose") exitWith {[ACT_TAP] call FUNC(act)};
-
-            private _phase = ((diag_tickTime - (GVAR(wb) getOrDefault ["openTime", 0])) mod TAP_PERIOD) / TAP_PERIOD;
-
-            if (_phase > 1 - TAP_WINDOW || {_phase < TAP_WINDOW / 3}) then {
-                [ACT_TAP] call FUNC(act);
-            } else {
-                GVAR(wb) set ["result", "WB_TapMissed"];
-                [GVAR(wb) get "unit", "click_1"] call EFUNC(malfunctions,playSound);
-                call FUNC(refresh);
-            };
-        };
+        if (_progress < 0.2) then {[ACT_TAP] call FUNC(act)};
     };
 
     case "magInsert": {

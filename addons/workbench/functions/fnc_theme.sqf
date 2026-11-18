@@ -72,5 +72,6 @@ createHashMapFromArray [
     ["radius", 0.012 * safeZoneH],
     ["font", "PuristaMedium"],
     ["fontBold", "PuristaSemibold"],
-    ["fontMono", "EtelkaMonospacePro"]
+    // Purista for the small capitals too: Etelka's monospace looked odd beside it (Mia).
+    ["fontMono", "PuristaMedium"]
 ]

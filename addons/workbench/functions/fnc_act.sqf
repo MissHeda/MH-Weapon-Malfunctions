@@ -30,6 +30,7 @@ if ((_before param [0, ""]) == _did && {_works || {_after isNotEqualTo _before}}
 };
 
 GVAR(wb) set ["result", _result];
+GVAR(wb) set ["view", -1];
 
 if (_works) then {
     GVAR(wb) set ["closing", true];

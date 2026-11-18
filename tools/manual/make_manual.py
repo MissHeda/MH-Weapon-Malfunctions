@@ -258,9 +258,9 @@ def build():
 
     # ----- Right: six panels -----
     panels = [
-        ("r_tap", "TAP!", "Magazine loose? Click it the moment the ring snaps shut on it. Too early or too late and it won't seat."),
+        ("r_tap", "TAP!", "Magazine loose? Click it once to tap it home. Then rack."),
         ("r_rack", "KA-CHUNK!", "Grab the charging handle, drag it ALL the way back and let go. Halfway is a short stroke - nothing happens."),
-        ("r_locked", "CLICK!", "Need the action open? Hold the handle back and right-click: the bolt locks. Click the locked bolt to send it home."),
+        ("r_locked", "CLICK!", "Need the action open? Drag the handle back and HOLD it till the bar is full: the bolt locks. Click it to send it home."),
         ("r_magout", "SNAP!", "Drag the magazine down to drop it. Push it up STRAIGHT - off the line it goes in but won't click."),
         ("r_chamber", "RATTLE!", "Bolt locked, mag out: hold on the chamber and wiggle left, right, left till it's clear. A stuck case takes more."),
         ("r_sweep", "PING!", "Case caught in the port? Swipe it out and away - or just rack it."),
@@ -295,9 +295,7 @@ def build():
         elif name == "r_locked":
             hx, hy = P("handle")
             arrow(pd, (hx + 20, hy - 36), (hx - 140, hy - 36))
-            mouse(pd, pw - 120, ph - 92, "left", 1.0)
-            pd.text((pw - 70, ph - 76), "+", font=num, fill=INK)
-            mouse(pd, pw - 50, ph - 92, "right", 1.0)
+            mouse(pd, pw - 70, ph - 92, "left", 1.0)
         elif name == "r_magout":
             mx, my = P("mag")
             arrow(pd, (mx + 74, my - 120), (mx + 74, my - 10))

@@ -41,7 +41,11 @@ if !("now" in _ctrls) exitWith {};
 
 private _steps = [_state] call FUNC(steps);
 private _done = GVAR(wb) get "done";
-private _total = count _done + count _steps;
+private _all = _done + _steps;
+private _total = count _all;
+private _current = count _done;
+private _view = GVAR(wb) get "view";
+private _shown = [_view, _current] select (_view < 0 || {_view >= _total});
 private _slide = getNumber (configFile >> "CfgWeapons" >> (GVAR(wb) get "weapon") >> "type") == 2;
 private _fnc_title = {localize format ["STR_mhwm_workbench_Step_%1", [_this, "rackSlide"] select (_this == "rack" && _slide)]};
 private _pictures = createHashMapFromArray [
@@ -51,56 +55,72 @@ private _pictures = createHashMapFromArray [
 
 // The count over the page.
 (_ctrls get "progress") ctrlSetStructuredText parseText format [
-    "<t font='%1' size='0.72' color='%2'>%3</t>",
-    _theme get "fontMono", "paperInk" call _hex,
-    toUpperANSI ([format [LLSTRING(Progress), (count _done + 1) min _total, _total], LLSTRING(Progress_Done)] select _cleared)
+    "<t size='0.8' color='%1'>%2</t>",
+    "paperInk" call _hex,
+    toUpperANSI ([format [LLSTRING(Progress), (_shown + 1) min _total, _total], LLSTRING(Progress_Done)] select (_cleared && {_view < 0}))
 ];
 
-// The step now: picture, number, what and how.
+// The large card: the step shown - the one now in red, one done in green, one still to come in ink.
 private _pic = _ctrls get "nowPic";
-private _frameColor = _theme get (["paperRed", "paperGood"] select _cleared);
+private _tone = switch (true) do {
+    case (_cleared && {_view < 0}): {"paperGood"};
+    case (_shown < _current): {"paperGood"};
+    case (_shown > _current): {"paperInk"};
+    default {"paperRed"};
+};
 
-{_x ctrlSetBackgroundColor _frameColor} forEach (_ctrls get "nowFrame");
+{_x ctrlSetBackgroundColor (_theme get _tone)} forEach (_ctrls get "nowFrame");
 
-if (_cleared) then {
+if (_cleared && {_view < 0}) then {
     _pic ctrlShow false;
     (_ctrls get "now") ctrlSetStructuredText parseText format [
         "<t font='%1' size='1.5' color='%2'>%3</t><br/><t size='0.9' color='%4'>%5</t>",
         _theme get "fontBold", "paperGood" call _hex, toUpperANSI LLSTRING(WB_Cleared), "paperInk" call _hex, LLSTRING(Step_Cleared_How)
     ];
 } else {
-    private _step = _steps select 0;
+    private _step = _all select _shown;
+    private _note = switch (true) do {
+        case (_shown < _current): {format ["  <t size='0.75' color='%1'>%2</t>", "paperGood" call _hex, toUpperANSI LLSTRING(Tag_Done)]};
+        case (_shown > _current): {format ["  <t size='0.75' color='%1'>%2</t>", "paperMuted" call _hex, toUpperANSI LLSTRING(Tag_Later)]};
+        default {""};
+    };
 
     _pic ctrlShow true;
     _pic ctrlSetText format [QPATHTOF(ui\step_%1_co.paa), _pictures get _step];
     (_ctrls get "now") ctrlSetStructuredText parseText format [
-        "<t font='%1' size='1.15' color='%2'>%3. %4</t><br/><t size='0.85' color='%5'>%6</t>",
-        _theme get "fontBold", "paperRed" call _hex, count _done + 1, toUpperANSI (_step call _fnc_title),
-        "paperInk" call _hex, localize format ["STR_mhwm_workbench_Step_%1_How", _step]
+        "<t font='%1' size='1.1' color='%2'>%3. %4</t>%7<br/><t size='0.82' color='%5'>%6</t>",
+        _theme get "fontBold", _tone call _hex, _shown + 1, toUpperANSI (_step call _fnc_title),
+        "paperInk" call _hex, localize format ["STR_mhwm_workbench_Step_%1_How", _step], _note
     ];
 };
 
-// Every step: done ones ticked and greyed, the one now in red, the rest in ink.
-private _rows = [];
-
+// Every step a line: done ones ticked and greyed, the one now in red, the rest in ink; the one shown underlined by ">".
 {
-    _rows pushBack format [
-        "<t font='%1' color='%2'>OK</t>  <t color='%3'>%4. %5</t>",
-        _theme get "fontBold", "paperGood" call _hex, "paperMuted" call _hex, _forEachIndex + 1, _x call _fnc_title
-    ];
-} forEach _done;
+    _x params ["_row", "_click"];
 
-{
-    _rows pushBack ([
-        format ["<t color='%1'>%2. %3</t>", "paperInk" call _hex, count _done + _forEachIndex + 1, _x call _fnc_title],
-        format ["<t font='%1' color='%2'>&gt;&gt;  %3. %4</t>", _theme get "fontBold", "paperRed" call _hex, count _done + 1, _x call _fnc_title]
-    ] select (_forEachIndex == 0));
-} forEach _steps;
+    if (_forEachIndex >= _total) then {
+        _row ctrlShow false;
+        _click ctrlShow false;
+    } else {
+        private _step = _all select _forEachIndex;
+        private _mark = [" ", "&gt;"] select (_forEachIndex == _shown);
+        private _line = switch (true) do {
+            case (_forEachIndex < _current): {
+                format ["<t color='%1'>%6 </t><t font='%2' color='%3'>OK</t>  <t color='%4'>%5</t>", "paperRed" call _hex, _theme get "fontBold", "paperGood" call _hex, "paperMuted" call _hex, _step call _fnc_title, _mark]
+            };
+            case (_forEachIndex == _current): {
+                format ["<t color='%1'>%4 </t><t font='%2' color='%1'>%3. %5</t>", "paperRed" call _hex, _theme get "fontBold", _forEachIndex + 1, _mark, _step call _fnc_title]
+            };
+            default {
+                format ["<t color='%1'>%4 </t><t color='%2'>%3. %5</t>", "paperRed" call _hex, "paperInk" call _hex, _forEachIndex + 1, _mark, _step call _fnc_title]
+            };
+        };
 
-(_ctrls get "list") ctrlSetStructuredText parseText format [
-    "<t font='%1' size='0.72' color='%2'>%3</t><br/><t size='0.9'>%4</t>",
-    _theme get "fontMono", "paperMuted" call _hex, toUpperANSI LLSTRING(Head_Steps), _rows joinString "<br/>"
-];
+        _row ctrlSetStructuredText parseText format ["<t size='0.88'>%1</t>", _line];
+        _row ctrlShow true;
+        _click ctrlShow true;
+    };
+} forEach (_ctrls get "rows");
 
 // What the last hand movement did.
 private _result = GVAR(wb) getOrDefault ["result", ""];
@@ -111,7 +131,7 @@ private _text = switch (true) do {
 };
 
 (_ctrls get "last") ctrlSetStructuredText parseText format [
-    "<t font='%1' size='0.72' color='%2'>%3</t><br/><t size='0.85' color='%4'>%5</t>",
-    _theme get "fontMono", "paperMuted" call _hex, toUpperANSI LLSTRING(Head_Last), "paperInk" call _hex,
+    "<t size='0.72' color='%1'>%2</t><br/><t size='0.82' color='%3'>%4</t>",
+    "paperMuted" call _hex, toUpperANSI LLSTRING(Head_Last), "paperInk" call _hex,
     [_text, LLSTRING(Last_None)] select (_text isEqualTo "")
 ];

@@ -7,6 +7,7 @@ PREP(manual);
 PREP(onFrame);
 PREP(onMouse);
 PREP(open);
+PREP(page);
 PREP(panel);
 PREP(points);
 PREP(project);

@@ -140,6 +140,24 @@ switch (true) do {
 
         _drag set ["progress", (_along max 0) min 1];
         _drag set ["maxDev", (_drag get "maxDev") max _across];
+
+        // The bolt held all the way back: after a moment the catch locks it open.
+        if (_kind == "handle") then {
+            if ((_along max 0) >= RACK_FULL) then {
+                if !("heldSince" in _drag) then {_drag set ["heldSince", diag_tickTime]};
+
+                private _hold = (diag_tickTime - (_drag get "heldSince")) / LOCK_HOLD;
+                _drag set ["hold", _hold min 1];
+
+                if (_hold >= 1) then {
+                    GVAR(wb) set ["drag", createHashMap];
+                    [ACT_LOCK] call FUNC(act);
+                };
+            } else {
+                _drag deleteAt "heldSince";
+                _drag set ["hold", 0];
+            };
+        };
     };
 };
 
@@ -200,6 +218,15 @@ private _placed = [];
         private _lw = 0.16 * safeZoneW;
         private _lh = 0.032 * safeZoneH;
         private _used = _lw * 0.6;
+
+        // The step's label is one line on a dark plate as wide as its words: red on the tan MX was cut and hard to read.
+        if (_attention) then {
+            private _measure = _ctrls get "measure";
+            _measure ctrlSetFontHeight (0.03 * safeZoneH * 0.85);
+            _measure ctrlSetText toUpperANSI _text;
+            _lw = ctrlTextWidth _measure + 0.012 * safeZoneW;
+            _used = _lw;
+        };
         private _sx = _screen select 0;
         private _cy = (_screen select 1) - _lh / 2;
         private _candidates = [
@@ -221,6 +248,7 @@ private _placed = [];
         _placed pushBack [_occupied, _ly];
 
         _label ctrlSetPosition [_lx, _ly, _lw, _lh];
+        _label ctrlSetBackgroundColor ([[0, 0, 0, 0], [0.04, 0.04, 0.04, 0.8]] select _attention);
         _label ctrlSetStructuredText parseText format [
             "<t font='%4' size='%5' color='%1' shadow='2' align='%3'>%2</t>",
             (switch (true) do {
@@ -229,7 +257,7 @@ private _placed = [];
                 default {_theme get "text2"};
             }) call BIS_fnc_colorRGBAtoHTML,
             toUpperANSI _text,
-            _align,
+            [_align, "center"] select _attention,
             _theme get "fontMono",
             [0.72, 0.85] select _attention
         ];
@@ -278,7 +306,8 @@ private _pulse = _ctrls get "pulse";
 private _state = [_unit, GVAR(wb) get "weapon"] call EFUNC(malfunctions,state);
 private _magScreen = _spotScreen param [_spotScreen findIf {(_x select 0) == "mag"}, []];
 
-if ((_state getOrDefault ["mag", ""]) == "loose" && {_magScreen isNotEqualTo []} && {_kind in ["", "magPress"]} && {!(GVAR(wb) get "buttons")}) then {
+// Off: a tap is a plain click now (Mia: too complicated). The ring stays for a later "hard" mode.
+if (false && {(_state getOrDefault ["mag", ""]) == "loose"} && {_magScreen isNotEqualTo []} && {_kind in ["", "magPress"]}) then {
     private _phase = ((diag_tickTime - (GVAR(wb) getOrDefault ["openTime", 0])) mod TAP_PERIOD) / TAP_PERIOD;
     private _size = HOTSPOT_SIZE * (1 + 2 * (1 - _phase));
     private _w = _size * pixelW / pixelH;
@@ -299,15 +328,23 @@ private _bar = _ctrls get "bar";
 private _barBack = _ctrls get "barBack";
 private _chamberScreen = _spotScreen param [_spotScreen findIf {(_x select 0) == "chamber"}, []];
 
-if (_kind == "chamber" && {_chamberScreen isNotEqualTo []}) then {
-    (_chamberScreen select 1) params ["_sx", "_sy"];
+private _handleScreen = _spotScreen param [_spotScreen findIf {(_x select 0) == "handle"}, []];
+private _barAt = switch (true) do {
+    case (_kind == "chamber" && {_chamberScreen isNotEqualTo []}): {[_chamberScreen select 1, _drag getOrDefault ["progress", 0]]};
+    case (_kind == "handle" && {(_drag getOrDefault ["hold", 0]) > 0} && {_handleScreen isNotEqualTo []}): {[_handleScreen select 1, _drag get "hold"]};
+    default {[]};
+};
+
+if (_barAt isNotEqualTo []) then {
+    _barAt params ["_at", "_fill"];
+    _at params ["_sx", "_sy"];
 
     private _bw = 0.1 * safeZoneW;
     private _bh = 0.008 * safeZoneH;
     private _by = _sy + HOTSPOT_SIZE;
 
     _barBack ctrlSetPosition [_sx - _bw / 2, _by, _bw, _bh];
-    _bar ctrlSetPosition [_sx - _bw / 2, _by, _bw * (_drag getOrDefault ["progress", 0]), _bh];
+    _bar ctrlSetPosition [_sx - _bw / 2, _by, _bw * _fill, _bh];
     {_x ctrlShow true; _x ctrlCommit 0} forEach [_barBack, _bar];
 } else {
     {_x ctrlShow false} forEach [_barBack, _bar];

@@ -30,11 +30,13 @@
 #define RACK_FULL 0.9
 #define RACK_SHORT 0.35
 #define WIGGLE_DOUBLE 4
-#define WIGGLE_CASE 9
+#define WIGGLE_CASE 6
 #define WIGGLE_ROUND 2
 #define TAP_PERIOD 1.1
 #define TAP_WINDOW 0.18
-#define INSERT_TOLERANCE 0.28
+#define INSERT_TOLERANCE 0.45
+// Held all the way back this long, the bolt locks open (Mia: right click while dragging was too much).
+#define LOCK_HOLD 0.7
 
 // Hotspots on the picture: how near the mouse has to be, their size.
 #define HOTSPOT_RADIUS (0.045 * safeZoneH)

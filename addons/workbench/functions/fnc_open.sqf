@@ -55,7 +55,8 @@ GVAR(wb) = createHashMapFromArray [
     ["openTime", diag_tickTime],
     ["buttons", !EGVAR(main,minigames) || {!isPiPEnabled}],
     ["notes", !(profileNamespace getVariable [QGVAR(notesHidden), false])],
-    ["done", []]
+    ["done", []],
+    ["view", -1]
 ];
 
 private _theme = call FUNC(theme);
@@ -284,8 +285,24 @@ if (_showPanel) then {
     ];
     _y = _y + 0.048 * safeZoneH;
 
-    _ctrls set ["progress", [QGVAR(structured), [_innerX, _y, _innerW, 0.026 * safeZoneH]] call _fnc_make];
-    _y = _y + 0.028 * safeZoneH;
+    _ctrls set ["progress", [QGVAR(structured), [_innerX, _y, _innerW * 0.6, 0.026 * safeZoneH]] call _fnc_make];
+
+    // Paging through the steps: back and forth, the one in the middle goes back to the step now.
+    if (GVAR(wb) get "notes") then {
+        private _arrowW = 0.022 * safeZoneW;
+        private _arrowH = 0.03 * safeZoneH;
+        private _ay = _y - 0.004 * safeZoneH;
+
+        {
+            _x params ["_index", "_label", "_code"];
+            [_display, [_innerX + _innerW - (3 - _index) * (_arrowW + _gap * 0.5), _ay, _arrowW, _arrowH], _label, _code, false, true] call FUNC(button);
+        } forEach [
+            [0, "<", {[-1] call FUNC(page)}],
+            [1, "o", {[0] call FUNC(page)}],
+            [2, ">", {[1] call FUNC(page)}]
+        ];
+    };
+    _y = _y + 0.034 * safeZoneH;
     [[_innerX, _y, _innerW, 3 * pixelH], _paperInk] call _fnc_line;
     _y = _y + _gap * 1.5;
 
@@ -297,7 +314,10 @@ if (_showPanel) then {
         // The step now: its picture in the manual's shape (446 x 300), framed in red, its words under it.
         private _picW = _innerW;
         private _picH = (_picW / pixelW) * (300 / 446) * pixelH;
-        private _maxH = (_bottom - _y) * 0.42;
+        // What is left once the words, the list of steps and the last action have their room.
+        private _nowH = 0.125 * safeZoneH;
+        private _rowH = 0.029 * safeZoneH;
+        private _maxH = ((_bottom - _y) - (_nowH + 0.028 * safeZoneH + 7 * _rowH + 0.07 * safeZoneH + 3 * _gap)) max (0.08 * safeZoneH);
 
         if (_picH > _maxH) then {
             _picH = _maxH;
@@ -305,7 +325,6 @@ if (_showPanel) then {
         };
 
         private _picX = _innerX + (_innerW - _picW) / 2;
-        private _nowH = 0.085 * safeZoneH;
         private _cardH = _picH + _nowH;
 
         [[_innerX, _y, _innerW, _cardH], _theme get "paperBox"] call _fnc_line;
@@ -326,10 +345,26 @@ if (_showPanel) then {
         _ctrls set ["now", [QGVAR(structured), [_innerX + _gap, _y + _picH + _gap * 0.4, _innerW - 2 * _gap, _nowH - _gap * 0.6]] call _fnc_make];
         _y = _y + _cardH + _gap * 1.5;
 
-        // Every step in order.
-        private _listH = (_bottom - _y) * 0.72;
-        _ctrls set ["list", [QGVAR(structured), [_innerX, _y, _innerW, _listH]] call _fnc_make];
-        _y = _y + _listH;
+        // Every step in order, a line each - a click on one shows it above (fnc_page).
+        private _head = [QGVAR(structured), [_innerX, _y, _innerW, 0.026 * safeZoneH]] call _fnc_make;
+        _head ctrlSetStructuredText parseText format [
+            "<t size='0.72' color='%1'>%2</t>", (_theme get "paperMuted") call BIS_fnc_colorRGBAtoHTML, toUpperANSI LLSTRING(Head_Steps)
+        ];
+        _y = _y + 0.028 * safeZoneH;
+
+        private _rows = [];
+
+        for "_i" from 0 to 6 do {
+            private _row = [QGVAR(structured), [_innerX, _y + _i * _rowH, _innerW, _rowH]] call _fnc_make;
+            private _click = [QGVAR(click), [_innerX, _y + _i * _rowH, _innerW, _rowH]] call _fnc_make;
+
+            _click setVariable [QGVAR(row), _i];
+            _click ctrlAddEventHandler ["ButtonClick", {params ["_c"]; [_c getVariable QGVAR(row), true] call FUNC(page)}];
+            _rows pushBack [_row, _click];
+        };
+
+        _ctrls set ["rows", _rows];
+        _y = _y + 7 * _rowH + _gap;
 
         // What the last hand movement did.
         [[_innerX, _y, _innerW, 2 * pixelH], _paperInk] call _fnc_line;
@@ -383,6 +418,11 @@ for "_i" from 0 to 5 do {
 };
 
 _ctrls set ["marks", _marks];
+
+// Out of sight: measures how wide a label's words are (fnc_onFrame).
+private _measure = [QGVAR(text), [-10, -10, 0.5, 0.05]] call _fnc_make;
+_measure ctrlSetFont (_theme get "fontMono");
+_ctrls set ["measure", _measure];
 
 private _track = [];
 
