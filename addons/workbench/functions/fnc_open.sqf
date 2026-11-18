@@ -207,39 +207,90 @@ _readout ctrlSetStructuredText parseText format [
 ];
 
 // Under the view: how the mouse works.
-private _hint = [QGVAR(structured), [_vx, _vy + _vh + _gap, _vw, _hintH]] call _fnc_make;
+private _hint = [QGVAR(text), [_vx, _vy + _vh + _gap * 0.5, _vw, _hintH]] call _fnc_make;
 _ctrls set ["hint", _hint];
 
-// ----- Panel: three cards -----
-[_display, [_px, _bodyY, _panelW, _bodyH], _theme get "panel"] call FUNC(panel);
+// ----- Panel: a page of field notes -----
+// The side panel is printed paper, as the field manual (fnc_manual): yellowed, grainy, black ink and red. Its sections are
+// caption boxes with a black number disc, as the manual's panels have (Mia: "in this paper style of the 1980s").
+private _paperInk = _theme get "paperInk";
+private _inkHex = _paperInk call BIS_fnc_colorRGBAtoHTML;
+private _redHex = (_theme get "paperRed") call BIS_fnc_colorRGBAtoHTML;
 
-private _innerX = _px + _pad;
-private _innerW = _panelW - 2 * _pad;
+[[_px + 5 * pixelW, _bodyY + 5 * pixelH, _panelW, _bodyH], [0, 0, 0, 0.55]] call _fnc_line;
+
+private _paper = [QGVAR(picture), [_px, _bodyY, _panelW, _bodyH]] call _fnc_make;
+_paper ctrlSetText QPATHTOF(ui\paper_co.paa);
+
+private _innerX = _px + _pad * 1.4;
+private _innerW = _panelW - 2.8 * _pad;
 private _y = _bodyY + _pad;
+
+// The page's head: red stencil letters, a line of ink under them.
+private _pageHead = [QGVAR(structured), [_innerX, _y, _innerW, 0.05 * safeZoneH]] call _fnc_make;
+_pageHead ctrlSetStructuredText parseText format [
+    "<t font='%1' size='1.45' color='%2'>%3</t>",
+    _theme get "fontBold", _redHex, toUpperANSI LLSTRING(Paper_Title)
+];
+_y = _y + 0.048 * safeZoneH;
+
+private _pageSub = [QGVAR(structured), [_innerX, _y, _innerW, 0.026 * safeZoneH]] call _fnc_make;
+_pageSub ctrlSetStructuredText parseText format [
+    "<t font='%1' size='0.68' color='%2'>%3</t>",
+    _theme get "fontMono", _inkHex, toUpperANSI LLSTRING(Paper_Sub)
+];
+_y = _y + 0.028 * safeZoneH;
+[[_innerX, _y, _innerW, 3 * pixelH], _paperInk] call _fnc_line;
+_y = _y + _gap * 1.5;
+
 private _buttonH = 0.042 * safeZoneH;
 private _buttonsH = [0, 4 * (_buttonH + _gap) + _pad] select (GVAR(wb) get "buttons");
-private _free = _bodyH - 2 * _pad - _buttonsH - 2 * _gap;
+private _free = (_bodyY + _bodyH) - _y - _pad - _buttonsH - 2 * _gap;
 
 private _fnc_card = {
     params ["_number", "_name", "_height"];
 
-    [_display, [_innerX, _y, _innerW, _height], _theme get "card"] call FUNC(panel);
-
-    private _head = [QGVAR(structured), [_innerX + _pad, _y + _gap, _innerW - 2 * _pad, 0.026 * safeZoneH]] call _fnc_make;
-    _head ctrlSetStructuredText parseText format [
-        "<t font='%1' size='0.75' color='%2'>%3</t>  <t font='%1' size='0.75' color='%4'>%5</t>",
-        _theme get "fontMono", _accentHex, _number, _mutedHex, toUpperANSI _name
+    // The box: light paper with an ink frame.
+    [[_innerX, _y, _innerW, _height], _theme get "paperBox"] call _fnc_line;
+    {
+        [_x, _paperInk] call _fnc_line;
+    } forEach [
+        [_innerX, _y, _innerW, 3 * pixelH],
+        [_innerX, _y + _height - 3 * pixelH, _innerW, 3 * pixelH],
+        [_innerX, _y, 3 * pixelW, _height],
+        [_innerX + _innerW - 3 * pixelW, _y, 3 * pixelW, _height]
     ];
 
-    private _body = [QGVAR(structured), [_innerX + _pad, _y + _gap + 0.03 * safeZoneH, _innerW - 2 * _pad, _height - 0.03 * safeZoneH - 2 * _gap]] call _fnc_make;
+    // The number in a black disc.
+    private _disc = 0.032 * safeZoneH;
+    private _discW = _disc * pixelW / pixelH;
+    private _dx = _innerX + _gap * pixelW / pixelH * 1.2;
+    private _dy = _y + _gap;
+
+    [_display, [_dx, _dy, _discW, _disc], _paperInk, _disc / 2] call FUNC(panel);
+
+    private _numberCtrl = [QGVAR(structured), [_dx, _dy + _disc * 0.08, _discW, _disc]] call _fnc_make;
+    _numberCtrl ctrlSetStructuredText parseText format [
+        "<t align='center' font='%1' size='0.85' color='#f0e6cb'>%2</t>", _theme get "fontBold", _number
+    ];
+
+    private _head = [QGVAR(structured), [_dx + _discW + _gap, _dy + _disc * 0.08, _innerW, _disc]] call _fnc_make;
+    _head ctrlSetStructuredText parseText format [
+        "<t font='%1' size='0.95' color='%2'>%3</t>", _theme get "fontBold", _inkHex, toUpperANSI _name
+    ];
+
+    private _body = [QGVAR(structured), [_innerX + _gap * 1.5, _dy + _disc + _gap * 0.6, _innerW - _gap * 3, _height - _disc - 2.6 * _gap]] call _fnc_make;
 
     _y = _y + _height + _gap;
     _body
 };
 
-_ctrls set ["see", ["01", LLSTRING(Head_See), _free * 0.36] call _fnc_card];
-_ctrls set ["last", ["02", LLSTRING(Head_Last), _free * 0.18] call _fnc_card];
-_ctrls set ["hands", ["03", LLSTRING(Head_Hands), _free * 0.46] call _fnc_card];
+// With buttons the procedure is one line, so the observation gets its room (four lines were cut off at 0.36).
+private _shares = [[0.36, 0.18, 0.46], [0.5, 0.22, 0.28]] select (GVAR(wb) get "buttons");
+
+_ctrls set ["see", ["1", LLSTRING(Head_See), _free * (_shares select 0)] call _fnc_card];
+_ctrls set ["last", ["2", LLSTRING(Head_Last), _free * (_shares select 1)] call _fnc_card];
+_ctrls set ["hands", ["3", LLSTRING(Head_Hands), _free * (_shares select 2)] call _fnc_card];
 
 // The buttons: every hand movement, for the server without minigames or a player without Picture-in-Picture.
 if (GVAR(wb) get "buttons") then {
@@ -254,7 +305,9 @@ if (GVAR(wb) get "buttons") then {
             _display,
             [_innerX + _col * (_bw + _gap), _y + _row * (_buttonH + _gap), _bw, _buttonH],
             _label,
-            {[_c getVariable [QGVAR(act), ""]] call FUNC(act)}
+            {[_c getVariable [QGVAR(act), ""]] call FUNC(act)},
+            false,
+            true
         ] call FUNC(button);
 
         _click setVariable [QGVAR(act), _act];

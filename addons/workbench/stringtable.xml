@@ -103,6 +103,12 @@
         <Key ID="STR_mhwm_workbench_Manual_Close">
             <English>Click anywhere to close</English>
         </Key>
+        <Key ID="STR_mhwm_workbench_Paper_Sub">
+            <English>Field notes // see it, fix it</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Paper_Title">
+            <English>Trouble-shooting</English>
+        </Key>
         <Key ID="STR_mhwm_workbench_Readout">
             <English>Mag</English>
         </Key>

@@ -63,6 +63,12 @@ createHashMapFromArray [
     ["warn", [0.93, 0.33, 0.27, 1]],
     ["good", [0.42, 0.85, 0.55, 1]],
     ["dim", [0, 0, 0, 0.5]],
+    // The side panel's printed paper (fnc_open): ink, its faded grey, the print red, a dark green, the caption boxes.
+    ["paperInk", [0.11, 0.094, 0.086, 1]],
+    ["paperMuted", [0.11, 0.094, 0.086, 0.62]],
+    ["paperRed", [0.84, 0.2, 0.15, 1]],
+    ["paperGood", [0.13, 0.45, 0.2, 1]],
+    ["paperBox", [0.98, 0.965, 0.91, 0.9]],
     ["radius", 0.012 * safeZoneH],
     ["font", "PuristaMedium"],
     ["fontBold", "PuristaSemibold"],

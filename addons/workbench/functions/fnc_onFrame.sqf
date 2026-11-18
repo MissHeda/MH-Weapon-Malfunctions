@@ -303,10 +303,19 @@ private _hintKey = switch (true) do {
 
 if (_hintKey != (GVAR(wb) getOrDefault ["hintKey", ""])) then {
     GVAR(wb) set ["hintKey", _hintKey];
-    (_ctrls get "hint") ctrlSetStructuredText parseText format [
-        "<t font='%3' size='0.72' color='%1'>%2</t>",
-        (_theme get "muted") call BIS_fnc_colorRGBAtoHTML,
-        toUpperANSI localize format ["STR_mhwm_workbench_%1", _hintKey],
-        _theme get "fontMono"
-    ];
+    // One line, never wrapped (the long default line broke onto a second one, cut off by the frame): set at its size,
+    // then smaller step by step until it fits the view's width.
+    private _hint = _ctrls get "hint";
+    private _fit = (ctrlPosition _hint) select 2;
+    private _size = 0.024 * safeZoneH;
+
+    _hint ctrlSetText toUpperANSI localize format ["STR_mhwm_workbench_%1", _hintKey];
+    _hint ctrlSetFont (_theme get "fontMono");
+    _hint ctrlSetTextColor (_theme get "muted");
+    _hint ctrlSetFontHeight _size;
+
+    while {ctrlTextWidth _hint > _fit && {_size > 0.012 * safeZoneH}} do {
+        _size = _size * 0.92;
+        _hint ctrlSetFontHeight _size;
+    };
 };

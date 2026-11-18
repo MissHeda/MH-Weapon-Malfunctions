@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.6
+- The bench's side panel is a page of printed field notes, as the field manual: yellowed paper, ink caption boxes with number discs, red print; the buttons are caption boxes too.
+- The hint line under the 3D view stays on one line (it shrinks to fit instead of breaking).
+- Test mission (hemtt launch test): every malfunction variant, weapon and setting in the mouse wheel menu and under ACE Self-Interaction > MHWM Test.
+
 ## 0.1.5
 - Field manual: one page in the style of an old army maintenance comic shows how every minigame is played - "Field manual" in the bench's header, comes up by itself the first time.
 - Middle mouse button moves the weapon in the 3D view, a double click puts it back.

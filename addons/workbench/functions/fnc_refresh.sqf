@@ -42,12 +42,13 @@ private _lines = ([_state] call EFUNC(malfunctions,describe)) apply {
     _x params ["_text", "_problem"];
 
     format [
-        "<t font='%1' color='%2'>%3</t>  <t color='%4'>%5</t>",
-        _theme get "fontMono",
-        (["muted", "warn"] select _problem) call _hex,
-        [">", "!"] select _problem,
-        (["text2", "text"] select _problem) call _hex,
-        _text
+        "<t font='%1' color='%2'>%3</t>  <t font='%6' color='%4'>%5</t>",
+        _theme get "fontBold",
+        (["paperMuted", "paperRed"] select _problem) call _hex,
+        ["-", "!"] select _problem,
+        (["paperMuted", "paperInk"] select _problem) call _hex,
+        _text,
+        _theme get "font"
     ]
 };
 
@@ -56,10 +57,10 @@ private _lines = ([_state] call EFUNC(malfunctions,describe)) apply {
 // The last hand movement.
 private _result = GVAR(wb) getOrDefault ["result", ""];
 private _text = switch (true) do {
-    case (_result isEqualTo ""): {format ["<t color='%1'>%2</t>", "muted" call _hex, LLSTRING(Last_None)]};
-    case (_result == "WB_Cleared"): {format ["<t font='%1' size='1.15' color='%2'>%3</t>", _theme get "fontBold", "good" call _hex, LLSTRING(WB_Cleared)]};
-    case (_result select [0, 3] == "WB_"): {localize format ["STR_mhwm_workbench_%1", _result]};
-    default {localize format ["STR_mhwm_malfunctions_%1", _result]};
+    case (_result isEqualTo ""): {format ["<t color='%1'>%2</t>", "paperMuted" call _hex, LLSTRING(Last_None)]};
+    case (_result == "WB_Cleared"): {format ["<t font='%1' size='1.15' color='%2'>%3</t>", _theme get "fontBold", "paperGood" call _hex, toUpperANSI LLSTRING(WB_Cleared)]};
+    case (_result select [0, 3] == "WB_"): {format ["<t color='%1'>%2</t>", "paperInk" call _hex, localize format ["STR_mhwm_workbench_%1", _result]]};
+    default {format ["<t color='%1'>%2</t>", "paperInk" call _hex, localize format ["STR_mhwm_malfunctions_%1", _result]]};
 };
 
 (_ctrls get "last") ctrlSetStructuredText parseText format ["<t size='0.95'>%1</t>", _text];
@@ -67,6 +68,6 @@ private _text = switch (true) do {
 // What the hands can do: the parts' names in the accent.
 (_ctrls get "hands") ctrlSetStructuredText parseText format [
     "<t size='0.82' color='%2'>%1</t>",
-    ([LLSTRING(Hands_Help), LLSTRING(Hands_Buttons)] select (GVAR(wb) get "buttons")) regexReplace ["#ACCENT#/g", "accent" call _hex],
-    "text2" call _hex
+    ([LLSTRING(Hands_Help), LLSTRING(Hands_Buttons)] select (GVAR(wb) get "buttons")) regexReplace ["#ACCENT#/g", "paperRed" call _hex],
+    "paperInk" call _hex
 ];
