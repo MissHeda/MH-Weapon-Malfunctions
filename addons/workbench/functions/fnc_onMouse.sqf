@@ -90,14 +90,8 @@ if (_event == "down") exitWith {
         } forEach (GVAR(wb) getOrDefault ["spotScreen", []]);
     };
 
-    // The middle button moves the weapon across the view, as in AIO's 3D view; a double click with it puts it back.
+    // The middle button held moves the weapon across the view, as in AIO's 3D view ("Reset view" puts it back).
     if (_button == 2) exitWith {
-        if (diag_tickTime - (GVAR(wb) getOrDefault ["lastMiddle", -1]) < 0.35 && {"origin" in _scene}) then {
-            _scene set ["target", +(_scene get "origin")];
-            call FUNC(camera);
-        };
-
-        GVAR(wb) set ["lastMiddle", diag_tickTime];
         GVAR(wb) set ["drag", createHashMapFromArray [["kind", "pan"], ["last", _mouse], ["button", _button]]];
     };
 

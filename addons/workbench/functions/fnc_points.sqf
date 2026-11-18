@@ -198,7 +198,7 @@ _scene set ["points", _points];
 // The camera frames the weapon now.
 if (!isNull _object) then {
     _scene set ["target", _object modelToWorldVisualWorld _centre];
-    // Where moving with the middle button starts from, and where its double click puts the weapon back.
+    // Where moving with the middle button starts from, and where "Reset view" puts the weapon back.
     _scene set ["origin", _object modelToWorldVisualWorld _centre];
 };
 
@@ -210,6 +210,7 @@ _scene set ["dist", _dist];
 _scene set ["az", (_right select 0) atan2 (_right select 1)];
 _scene set ["near", _dist * 0.3];
 _scene set ["far", _dist * 2.5];
+_scene set ["home", [_scene get "az", _scene get "pitch", _dist]];
 
 call FUNC(camera);
 call FUNC(sync);

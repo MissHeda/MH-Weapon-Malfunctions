@@ -17,7 +17,17 @@ params [["_action", "", [""]]];
 
 if (isNil QGVAR(wb) || {GVAR(wb) get "closing"}) exitWith {};
 
+private _before = [] call FUNC(steps);
+
 ([GVAR(wb) get "unit", GVAR(wb) get "weapon", _action] call EFUNC(malfunctions,act)) params ["_result", "_works"];
+
+// The step that was up is done when the hands did it and the list moved on (the side panel ticks it off).
+private _after = [] call FUNC(steps);
+private _did = [_action, ACT_INSERT] select (_action == ACT_INSERT_LOOSE);
+
+if ((_before param [0, ""]) == _did && {_works || {_after isNotEqualTo _before}}) then {
+    (GVAR(wb) get "done") pushBack (_before select 0);
+};
 
 GVAR(wb) set ["result", _result];
 

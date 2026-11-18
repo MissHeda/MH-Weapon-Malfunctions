@@ -185,6 +185,9 @@ def roughen(img, amount=0.06):
 
 
 # ----- The page -----
+STEPS = {}
+
+
 def build():
     sp = spots()
     page = Image.new("RGB", (W, H), PAPER)
@@ -235,7 +238,7 @@ def build():
     ty += 14
     d.text((lx, ty), "YOUR MOUSE:", font=bodyb, fill=INK)
     ty += 38
-    for button, label in [("left", "work a part"), ("right", "turn the weapon"), ("middle", "move it  (2x: back)")]:
+    for button, label in [("left", "work a part"), ("right", "turn the weapon"), ("middle", "hold: move it")]:
         mouse(d, lx, ty, button, 0.62)
         d.text((lx + 46, ty + 6), label, font=body, fill=INK)
         ty += 46
@@ -316,6 +319,11 @@ def build():
 
         burst(pd, (96, 62), word, 52, sfx if len(word) < 7 else font("impact.ttf", 36), rot=random.random())
 
+        # Each panel alone as well: the bench's side panel shows the step to do now with its picture (fnc_open).
+        framed = pic.copy()
+        ImageDraw.Draw(framed).rectangle([0, 0, pw - 1, ph - 1], outline=INK, width=6)
+        STEPS[name] = framed
+
         page.paste(pic, (x, y))
         d.rectangle([x, y, x + pw, y + ph], outline=INK, width=6)
         caption(d, (x, y + ph - 2, x + pw, y + ph + capH), i + 1, text, cap, num)
@@ -338,6 +346,13 @@ def main():
         PAA.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run([str(IMAGE_TO_PAA), str(png), str(PAA)], check=True)
         print(PAA)
+        # The panels for the side panel, 512 x 512 (the game shows them at their own shape again).
+        for name, pic in STEPS.items():
+            step_png = OUT / f"step_{name[2:]}.png"
+            roughen(pic.convert("RGB")).resize((512, 512), Image.LANCZOS).save(step_png)
+            step_paa = PAA.parent / f"step_{name[2:]}_co.paa"
+            subprocess.run([str(IMAGE_TO_PAA), str(step_png), str(step_paa)], check=True)
+            print(step_paa)
 
 
 if __name__ == "__main__":

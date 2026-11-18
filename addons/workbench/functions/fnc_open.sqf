@@ -8,8 +8,9 @@
  *   header   title, the weapon, status chip (MALFUNCTION / CLEAR), close
  *   view     the weapon in 3D (fnc_scene, filmed into a render target), its parts marked (fnc_hotspots) and worked by
  *            mouse (fnc_onMouse, fnc_onFrame); under it how the mouse works
- *   panel    01 Observation (fnc_describe), 02 Last action, 03 Procedure - and with the server's minigames off, or
- *            without Picture-in-Picture, a button for every hand movement. The "Field notes" check in the header hides
+ *   panel    a page of the field manual: the step to do now with its comic picture, every step in order, the last
+ *            hand movement (fnc_steps, fnc_refresh) - and with the server's minigames off, or without
+ *            Picture-in-Picture, a button for every hand movement. The "Field notes" check in the header hides
  *            the three cards for players who know the drill (profileNamespace mhwm_workbench_notesHidden): the view then
  *            takes the whole width, or with buttons the panel keeps only them.
  *
@@ -53,7 +54,8 @@ GVAR(wb) = createHashMapFromArray [
     ["closing", false],
     ["openTime", diag_tickTime],
     ["buttons", !EGVAR(main,minigames) || {!isPiPEnabled}],
-    ["notes", !(profileNamespace getVariable [QGVAR(notesHidden), false])]
+    ["notes", !(profileNamespace getVariable [QGVAR(notesHidden), false])],
+    ["done", []]
 ];
 
 private _theme = call FUNC(theme);
@@ -237,129 +239,135 @@ _readout ctrlSetStructuredText parseText format [
     _rounds, toUpperANSI LLSTRING(Rounds)
 ];
 
+// Over the view at the right: the weapon back where it started, turned and zoomed as it was.
+private _resetW = 0.075 * safeZoneW;
+[_display, [_bx1 - _insetW * 1.5 - _resetW, _by0 + _inset * 0.6, _resetW, 0.034 * safeZoneH], LLSTRING(ResetView), {
+    private _scene = GVAR(wb) getOrDefault ["scene", createHashMap];
+
+    if ("home" in _scene && {"origin" in _scene}) then {
+        (_scene get "home") params ["_az", "_pitch", "_dist"];
+        _scene set ["az", _az];
+        _scene set ["pitch", _pitch];
+        _scene set ["dist", _dist];
+        _scene set ["target", +(_scene get "origin")];
+        call FUNC(camera);
+    };
+}] call FUNC(button);
+
 // Under the view: how the mouse works.
 private _hint = [QGVAR(text), [_vx, _vy + _vh + _gap * 0.5, _vw, _hintH]] call _fnc_make;
 _ctrls set ["hint", _hint];
 
-// ----- Panel: a page of field notes -----
+// ----- Panel: what to do, as a page of the field manual -----
+// Printed paper as the field manual (fnc_manual): the step to do now large, with its comic picture, and under it every
+// step in order - done ones ticked off (fnc_steps, fnc_refresh). Mia: the field notes at the side, with the pictures,
+// showing what comes first.
 if (_showPanel) then {
-// The side panel is printed paper, as the field manual (fnc_manual): yellowed, grainy, black ink and red. Its sections are
-// caption boxes with a black number disc, as the manual's panels have (Mia: "in this paper style of the 1980s").
-private _paperInk = _theme get "paperInk";
-private _inkHex = _paperInk call BIS_fnc_colorRGBAtoHTML;
-private _redHex = (_theme get "paperRed") call BIS_fnc_colorRGBAtoHTML;
+    private _paperInk = _theme get "paperInk";
+    private _inkHex = _paperInk call BIS_fnc_colorRGBAtoHTML;
+    private _redHex = (_theme get "paperRed") call BIS_fnc_colorRGBAtoHTML;
 
-[[_px + 5 * pixelW, _bodyY + 5 * pixelH, _panelW, _bodyH], [0, 0, 0, 0.55]] call _fnc_line;
+    [[_px + 5 * pixelW, _bodyY + 5 * pixelH, _panelW, _bodyH], [0, 0, 0, 0.55]] call _fnc_line;
 
-private _paper = [QGVAR(picture), [_px, _bodyY, _panelW, _bodyH]] call _fnc_make;
-_paper ctrlSetText QPATHTOF(ui\paper_co.paa);
+    private _paper = [QGVAR(picture), [_px, _bodyY, _panelW, _bodyH]] call _fnc_make;
+    _paper ctrlSetText QPATHTOF(ui\paper_co.paa);
 
-private _innerX = _px + _pad * 1.4;
-private _innerW = _panelW - 2.8 * _pad;
-private _y = _bodyY + _pad;
+    private _innerX = _px + _pad * 1.4;
+    private _innerW = _panelW - 2.8 * _pad;
+    private _y = _bodyY + _pad;
 
-// The page's head: red stencil letters, a line of ink under them.
-private _pageHead = [QGVAR(structured), [_innerX, _y, _innerW, 0.05 * safeZoneH]] call _fnc_make;
-_pageHead ctrlSetStructuredText parseText format [
-    "<t font='%1' size='1.45' color='%2'>%3</t>",
-    _theme get "fontBold", _redHex, toUpperANSI LLSTRING(Paper_Title)
-];
-_y = _y + 0.048 * safeZoneH;
-
-private _pageSub = [QGVAR(structured), [_innerX, _y, _innerW, 0.026 * safeZoneH]] call _fnc_make;
-_pageSub ctrlSetStructuredText parseText format [
-    "<t font='%1' size='0.68' color='%2'>%3</t>",
-    _theme get "fontMono", _inkHex, toUpperANSI LLSTRING(Paper_Sub)
-];
-_y = _y + 0.028 * safeZoneH;
-[[_innerX, _y, _innerW, 3 * pixelH], _paperInk] call _fnc_line;
-_y = _y + _gap * 1.5;
-
-private _buttonH = 0.042 * safeZoneH;
-private _buttonsH = [0, 4 * (_buttonH + _gap) + _pad] select (GVAR(wb) get "buttons");
-
-// Without the notes the buttons sit right under the page's head.
-if !(GVAR(wb) get "notes") then {_buttonsH = 0};
-
-private _free = (_bodyY + _bodyH) - _y - _pad - _buttonsH - 2 * _gap;
-
-private _fnc_card = {
-    params ["_number", "_name", "_height"];
-
-    // The box: light paper with an ink frame.
-    [[_innerX, _y, _innerW, _height], _theme get "paperBox"] call _fnc_line;
-    {
-        [_x, _paperInk] call _fnc_line;
-    } forEach [
-        [_innerX, _y, _innerW, 3 * pixelH],
-        [_innerX, _y + _height - 3 * pixelH, _innerW, 3 * pixelH],
-        [_innerX, _y, 3 * pixelW, _height],
-        [_innerX + _innerW - 3 * pixelW, _y, 3 * pixelW, _height]
+    // The page's head: red stencil letters, the step count under them, a line of ink.
+    private _pageHead = [QGVAR(structured), [_innerX, _y, _innerW, 0.05 * safeZoneH]] call _fnc_make;
+    _pageHead ctrlSetStructuredText parseText format [
+        "<t font='%1' size='1.45' color='%2'>%3</t>",
+        _theme get "fontBold", _redHex, toUpperANSI LLSTRING(Paper_Title)
     ];
+    _y = _y + 0.048 * safeZoneH;
 
-    // The number in a black disc.
-    private _disc = 0.032 * safeZoneH;
-    private _discW = _disc * pixelW / pixelH;
-    private _dx = _innerX + _gap * pixelW / pixelH * 1.2;
-    private _dy = _y + _gap;
+    _ctrls set ["progress", [QGVAR(structured), [_innerX, _y, _innerW, 0.026 * safeZoneH]] call _fnc_make];
+    _y = _y + 0.028 * safeZoneH;
+    [[_innerX, _y, _innerW, 3 * pixelH], _paperInk] call _fnc_line;
+    _y = _y + _gap * 1.5;
 
-    [_display, [_dx, _dy, _discW, _disc], _paperInk, _disc / 2] call FUNC(panel);
+    private _buttonH = 0.042 * safeZoneH;
+    private _buttonsH = [0, 4 * (_buttonH + _gap) + _pad] select (GVAR(wb) get "buttons");
+    private _bottom = _bodyY + _bodyH - _pad - _buttonsH;
 
-    private _numberCtrl = [QGVAR(structured), [_dx, _dy + _disc * 0.08, _discW, _disc]] call _fnc_make;
-    _numberCtrl ctrlSetStructuredText parseText format [
-        "<t align='center' font='%1' size='0.85' color='#f0e6cb'>%2</t>", _theme get "fontBold", _number
-    ];
+    if (GVAR(wb) get "notes") then {
+        // The step now: its picture in the manual's shape (446 x 300), framed in red, its words under it.
+        private _picW = _innerW;
+        private _picH = (_picW / pixelW) * (300 / 446) * pixelH;
+        private _maxH = (_bottom - _y) * 0.42;
 
-    private _head = [QGVAR(structured), [_dx + _discW + _gap, _dy + _disc * 0.08, _innerW, _disc]] call _fnc_make;
-    _head ctrlSetStructuredText parseText format [
-        "<t font='%1' size='0.95' color='%2'>%3</t>", _theme get "fontBold", _inkHex, toUpperANSI _name
-    ];
+        if (_picH > _maxH) then {
+            _picH = _maxH;
+            _picW = (_picH / pixelH) * (446 / 300) * pixelW;
+        };
 
-    private _body = [QGVAR(structured), [_innerX + _gap * 1.5, _dy + _disc + _gap * 0.6, _innerW - _gap * 3, _height - _disc - 2.6 * _gap]] call _fnc_make;
+        private _picX = _innerX + (_innerW - _picW) / 2;
+        private _nowH = 0.085 * safeZoneH;
+        private _cardH = _picH + _nowH;
 
-    _y = _y + _height + _gap;
-    _body
-};
+        [[_innerX, _y, _innerW, _cardH], _theme get "paperBox"] call _fnc_line;
+        private _frame = [];
+        {
+            _frame pushBack ([_x, _theme get "paperRed"] call _fnc_line);
+        } forEach [
+            [_innerX, _y, _innerW, 4 * pixelH],
+            [_innerX, _y + _cardH - 4 * pixelH, _innerW, 4 * pixelH],
+            [_innerX, _y, 4 * pixelW, _cardH],
+            [_innerX + _innerW - 4 * pixelW, _y, 4 * pixelW, _cardH]
+        ];
+        _ctrls set ["nowFrame", _frame];
 
-// With buttons the procedure is one line, so the observation gets its room (four lines were cut off at 0.36).
-private _shares = [[0.36, 0.18, 0.46], [0.5, 0.22, 0.28]] select (GVAR(wb) get "buttons");
+        private _pic = [QGVAR(picture), [_picX, _y + 4 * pixelH, _picW, _picH - 4 * pixelH]] call _fnc_make;
+        _ctrls set ["nowPic", _pic];
 
-if (GVAR(wb) get "notes") then {
-    _ctrls set ["see", ["1", LLSTRING(Head_See), _free * (_shares select 0)] call _fnc_card];
-    _ctrls set ["last", ["2", LLSTRING(Head_Last), _free * (_shares select 1)] call _fnc_card];
-    _ctrls set ["hands", ["3", LLSTRING(Head_Hands), _free * (_shares select 2)] call _fnc_card];
-};
+        _ctrls set ["now", [QGVAR(structured), [_innerX + _gap, _y + _picH + _gap * 0.4, _innerW - 2 * _gap, _nowH - _gap * 0.6]] call _fnc_make];
+        _y = _y + _cardH + _gap * 1.5;
 
-// The buttons: every hand movement, for the server without minigames or a player without Picture-in-Picture.
-if (GVAR(wb) get "buttons") then {
-    private _bw = (_innerW - _gap) / 2;
+        // Every step in order.
+        private _listH = (_bottom - _y) * 0.72;
+        _ctrls set ["list", [QGVAR(structured), [_innerX, _y, _innerW, _listH]] call _fnc_make];
+        _y = _y + _listH;
 
-    {
-        _x params ["_act", "_label"];
+        // What the last hand movement did.
+        [[_innerX, _y, _innerW, 2 * pixelH], _paperInk] call _fnc_line;
+        _ctrls set ["last", [QGVAR(structured), [_innerX, _y + _gap * 0.5, _innerW, _bottom - _y - _gap]] call _fnc_make];
+    };
 
-        private _col = _forEachIndex % 2;
-        private _row = floor (_forEachIndex / 2);
-        private _click = [
-            _display,
-            [_innerX + _col * (_bw + _gap), _y + _row * (_buttonH + _gap), _bw, _buttonH],
-            _label,
-            {[_c getVariable [QGVAR(act), ""]] call FUNC(act)},
-            false,
-            true
-        ] call FUNC(button);
+    _y = _bottom + _gap;
 
-        _click setVariable [QGVAR(act), _act];
-    } forEach [
-        [ACT_TAP, LLSTRING(Btn_Tap)],
-        [ACT_RACK, LLSTRING(Btn_Rack)],
-        [ACT_LOCK, LLSTRING(Btn_Lock)],
-        [ACT_RELEASE, LLSTRING(Btn_Release)],
-        [ACT_DROP, LLSTRING(Btn_Drop)],
-        [ACT_INSERT, LLSTRING(Btn_Insert)],
-        [ACT_CLEAR, LLSTRING(Btn_Clear)],
-        [ACT_SWEEP, LLSTRING(Btn_Sweep)]
-    ];
-};
+    // The buttons: every hand movement, for the server without minigames or a player without Picture-in-Picture.
+    if (GVAR(wb) get "buttons") then {
+        private _bw = (_innerW - _gap) / 2;
+
+        {
+            _x params ["_act", "_label"];
+
+            private _col = _forEachIndex % 2;
+            private _row = floor (_forEachIndex / 2);
+            private _click = [
+                _display,
+                [_innerX + _col * (_bw + _gap), _y + _row * (_buttonH + _gap), _bw, _buttonH],
+                _label,
+                {[_c getVariable [QGVAR(act), ""]] call FUNC(act)},
+                false,
+                true
+            ] call FUNC(button);
+
+            _click setVariable [QGVAR(act), _act];
+        } forEach [
+            [ACT_TAP, LLSTRING(Btn_Tap)],
+            [ACT_RACK, LLSTRING(Btn_Rack)],
+            [ACT_LOCK, LLSTRING(Btn_Lock)],
+            [ACT_RELEASE, LLSTRING(Btn_Release)],
+            [ACT_DROP, LLSTRING(Btn_Drop)],
+            [ACT_INSERT, LLSTRING(Btn_Insert)],
+            [ACT_CLEAR, LLSTRING(Btn_Clear)],
+            [ACT_SWEEP, LLSTRING(Btn_Sweep)]
+        ];
+    };
 };
 
 // Hotspot marks and the drag's track, made once and moved every frame (fnc_onFrame).

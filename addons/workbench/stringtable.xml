@@ -31,20 +31,11 @@
         <Key ID="STR_mhwm_workbench_Close">
             <English>Close</English>
         </Key>
-        <Key ID="STR_mhwm_workbench_Hands_Buttons">
-            <English>Use the buttons below - one hand movement each.</English>
-        </Key>
-        <Key ID="STR_mhwm_workbench_Hands_Help">
-            <English>&lt;t color='#ACCENT#'&gt;Charging handle&lt;/t&gt; - drag it back all the way and let go to rack. Right click while it is all the way back to lock it open. Click the locked bolt to let it go.&lt;br/&gt;&lt;t color='#ACCENT#'&gt;Magazine&lt;/t&gt; - click to tap it home, on the beat of the ring. Drag it down to drop it, drag it up straight to insert it.&lt;br/&gt;&lt;t color='#ACCENT#'&gt;Ejection port&lt;/t&gt; - swipe a stuck case out.&lt;br/&gt;&lt;t color='#ACCENT#'&gt;Chamber&lt;/t&gt; - bolt locked: hold and wiggle to clear it.</English>
-        </Key>
-        <Key ID="STR_mhwm_workbench_Head_Hands">
-            <English>Procedure</English>
-        </Key>
         <Key ID="STR_mhwm_workbench_Head_Last">
             <English>Last action</English>
         </Key>
-        <Key ID="STR_mhwm_workbench_Head_See">
-            <English>Observation</English>
+        <Key ID="STR_mhwm_workbench_Head_Steps">
+            <English>All steps</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Buttons">
             <English>Drag: turn  ·  Middle: move  ·  Wheel: zoom  ·  Buttons: hand movements</English>
@@ -56,7 +47,7 @@
             <English>Wiggle - left, right, left...</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Default">
-            <English>Left on a part: work it  ·  Right: turn  ·  Middle: move (2x: back)  ·  Wheel: zoom</English>
+            <English>Left: work the red part  ·  Right drag: turn  ·  Hold middle: move  ·  Wheel: zoom</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Handle">
             <English>Drag back all the way and let go: rack</English>
@@ -106,20 +97,50 @@
         <Key ID="STR_mhwm_workbench_Notes">
             <English>Field notes</English>
         </Key>
-        <Key ID="STR_mhwm_workbench_Paper_Sub">
-            <English>Field notes // see it, fix it</English>
-        </Key>
         <Key ID="STR_mhwm_workbench_Paper_Title">
-            <English>Trouble-shooting</English>
+            <English>What to do</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Progress">
+            <English>Step %1 of %2</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Progress_Done">
+            <English>All done</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Readout">
             <English>Mag</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_ResetView">
+            <English>Reset view</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Rounds">
             <English>rds</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Spot_Chamber">
             <English>Chamber</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_clear">
+            <English>Hold + wiggle</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_drop">
+            <English>Drag down: drop</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_insert">
+            <English>Drag up: insert</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_lock">
+            <English>Drag back + right click</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_rack">
+            <English>Drag back: rack</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_release">
+            <English>Click: release</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_sweep">
+            <English>Swipe out</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Spot_Do_tap">
+            <English>Click: tap</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Spot_Handle">
             <English>Charging handle</English>
@@ -147,6 +168,66 @@
         </Key>
         <Key ID="STR_mhwm_workbench_Status_Jammed">
             <English>Malfunction</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_Cleared_How">
+            <English>The weapon works again.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_clear">
+            <English>Clear the chamber</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_clear_How">
+            <English>Hold on the chamber and wiggle left and right.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_drop">
+            <English>Drop the magazine</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_drop_How">
+            <English>Drag the magazine down.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_insert">
+            <English>Insert the magazine</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_insert_How">
+            <English>Drag it straight up into the well.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_lock">
+            <English>Lock the bolt open</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_lock_How">
+            <English>Drag the handle all the way back, keep holding, right click.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_look">
+            <English>Look inside</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_look_How">
+            <English>With the bolt open you see what is stuck - the next steps show then.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_rack">
+            <English>Rack the charging handle</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_rackSlide">
+            <English>Rack the slide</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_rack_How">
+            <English>Drag the handle all the way back and let go.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_release">
+            <English>Send the bolt home</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_release_How">
+            <English>Click the locked bolt.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_sweep">
+            <English>Sweep the case out</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_sweep_How">
+            <English>Swipe the stuck case out of the port.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_tap">
+            <English>Tap the magazine</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Step_tap_How">
+            <English>Click the magazine the moment the ring closes on it.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Title">
             <English>Weapon malfunction</English>

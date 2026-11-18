@@ -35,6 +35,28 @@ if ("weapon" in _scene && {!("points" in _scene)}) then {
     call FUNC(points);
 };
 
+// ----- The middle button, held: moving the weapon -----
+// Also read from the mouse itself (inputMouse: 2 click and hold, 4 double click and hold): the display's press did not
+// always reach the bench (Mia: "holding the middle button does nothing"). A move begun so ends when the button is up.
+private _middle = inputMouse 2;
+
+if (_kind == "" && {_middle in [2, 4]} && {!("manual" in GVAR(wb))}) then {
+    (GVAR(wb) get "viewRect") params ["_vx", "_vy", "_vw", "_vh"];
+    _mouse params ["_mx", "_my"];
+
+    if (_mx >= _vx && {_mx <= _vx + _vw} && {_my >= _vy} && {_my <= _vy + _vh}) then {
+        _drag = createHashMapFromArray [["kind", "pan"], ["last", _mouse], ["button", 2], ["polled", true]];
+        GVAR(wb) set ["drag", _drag];
+        _kind = "pan";
+    };
+};
+
+if (_kind == "pan" && {_drag getOrDefault ["polled", false]} && {_middle == 0}) then {
+    _drag = createHashMap;
+    GVAR(wb) set ["drag", _drag];
+    _kind = "";
+};
+
 // ----- The drag -----
 switch (true) do {
     case (_kind == "orbit"): {
@@ -52,7 +74,7 @@ switch (true) do {
     };
 
     // The weapon follows the mouse: the camera and its aim move the other way, by what a screen distance is at the
-    // weapon's distance - at most the weapon's size away from where it started.
+    // weapon's distance - at most twice the weapon's size away from where it started.
     case (_kind == "pan"): {
         private _last = _drag get "last";
         private _dx = (_mouse select 0) - (_last select 0);
@@ -69,7 +91,7 @@ switch (true) do {
                 vectorAdd ((_scene get "camUp") vectorMultiply (_dy / _ph * 2 * _tanV * _dist));
             private _target = (_scene get "target") vectorAdd _shift;
             private _origin = _scene getOrDefault ["origin", _target];
-            private _limit = ((_scene getOrDefault ["points", createHashMap]) getOrDefault ["size", 1]) * 0.6;
+            private _limit = ((_scene getOrDefault ["points", createHashMap]) getOrDefault ["size", 1]) * 2;
             private _offset = _target vectorDiff _origin;
 
             if (vectorMagnitude _offset > _limit) then {
@@ -155,7 +177,11 @@ private _placed = [];
 
         if (_over) then {_hovered = _id};
 
-        private _size = HOTSPOT_SIZE * ([1, 1.35] select (_over || _active));
+        private _size = HOTSPOT_SIZE * (switch (true) do {
+            case (_over || _active): {1.35};
+            case (_attention): {1.2 + 0.15 * sin (diag_tickTime * 360)};
+            default {0.6};
+        });
         private _w = _size * pixelW / pixelH;
 
         _ring ctrlSetPosition [(_screen select 0) - _w / 2, (_screen select 1) - _size / 2, _w, _size];
@@ -196,7 +222,7 @@ private _placed = [];
 
         _label ctrlSetPosition [_lx, _ly, _lw, _lh];
         _label ctrlSetStructuredText parseText format [
-            "<t font='%4' size='0.72' color='%1' shadow='2' align='%3'>%2</t>",
+            "<t font='%4' size='%5' color='%1' shadow='2' align='%3'>%2</t>",
             (switch (true) do {
                 case (_over || _active): {_theme get "accent"};
                 case (_attention): {_theme get "warn"};
@@ -204,9 +230,11 @@ private _placed = [];
             }) call BIS_fnc_colorRGBAtoHTML,
             toUpperANSI _text,
             _align,
-            _theme get "fontMono"
+            _theme get "fontMono",
+            [0.72, 0.85] select _attention
         ];
-        _label ctrlShow true;
+        // Quiet parts keep their names to themselves until the mouse is on them: only the step now speaks.
+        _label ctrlShow (_attention || {_over} || {_active});
         _label ctrlCommit 0;
     };
 } forEach _marks;

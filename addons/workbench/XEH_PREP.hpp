@@ -12,5 +12,6 @@ PREP(points);
 PREP(project);
 PREP(refresh);
 PREP(scene);
+PREP(steps);
 PREP(sync);
 PREP(theme);
