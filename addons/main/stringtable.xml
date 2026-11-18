@@ -40,6 +40,9 @@
         <Key ID="STR_mhwm_main_Cat_Player">
             <English>Player</English>
         </Key>
+        <Key ID="STR_mhwm_main_Cat_Testing">
+            <English>Testing</English>
+        </Key>
         <Key ID="STR_mhwm_main_Cat_Types">
             <English>Malfunction types</English>
         </Key>
@@ -120,6 +123,19 @@
         </Key>
         <Key ID="STR_mhwm_main_SubsonicMags_Desc">
             <English>Magazines slower than sound are found\nby themselves.\n\nAdd more magazine classes here,\nseparated by commas.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_TestKey">
+            <English>Allow the test key for everyone</English>
+        </Key>
+        <Key ID="STR_mhwm_main_TestKey_Desc">
+            <English>The test key (Ctrl + Shift + J) makes
+the weapon in the hands malfunction at
+once, the next type each press.
+
+It always works in singleplayer, in the
+editor and for a logged-in admin.
+
+On: every player may use it.</English>
         </Key>
         <Key ID="STR_mhwm_main_WeaponRates">
             <English>Weapon reliability</English>

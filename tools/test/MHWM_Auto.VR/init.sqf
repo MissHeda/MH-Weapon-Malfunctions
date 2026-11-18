@@ -152,6 +152,14 @@ MHWMT_close = {
     sleep 3;
     format ["2 after tapRack: %1", call MHWMT_state] call MHWMT_log;
 
+    // ----- 2b. Test key: each press the next cause -----
+    for "_i" from 1 to 5 do {
+        call mhwm_malfunctions_fnc_testJam;
+        sleep 0.2;
+        format ["2b test key %1: %2", _i, call MHWMT_state] call MHWMT_log;
+    };
+    [player, _w, true] call mhwm_malfunctions_fnc_clear;
+
     // ----- 3. ACE Overheating -----
     if (isClass (configFile >> "CfgPatches" >> "ace_overheating")) then {
         [player, _w, true] call mhwm_malfunctions_fnc_clear;

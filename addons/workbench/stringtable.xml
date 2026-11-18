@@ -29,22 +29,22 @@
             <English>TAP</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Close">
-            <English>CLOSE</English>
+            <English>Close</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hands_Buttons">
             <English>Use the buttons below - one hand movement each.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hands_Help">
-            <English>&lt;t color='#e0283f'&gt;Charging handle&lt;/t&gt; - drag it back all the way and let go to rack. Right click while it is all the way back to lock it open. Click the locked bolt to let it go.&lt;br/&gt;&lt;t color='#e0283f'&gt;Magazine&lt;/t&gt; - click to tap it home, on the beat of the ring. Drag it down to drop it, drag it up straight to insert it.&lt;br/&gt;&lt;t color='#e0283f'&gt;Ejection port&lt;/t&gt; - swipe a stuck case out.&lt;br/&gt;&lt;t color='#e0283f'&gt;Chamber&lt;/t&gt; - bolt locked: hold and wiggle to clear it.</English>
+            <English>&lt;t color='#ACCENT#'&gt;Charging handle&lt;/t&gt; - drag it back all the way and let go to rack. Right click while it is all the way back to lock it open. Click the locked bolt to let it go.&lt;br/&gt;&lt;t color='#ACCENT#'&gt;Magazine&lt;/t&gt; - click to tap it home, on the beat of the ring. Drag it down to drop it, drag it up straight to insert it.&lt;br/&gt;&lt;t color='#ACCENT#'&gt;Ejection port&lt;/t&gt; - swipe a stuck case out.&lt;br/&gt;&lt;t color='#ACCENT#'&gt;Chamber&lt;/t&gt; - bolt locked: hold and wiggle to clear it.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Head_Hands">
-            <English>YOUR HANDS</English>
+            <English>Procedure</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Head_Last">
-            <English>LAST</English>
+            <English>Last action</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Head_See">
-            <English>WHAT YOU SEE</English>
+            <English>Observation</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Buttons">
             <English>Drag: turn   ·   Wheel: zoom   ·   Buttons on the right: hand movements</English>
@@ -97,6 +97,9 @@
         <Key ID="STR_mhwm_workbench_Last_None">
             <English>Nothing done yet.</English>
         </Key>
+        <Key ID="STR_mhwm_workbench_Readout">
+            <English>Inspect</English>
+        </Key>
         <Key ID="STR_mhwm_workbench_Spot_Chamber">
             <English>Chamber</English>
         </Key>
@@ -120,6 +123,15 @@
         </Key>
         <Key ID="STR_mhwm_workbench_Spot_Slide">
             <English>Slide</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Status_Clear">
+            <English>Clear</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Status_Jammed">
+            <English>Malfunction</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Title">
+            <English>Weapon malfunction</English>
         </Key>
         <Key ID="STR_mhwm_workbench_WB_Cleared">
             <English>Weapon cleared</English>

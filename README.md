@@ -29,6 +29,10 @@ Server setting "Minigames in the 3D view" off, or Picture-in-Picture off: button
 
 Tap-Rack (Ctrl + R), and unbound: tap, rack, lock/release, drop/insert, clear chamber. Server sets time and fumble chance.
 
+## Testing
+
+Ctrl + Shift + J makes the weapon in the hands malfunction at once - feed, dud, stovepipe, double feed, extraction in turn. Works in singleplayer, the editor and for admins; the server setting "Allow the test key for everyone" opens it to all players.
+
 ## ACE
 
 With ACE Overheating loaded, the server chooses who decides when a weapon jams: this mod (ACE's jams are cleared at once) or ACE Overheating (heat, its chance - each ACE jam becomes a malfunction of this mod). A hot barrel can raise this mod's rate.

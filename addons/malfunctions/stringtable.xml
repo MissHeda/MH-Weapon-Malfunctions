@@ -142,6 +142,12 @@
         <Key ID="STR_mhwm_malfunctions_Key_Tap_Desc">
             <English>Push the magazine home - blind.</English>
         </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Test">
+            <English>Test: malfunction now</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Test_Desc">
+            <English>The weapon in your hands malfunctions at once - the next type each press. Singleplayer, editor, admins, or when the server allows it.</English>
+        </Key>
         <Key ID="STR_mhwm_malfunctions_See_BoltClosed">
             <English>The bolt is closed.</English>
         </Key>
@@ -180,6 +186,12 @@
         </Key>
         <Key ID="STR_mhwm_malfunctions_See_Works">
             <English>The weapon is ready.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Test_NotAllowed">
+            <English>The test key is off on this server.</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Test_Title">
+            <English>Test malfunction</English>
         </Key>
     </Package>
 </Project>

@@ -18,7 +18,7 @@
 #define SCENE_TAN (SCENE_FOV * (((getResolution param [6, 0.75]) max 0.3) min 3))
 #define SCENE_LIGHT 28
 #define SCENE_LIGHT_REACH [0, 0, 0, 0, 30, 60]
-#define SCENE_SPHERE_COLOR "#(argb,8,8,3)color(0.045,0.03,0.033,1)"
+#define SCENE_SPHERE_COLOR "#(argb,8,8,3)color(0.03,0.032,0.035,1)"
 #define SCENE_PIP_DISTANCE 300
 
 // How far the parts travel, in metres - the bolt's by the weapon's size (fnc_points).
@@ -45,3 +45,8 @@
 
 // Where the mouse is - a test mission can stand in for it (mhwm_workbench_testMouse), the game never sets it.
 #define MOUSE_POS (missionNamespace getVariable [QGVAR(testMouse), getMousePosition])
+
+// The accent without a colour in the player's profile (AIO's orange), and how bright it must be at least to stand out
+// from the dark panes (luminance) - as AIO's fnc_accentColour.
+#define ACCENT_FALLBACK [0.84, 0.54, 0.1]
+#define ACCENT_MIN_LUMA 0.12

@@ -33,6 +33,11 @@ if (hasInterface) then {
         ["magToggle"] call FUNC(quickAction)
     }, {}, [0, [false, false, false]]] call CBA_fnc_addKeybind;
 
+    // Ctrl + Shift + J: a malfunction now, the next cause each press - for testing (fnc_testJam).
+    [_cat, QGVAR(keyTest), [LLSTRING(Key_Test), LLSTRING(Key_Test_Desc)], {
+        call FUNC(testJam)
+    }, {}, [36, [true, true, false]]] call CBA_fnc_addKeybind;
+
     [_cat, QGVAR(keyClear), [LLSTRING(Key_Clear), LLSTRING(Key_Clear_Desc)], {
         [ACT_CLEAR] call FUNC(quickAction)
     }, {}, [0, [false, false, false]]] call CBA_fnc_addKeybind;

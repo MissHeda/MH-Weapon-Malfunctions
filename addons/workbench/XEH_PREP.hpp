@@ -1,12 +1,15 @@
 PREP(act);
+PREP(button);
 PREP(camera);
 PREP(close);
 PREP(hotspots);
 PREP(onFrame);
 PREP(onMouse);
 PREP(open);
+PREP(panel);
 PREP(points);
 PREP(project);
 PREP(refresh);
 PREP(scene);
 PREP(sync);
+PREP(theme);

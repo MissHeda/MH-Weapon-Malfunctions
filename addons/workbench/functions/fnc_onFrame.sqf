@@ -29,6 +29,7 @@ private _ctrls = GVAR(wb) get "ctrls";
 private _drag = GVAR(wb) get "drag";
 private _kind = _drag getOrDefault ["kind", ""];
 private _mouse = MOUSE_POS;
+private _theme = GVAR(wb) get "theme";
 
 if ("weapon" in _scene && {!("points" in _scene)}) then {
     call FUNC(points);
@@ -128,7 +129,12 @@ private _placed = [];
         private _w = _size * pixelW / pixelH;
 
         _ring ctrlSetPosition [(_screen select 0) - _w / 2, (_screen select 1) - _size / 2, _w, _size];
-        _ring ctrlSetTextColor ([[1, 1, 1, 0.75], COLOR_RED] select (_attention || _over || _active));
+        // A part that needs the hands: the warning red; under the mouse or held: the player's accent; else quiet white.
+        _ring ctrlSetTextColor (switch (true) do {
+            case (_over || _active): {_theme get "accent"};
+            case (_attention): {_theme get "warn"};
+            default {[1, 1, 1, 0.6]};
+        });
         _ring ctrlShow true;
         _ring ctrlCommit 0;
 
@@ -160,10 +166,15 @@ private _placed = [];
 
         _label ctrlSetPosition [_lx, _ly, _lw, _lh];
         _label ctrlSetStructuredText parseText format [
-            "<t font='PuristaMedium' size='0.85' color='%1' shadow='2' align='%3'>%2</t>",
-            [HEX_TEXT, HEX_RED] select (_attention || _over),
-            _text,
-            _align
+            "<t font='%4' size='0.72' color='%1' shadow='2' align='%3'>%2</t>",
+            (switch (true) do {
+                case (_over || _active): {_theme get "accent"};
+                case (_attention): {_theme get "warn"};
+                default {_theme get "text2"};
+            }) call BIS_fnc_colorRGBAtoHTML,
+            toUpperANSI _text,
+            _align,
+            _theme get "fontMono"
         ];
         _label ctrlShow true;
         _label ctrlCommit 0;
@@ -190,8 +201,8 @@ if ("vec" in _drag) then {
         private _share = (_forEachIndex + 1) / TRACK_DOTS;
         private _at = [(_from select 0) + (_vec select 0) * _share, (_from select 1) + (_vec select 1) * _share];
         private _colour = switch (true) do {
-            case (_share <= _progress && {_progress >= _full}): {COLOR_GOOD};
-            case (_share <= _progress): {COLOR_RED};
+            case (_share <= _progress && {_progress >= _full}): {_theme get "good"};
+            case (_share <= _progress): {_theme get "accent"};
             default {[1, 1, 1, 0.3]};
         };
 
@@ -218,7 +229,7 @@ if ((_state getOrDefault ["mag", ""]) == "loose" && {_magScreen isNotEqualTo []}
     (_magScreen select 1) params ["_sx", "_sy"];
 
     _pulse ctrlSetPosition [_sx - _w / 2, _sy - _size / 2, _w, _size];
-    _pulse ctrlSetTextColor ([[1, 1, 1, 0.5], COLOR_GOOD] select _good);
+    _pulse ctrlSetTextColor ([[1, 1, 1, 0.5], _theme get "good"] select _good);
     _pulse ctrlShow true;
     _pulse ctrlCommit 0;
 } else {
@@ -263,8 +274,9 @@ private _hintKey = switch (true) do {
 if (_hintKey != (GVAR(wb) getOrDefault ["hintKey", ""])) then {
     GVAR(wb) set ["hintKey", _hintKey];
     (_ctrls get "hint") ctrlSetStructuredText parseText format [
-        "<t font='RobotoCondensed' size='0.9' color='%1'>%2</t>",
-        HEX_DIM,
-        localize format ["STR_mhwm_workbench_%1", _hintKey]
+        "<t font='%3' size='0.72' color='%1'>%2</t>",
+        (_theme get "muted") call BIS_fnc_colorRGBAtoHTML,
+        toUpperANSI localize format ["STR_mhwm_workbench_%1", _hintKey],
+        _theme get "fontMono"
     ];
 };

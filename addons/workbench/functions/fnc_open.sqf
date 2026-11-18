@@ -1,14 +1,19 @@
 #include "..\script_component.hpp"
 /*
  * Author: Miss Heda
- * Opens the workbench for the jammed weapon in the player's hands: the weapon in 3D on the left (fnc_scene, filmed into a
- * render target), what is seen on it and what the last hand movement did on the right (fnc_refresh). The parts the hands
- * can work on are marked on the weapon (fnc_hotspots) and worked by mouse (fnc_onMouse, fnc_onFrame); with the server's
- * minigames off, or without Picture-in-Picture, buttons do the same.
+ * Opens the workbench for the jammed weapon in the player's hands, in the look of AIO's Glass (fnc_theme): round-cornered
+ * near-black panes, the player's own Arma colour as the accent, Purista - with a military touch: a status chip, the 3D
+ * view framed by a sight's corner brackets with a readout over it, numbered sections in a monospace.
+ *
+ *   header   title, the weapon, status chip (MALFUNCTION / CLEAR), close
+ *   view     the weapon in 3D (fnc_scene, filmed into a render target), its parts marked (fnc_hotspots) and worked by
+ *            mouse (fnc_onMouse, fnc_onFrame); under it how the mouse works
+ *   panel    01 Observation (fnc_describe), 02 Last action, 03 Procedure - and with the server's minigames off, or
+ *            without Picture-in-Picture, a button for every hand movement
  *
  * GVAR(wb), while open:
- *   unit, weapon, display, ctrls (hashmap of controls), viewRect / picRect [x, y, w, h] (screen),
- *   scene (fnc_scene), drag (the mouse's hold, fnc_onMouse), result (last stringtable key), pfh, closing
+ *   unit, weapon, display, theme, ctrls (hashmap of controls), viewRect / picRect [x, y, w, h] (screen),
+ *   scene (fnc_scene), drag (the mouse's hold, fnc_onMouse), result (last stringtable key), pfh, closing, openTime, buttons
  *
  * Arguments:
  * None
@@ -48,20 +53,28 @@ GVAR(wb) = createHashMapFromArray [
     ["buttons", !EGVAR(main,minigames) || {!isPiPEnabled}]
 ];
 
+private _theme = call FUNC(theme);
+GVAR(wb) set ["theme", _theme];
+
+private _html = {_this call BIS_fnc_colorRGBAtoHTML};
+private _accentHex = (_theme get "accent") call _html;
+private _mutedHex = (_theme get "muted") call _html;
+private _text2Hex = (_theme get "text2") call _html;
+
 // ----- Layout -----
 private _pad = 0.012 * safeZoneH;
-private _fx = safeZoneX + 0.05 * safeZoneW;
+private _gap = 0.008 * safeZoneH;
+private _fx = safeZoneX + 0.06 * safeZoneW;
 private _fy = safeZoneY + 0.07 * safeZoneH;
-private _fw = 0.9 * safeZoneW;
+private _fw = 0.88 * safeZoneW;
 private _fh = 0.86 * safeZoneH;
-private _headH = 0.055 * safeZoneH;
-private _hintH = 0.04 * safeZoneH;
-private _panelW = 0.3 * _fw;
-private _vx = _fx + _pad;
-private _vy = _fy + _headH + _pad;
-private _vw = _fw - _panelW - 3 * _pad;
-private _vh = _fh - _headH - _hintH - 3 * _pad;
-private _px = _vx + _vw + _pad;
+private _headH = 0.06 * safeZoneH;
+private _hintH = 0.036 * safeZoneH;
+private _panelW = 0.28 * _fw;
+private _bodyY = _fy + _headH + _gap;
+private _bodyH = _fh - _headH - _gap;
+private _viewW = _fw - _panelW - _gap;
+private _px = _fx + _viewW + _gap;
 
 private _fnc_make = {
     params ["_class", "_pos", ["_group", controlNull]];
@@ -73,32 +86,57 @@ private _fnc_make = {
     _ctrl
 };
 
-// The world behind, dimmed; the frame.
-private _dim = [QGVAR(box), [safeZoneX, safeZoneY, safeZoneW, safeZoneH]] call _fnc_make;
-_dim ctrlSetBackgroundColor [0, 0, 0, 0.55];
+private _fnc_line = {
+    params ["_pos", "_color"];
 
-private _frame = [QGVAR(box), [_fx, _fy, _fw, _fh]] call _fnc_make;
-_frame ctrlSetBackgroundColor COLOR_BASE;
+    private _ctrl = [QGVAR(rect), _pos] call _fnc_make;
+    _ctrl ctrlSetBackgroundColor _color;
+    _ctrl
+};
 
-// Header: a red line, the title, the weapon, close.
-private _accent = [QGVAR(box), [_fx, _fy, _fw, 0.004 * safeZoneH]] call _fnc_make;
-_accent ctrlSetBackgroundColor COLOR_RED;
+// The world behind, dimmed.
+[[safeZoneX, safeZoneY, safeZoneW, safeZoneH], _theme get "dim"] call _fnc_line;
 
-private _title = [QGVAR(structured), [_fx + _pad, _fy + 0.008 * safeZoneH, _fw - 0.2 * _fw, _headH - 0.008 * safeZoneH]] call _fnc_make;
+// ----- Header -----
+[_display, [_fx, _fy, _fw, _headH], _theme get "panel"] call FUNC(panel);
+
+// A short accent bar at the left, as a unit marking.
+[[_fx + _pad, _fy + _headH * 0.25, 0.0035 * safeZoneH * pixelW / pixelH, _headH * 0.5], _theme get "accent"] call _fnc_line;
+
+private _title = [QGVAR(structured), [_fx + _pad * 2, _fy + _headH * 0.2, _fw * 0.6, _headH * 0.7]] call _fnc_make;
 _title ctrlSetStructuredText parseText format [
-    "<t font='PuristaBold' size='1.25' color='%1'>WEAPON MALFUNCTION</t>  <t font='PuristaMedium' size='1.1' color='%2'>%3</t>",
-    HEX_RED, HEX_TEXT, getText (configFile >> "CfgWeapons" >> _weapon >> "displayName")
+    "<t font='%1' size='1.2'>%2</t>   <t font='%3' size='0.8' color='%4'>%5</t>",
+    _theme get "fontBold", toUpperANSI LLSTRING(Title),
+    _theme get "fontMono", _text2Hex, toUpperANSI getText (configFile >> "CfgWeapons" >> _weapon >> "displayName")
 ];
 
-private _close = [QGVAR(button), [_fx + _fw - _pad - 0.09 * safeZoneW, _fy + 0.012 * safeZoneH, 0.09 * safeZoneW, _headH - 0.02 * safeZoneH]] call _fnc_make;
-_close ctrlSetText LLSTRING(Close);
-_close ctrlAddEventHandler ["ButtonClick", {closeDialog 0}];
+// The status chip: what the weapon is now (fnc_refresh fills it).
+private _chipW = 0.11 * safeZoneW;
+private _closeW = 0.075 * safeZoneW;
+private _chipX = _fx + _fw - _pad - _closeW - _gap - _chipW;
+private _chipY = _fy + _headH * 0.2;
+private _chipH = _headH * 0.6;
+private _chipParts = [_display, [_chipX, _chipY, _chipW, _chipH], _theme get "card"] call FUNC(panel);
+private _chip = [QGVAR(structured), [_chipX, _chipY + (_chipH - 0.026 * safeZoneH) / 2, _chipW, 0.03 * safeZoneH]] call _fnc_make;
 
-// The 3D view: a group the size of the view, the picture inside it with the screen's shape, covering it.
+_ctrls set ["chip", _chip];
+_ctrls set ["chipParts", _chipParts];
+
+[_display, [_fx + _fw - _pad - _closeW, _chipY, _closeW, _chipH], LLSTRING(Close), {closeDialog 0}] call FUNC(button);
+
+// ----- The 3D view -----
+[_display, [_fx, _bodyY, _viewW, _bodyH], _theme get "panel"] call FUNC(panel);
+
+private _vx = _fx + _pad;
+private _vy = _bodyY + _pad;
+private _vw = _viewW - 2 * _pad;
+private _vh = _bodyH - 2 * _pad - _hintH;
+
 private _view = [QGVAR(group), [_vx, _vy, _vw, _vh]] call _fnc_make;
-private _viewBack = [QGVAR(box), [0, 0, _vw, _vh], _view] call _fnc_make;
-_viewBack ctrlSetBackgroundColor [0.03, 0.02, 0.022, 1];
+private _viewBack = [QGVAR(rect), [0, 0, _vw, _vh], _view] call _fnc_make;
+_viewBack ctrlSetBackgroundColor [0.025, 0.025, 0.028, 1];
 
+// The picture has the screen's shape and covers the view; the group cuts it to size.
 private _picH = _vh;
 private _picW = SCENE_ASPECT * (_picH / pixelH) * pixelW;
 
@@ -116,80 +154,90 @@ _picture ctrlSetText SCENE_TEXTURE;
 GVAR(wb) set ["viewRect", [_vx, _vy, _vw, _vh]];
 GVAR(wb) set ["picRect", [_vx + _picX, _vy + _picY, _picW, _picH]];
 
-// A thin red frame round the view.
+// The sight's corner brackets, in the accent.
+private _arm = 0.035 * safeZoneH;
+private _armW = _arm * pixelW / pixelH;
+private _thick = 2 * pixelH;
+private _thickW = 2 * pixelW;
+private _inset = _pad;
+private _insetW = _pad * pixelW / pixelH;
+private _bx0 = _vx + _insetW;
+private _by0 = _vy + _inset;
+private _bx1 = _vx + _vw - _insetW;
+private _by1 = _vy + _vh - _inset;
+
 {
-    private _line = [QGVAR(box), _x] call _fnc_make;
-    _line ctrlSetBackgroundColor COLOR_RED_SOFT;
+    _x params ["_cx", "_cy", "_dx", "_dy"];
+
+    // Across, then up or down, from the corner inwards.
+    [[[_cx, _cx - _armW] select (_dx < 0), [_cy, _cy - _thick] select (_dy < 0), _armW, _thick], _theme get "accent"] call _fnc_line;
+    [[[_cx, _cx - _thickW] select (_dx < 0), [_cy, _cy - _arm] select (_dy < 0), _thickW, _arm], _theme get "accent"] call _fnc_line;
 } forEach [
-    [_vx, _vy, _vw, pixelH],
-    [_vx, _vy + _vh - pixelH, _vw, pixelH],
-    [_vx, _vy, pixelW, _vh],
-    [_vx + _vw - pixelW, _vy, pixelW, _vh]
+    [_bx0, _by0, 1, 1],
+    [_bx1, _by0, -1, 1],
+    [_bx0, _by1, 1, -1],
+    [_bx1, _by1, -1, -1]
+];
+
+// The readout over the view: what is inspected, and what the parts mean.
+private _readout = [QGVAR(structured), [_bx0 + _insetW * 1.5, _by0 + _inset * 0.6, _vw * 0.7, 0.03 * safeZoneH]] call _fnc_make;
+_readout ctrlSetStructuredText parseText format [
+    "<t font='%1' size='0.75' color='%2'>%3 // %4</t>",
+    _theme get "fontMono", _mutedHex, toUpperANSI LLSTRING(Readout), toUpperANSI _weapon
 ];
 
 // Under the view: how the mouse works.
-private _hint = [QGVAR(structured), [_vx, _vy + _vh + _pad / 2, _vw, _hintH]] call _fnc_make;
+private _hint = [QGVAR(structured), [_vx, _vy + _vh + _gap, _vw, _hintH]] call _fnc_make;
 _ctrls set ["hint", _hint];
 
-// ----- Panel -----
-private _panelBack = [QGVAR(box), [_px, _vy, _panelW, _vh + _hintH + _pad / 2]] call _fnc_make;
-_panelBack ctrlSetBackgroundColor COLOR_PANEL;
+// ----- Panel: three cards -----
+[_display, [_px, _bodyY, _panelW, _bodyH], _theme get "panel"] call FUNC(panel);
 
-private _y = _vy + _pad;
+private _innerX = _px + _pad;
 private _innerW = _panelW - 2 * _pad;
+private _y = _bodyY + _pad;
+private _buttonH = 0.042 * safeZoneH;
+private _buttonsH = [0, 4 * (_buttonH + _gap) + _pad] select (GVAR(wb) get "buttons");
+private _free = _bodyH - 2 * _pad - _buttonsH - 2 * _gap;
 
-private _fnc_heading = {
-    params ["_text"];
+private _fnc_card = {
+    params ["_number", "_name", "_height"];
 
-    private _ctrl = [QGVAR(structured), [_px + _pad, _y, _innerW, 0.03 * safeZoneH]] call _fnc_make;
-    _ctrl ctrlSetStructuredText parseText format ["<t font='PuristaBold' size='0.9' color='%1'>%2</t>", HEX_RED, _text];
-    _y = _y + 0.032 * safeZoneH;
+    [_display, [_innerX, _y, _innerW, _height], _theme get "card"] call FUNC(panel);
 
-    private _line = [QGVAR(box), [_px + _pad, _y, _innerW, pixelH]] call _fnc_make;
-    _line ctrlSetBackgroundColor COLOR_RED_SOFT;
-    _y = _y + _pad / 2;
+    private _head = [QGVAR(structured), [_innerX + _pad, _y + _gap, _innerW - 2 * _pad, 0.026 * safeZoneH]] call _fnc_make;
+    _head ctrlSetStructuredText parseText format [
+        "<t font='%1' size='0.75' color='%2'>%3</t>  <t font='%1' size='0.75' color='%4'>%5</t>",
+        _theme get "fontMono", _accentHex, _number, _mutedHex, toUpperANSI _name
+    ];
+
+    private _body = [QGVAR(structured), [_innerX + _pad, _y + _gap + 0.03 * safeZoneH, _innerW - 2 * _pad, _height - 0.03 * safeZoneH - 2 * _gap]] call _fnc_make;
+
+    _y = _y + _height + _gap;
+    _body
 };
 
-[LLSTRING(Head_See)] call _fnc_heading;
-private _see = [QGVAR(structured), [_px + _pad, _y, _innerW, 0.2 * safeZoneH]] call _fnc_make;
-_ctrls set ["see", _see];
-_y = _y + 0.2 * safeZoneH + _pad;
-
-[LLSTRING(Head_Last)] call _fnc_heading;
-private _last = [QGVAR(structured), [_px + _pad, _y, _innerW, 0.08 * safeZoneH]] call _fnc_make;
-_ctrls set ["last", _last];
-_y = _y + 0.08 * safeZoneH + _pad;
-
-[LLSTRING(Head_Hands)] call _fnc_heading;
-
-// The rest of the panel, less the buttons' rows when there are buttons (0.2 cut the help off in the first test).
-private _buttonsH = [0, 4 * (0.04 * safeZoneH + _pad / 2) + _pad] select (GVAR(wb) get "buttons");
-private _handsH = (_vy + _vh + _hintH - _y - _pad - _buttonsH) max (0.1 * safeZoneH);
-private _hands = [QGVAR(structured), [_px + _pad, _y, _innerW, _handsH]] call _fnc_make;
-_ctrls set ["hands", _hands];
-_y = _y + _handsH + _pad;
+_ctrls set ["see", ["01", LLSTRING(Head_See), _free * 0.36] call _fnc_card];
+_ctrls set ["last", ["02", LLSTRING(Head_Last), _free * 0.18] call _fnc_card];
+_ctrls set ["hands", ["03", LLSTRING(Head_Hands), _free * 0.46] call _fnc_card];
 
 // The buttons: every hand movement, for the server without minigames or a player without Picture-in-Picture.
 if (GVAR(wb) get "buttons") then {
-    private _bw = (_innerW - _pad) / 2;
-    private _bh = 0.04 * safeZoneH;
-    private _buttons = [];
+    private _bw = (_innerW - _gap) / 2;
 
     {
         _x params ["_act", "_label"];
 
         private _col = _forEachIndex % 2;
         private _row = floor (_forEachIndex / 2);
-        private _button = [QGVAR(button), [_px + _pad + _col * (_bw + _pad), _y + _row * (_bh + _pad / 2), _bw, _bh]] call _fnc_make;
+        private _click = [
+            _display,
+            [_innerX + _col * (_bw + _gap), _y + _row * (_buttonH + _gap), _bw, _buttonH],
+            _label,
+            {[_c getVariable [QGVAR(act), ""]] call FUNC(act)}
+        ] call FUNC(button);
 
-        _button ctrlSetText _label;
-        _button setVariable [QGVAR(act), _act];
-        _button ctrlAddEventHandler ["ButtonClick", {
-            params ["_button"];
-
-            [_button getVariable [QGVAR(act), ""]] call FUNC(act);
-        }];
-        _buttons pushBack _button;
+        _click setVariable [QGVAR(act), _act];
     } forEach [
         [ACT_TAP, LLSTRING(Btn_Tap)],
         [ACT_RACK, LLSTRING(Btn_Rack)],
@@ -200,8 +248,6 @@ if (GVAR(wb) get "buttons") then {
         [ACT_CLEAR, LLSTRING(Btn_Clear)],
         [ACT_SWEEP, LLSTRING(Btn_Sweep)]
     ];
-
-    _ctrls set ["buttons", _buttons];
 };
 
 // Hotspot marks and the drag's track, made once and moved every frame (fnc_onFrame).
@@ -232,13 +278,13 @@ private _pulse = [QGVAR(picture), [0, 0, 0, 0]] call _fnc_make;
 _pulse ctrlSetText TEX_CIRCLE;
 _ctrls set ["pulse", _pulse];
 
-private _bar = [QGVAR(box), [0, 0, 0, 0]] call _fnc_make;
-_bar ctrlSetBackgroundColor COLOR_RED;
-_ctrls set ["bar", _bar];
-
-private _barBack = [QGVAR(box), [0, 0, 0, 0]] call _fnc_make;
+private _barBack = [QGVAR(rect), [0, 0, 0, 0]] call _fnc_make;
 _barBack ctrlSetBackgroundColor [0, 0, 0, 0.6];
 _ctrls set ["barBack", _barBack];
+
+private _bar = [QGVAR(rect), [0, 0, 0, 0]] call _fnc_make;
+_bar ctrlSetBackgroundColor (_theme get "accent");
+_ctrls set ["bar", _bar];
 
 // The mouse: buttons and wheel on the display, movement polled each frame.
 _display displayAddEventHandler ["MouseButtonDown", {["down", _this] call FUNC(onMouse); false}];

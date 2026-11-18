@@ -56,3 +56,9 @@ _cat = [CBA_SETTINGS_CAT, LLSTRING(Cat_Player)];
 // Switches
 [QGVAR(notify), "CHECKBOX", [LSTRING(Notify), LSTRING(Notify_Desc)], _cat, true, 0] call CBA_fnc_addSetting;
 [QGVAR(sounds), "CHECKBOX", [LSTRING(Sounds), LSTRING(Sounds_Desc)], _cat, true, 0] call CBA_fnc_addSetting;
+
+// ----- Testing (server) -----
+_cat = [CBA_SETTINGS_CAT, LLSTRING(Cat_Testing)];
+
+// Switches
+[QGVAR(testKey), "CHECKBOX", [LSTRING(TestKey), LSTRING(TestKey_Desc)], _cat, false, 1] call CBA_fnc_addSetting;

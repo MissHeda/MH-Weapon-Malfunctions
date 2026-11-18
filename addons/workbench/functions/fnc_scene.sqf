@@ -121,7 +121,7 @@ if (!isNull _case) then {
 _scene set ["case", _case];
 
 // The lights, with the camera: key, fill, rim. Without falloff up to 30 m (AIO: with a constant falloff they lit nothing).
-private _lights = [[1, [1, 0.96, 0.92]], [0.4, [0.75, 0.8, 0.95]], [0.7, [1, 0.75, 0.75]]] apply {
+private _lights = [[1, [1, 0.96, 0.92]], [0.4, [0.75, 0.8, 0.95]], [0.7, [0.9, 0.92, 1]]] apply {
     _x params ["_share", "_colour"];
 
     private _light = "#lightpoint" createVehicleLocal [0, 0, 0];

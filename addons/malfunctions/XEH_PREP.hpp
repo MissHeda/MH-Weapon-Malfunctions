@@ -12,3 +12,4 @@ PREP(onReloaded);
 PREP(playSound);
 PREP(quickAction);
 PREP(state);
+PREP(testJam);
