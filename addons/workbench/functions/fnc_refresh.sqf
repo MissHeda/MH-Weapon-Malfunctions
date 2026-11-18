@@ -37,6 +37,9 @@ _chipColor set [3, 0.22];
     toUpperANSI ([LLSTRING(Status_Jammed), LLSTRING(Status_Clear)] select _cleared)
 ];
 
+// Without the field notes there are no cards to fill.
+if !("see" in _ctrls) exitWith {};
+
 // What is seen.
 private _lines = ([_state] call EFUNC(malfunctions,describe)) apply {
     _x params ["_text", "_problem"];

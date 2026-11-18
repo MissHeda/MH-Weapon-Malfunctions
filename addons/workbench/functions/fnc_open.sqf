@@ -9,7 +9,9 @@
  *   view     the weapon in 3D (fnc_scene, filmed into a render target), its parts marked (fnc_hotspots) and worked by
  *            mouse (fnc_onMouse, fnc_onFrame); under it how the mouse works
  *   panel    01 Observation (fnc_describe), 02 Last action, 03 Procedure - and with the server's minigames off, or
- *            without Picture-in-Picture, a button for every hand movement
+ *            without Picture-in-Picture, a button for every hand movement. The "Field notes" check in the header hides
+ *            the three cards for players who know the drill (profileNamespace mhwm_workbench_notesHidden): the view then
+ *            takes the whole width, or with buttons the panel keeps only them.
  *
  * GVAR(wb), while open:
  *   unit, weapon, display, theme, ctrls (hashmap of controls), viewRect / picRect [x, y, w, h] (screen),
@@ -50,7 +52,8 @@ GVAR(wb) = createHashMapFromArray [
     ["result", ""],
     ["closing", false],
     ["openTime", diag_tickTime],
-    ["buttons", !EGVAR(main,minigames) || {!isPiPEnabled}]
+    ["buttons", !EGVAR(main,minigames) || {!isPiPEnabled}],
+    ["notes", !(profileNamespace getVariable [QGVAR(notesHidden), false])]
 ];
 
 private _theme = call FUNC(theme);
@@ -70,10 +73,11 @@ private _fw = 0.88 * safeZoneW;
 private _fh = 0.86 * safeZoneH;
 private _headH = 0.075 * safeZoneH;
 private _hintH = 0.036 * safeZoneH;
-private _panelW = 0.28 * _fw;
+private _showPanel = (GVAR(wb) get "notes") || {GVAR(wb) get "buttons"};
+private _panelW = [0, 0.28 * _fw] select _showPanel;
 private _bodyY = _fy + _headH + _gap;
 private _bodyH = _fh - _headH - _gap;
-private _viewW = _fw - _panelW - _gap;
+private _viewW = [_fw, _fw - _panelW - _gap] select _showPanel;
 private _px = _fx + _viewW + _gap;
 
 private _fnc_make = {
@@ -139,6 +143,33 @@ _ctrls set ["chipParts", _chipParts];
 // The field manual: how the minigames are played (fnc_manual).
 private _manualW = 0.1 * safeZoneW;
 [_display, [_chipX - _gap - _manualW, _chipY, _manualW, _chipH], LLSTRING(Manual), {[] call FUNC(manual)}, true] call FUNC(button);
+
+// The field notes check: off hides the side panel's cards; the bench is built anew with the other layout.
+private _notesW = 0.1 * safeZoneW;
+private _notesX = _chipX - 2 * _gap - _manualW - _notesW;
+[_display, [_notesX, _chipY, _notesW, _chipH], "     " + LLSTRING(Notes), {
+    profileNamespace setVariable [QGVAR(notesHidden), GVAR(wb) get "notes"];
+    saveProfileNamespace;
+    closeDialog 0;
+    [{[] call FUNC(open)}] call CBA_fnc_execNextFrame;
+}] call FUNC(button);
+
+// The check box at the button's left: an accent frame, filled while the notes show.
+private _boxH = _chipH * 0.42;
+private _boxW = _boxH * pixelW / pixelH;
+private _boxX = _notesX + _pad * pixelW / pixelH;
+private _boxY = _chipY + (_chipH - _boxH) / 2;
+{
+    [_x, _theme get "accent"] call _fnc_line;
+} forEach [
+    [_boxX, _boxY, _boxW, 2 * pixelH],
+    [_boxX, _boxY + _boxH - 2 * pixelH, _boxW, 2 * pixelH],
+    [_boxX, _boxY, 2 * pixelW, _boxH],
+    [_boxX + _boxW - 2 * pixelW, _boxY, 2 * pixelW, _boxH]
+];
+if (GVAR(wb) get "notes") then {
+    [[_boxX + _boxW * 0.25, _boxY + _boxH * 0.25, _boxW * 0.5, _boxH * 0.5], _theme get "accent"] call _fnc_line;
+};
 
 // ----- The 3D view -----
 [_display, [_fx, _bodyY, _viewW, _bodyH], _theme get "panel"] call FUNC(panel);
@@ -211,6 +242,7 @@ private _hint = [QGVAR(text), [_vx, _vy + _vh + _gap * 0.5, _vw, _hintH]] call _
 _ctrls set ["hint", _hint];
 
 // ----- Panel: a page of field notes -----
+if (_showPanel) then {
 // The side panel is printed paper, as the field manual (fnc_manual): yellowed, grainy, black ink and red. Its sections are
 // caption boxes with a black number disc, as the manual's panels have (Mia: "in this paper style of the 1980s").
 private _paperInk = _theme get "paperInk";
@@ -245,6 +277,10 @@ _y = _y + _gap * 1.5;
 
 private _buttonH = 0.042 * safeZoneH;
 private _buttonsH = [0, 4 * (_buttonH + _gap) + _pad] select (GVAR(wb) get "buttons");
+
+// Without the notes the buttons sit right under the page's head.
+if !(GVAR(wb) get "notes") then {_buttonsH = 0};
+
 private _free = (_bodyY + _bodyH) - _y - _pad - _buttonsH - 2 * _gap;
 
 private _fnc_card = {
@@ -288,9 +324,11 @@ private _fnc_card = {
 // With buttons the procedure is one line, so the observation gets its room (four lines were cut off at 0.36).
 private _shares = [[0.36, 0.18, 0.46], [0.5, 0.22, 0.28]] select (GVAR(wb) get "buttons");
 
-_ctrls set ["see", ["1", LLSTRING(Head_See), _free * (_shares select 0)] call _fnc_card];
-_ctrls set ["last", ["2", LLSTRING(Head_Last), _free * (_shares select 1)] call _fnc_card];
-_ctrls set ["hands", ["3", LLSTRING(Head_Hands), _free * (_shares select 2)] call _fnc_card];
+if (GVAR(wb) get "notes") then {
+    _ctrls set ["see", ["1", LLSTRING(Head_See), _free * (_shares select 0)] call _fnc_card];
+    _ctrls set ["last", ["2", LLSTRING(Head_Last), _free * (_shares select 1)] call _fnc_card];
+    _ctrls set ["hands", ["3", LLSTRING(Head_Hands), _free * (_shares select 2)] call _fnc_card];
+};
 
 // The buttons: every hand movement, for the server without minigames or a player without Picture-in-Picture.
 if (GVAR(wb) get "buttons") then {
@@ -321,6 +359,7 @@ if (GVAR(wb) get "buttons") then {
         [ACT_CLEAR, LLSTRING(Btn_Clear)],
         [ACT_SWEEP, LLSTRING(Btn_Sweep)]
     ];
+};
 };
 
 // Hotspot marks and the drag's track, made once and moved every frame (fnc_onFrame).

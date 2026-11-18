@@ -54,8 +54,81 @@ MHWMT_toggle = {
     format ["%1: %2", _label, ["off", "on"] select _value] call MHWMT_say;
 };
 
+// ----- Drills: every minigame once, on a rifle and on a pistol, ticked off when the bench clears it -----
+// [letter, cause, magazine, handgun, name]; what is done stays in the profile (MHWMT_done) over restarts.
+MHWMT_drills = [];
+{
+    _x params ["_cause", "_mag", "_name"];
+    MHWMT_drills pushBack [toString [65 + _forEachIndex], _cause, _mag, false, "Rifle - " + _name];
+    MHWMT_drills pushBack [toString [71 + _forEachIndex], _cause, _mag, true, "Pistol - " + _name];
+} forEach [
+    ["feed", "loose", "failure to feed, magazine loose (tap)"],
+    ["feed", "in", "failure to feed, magazine seated (tap, rack)"],
+    ["dud", "", "dud (tap, rack)"],
+    ["stovepipe", "", "stovepipe (sweep the case)"],
+    ["double", "", "double feed (lock, drop, rack, insert)"],
+    ["extract", "", "failure to extract (lock, clear, insert)"]
+];
+MHWMT_drills sort true;
+
+MHWMT_isDone = {(profileNamespace getVariable ["MHWMT_done", []]) find _this >= 0};
+MHWMT_drillTitle = {
+    params ["_letter", "", "", "", "_name"];
+    format ["%1 %2: %3", ["[  ]", "[OK]"] select (_letter call MHWMT_isDone), _letter, _name]
+};
+
+MHWMT_drill = {
+    params ["_letter", "_cause", "_mag", "_handgun", "_name"];
+
+    // The drill's weapon in the hands, then its malfunction, then the bench.
+    MHWMT_active = "";
+    if (_handgun) then {
+        if (handgunWeapon player == "") then {["hgun_P07_F", "16Rnd_9x21_Mag", true] call MHWMT_weapon};
+        player selectWeapon handgunWeapon player;
+    } else {
+        if (primaryWeapon player == "") then {["arifle_MX_F", "30Rnd_65x39_caseless_mag"] call MHWMT_weapon};
+        player selectWeapon primaryWeapon player;
+    };
+
+    [_letter, _cause, _mag] spawn {
+        params ["_letter", "_cause", "_mag"];
+        sleep 0.6; // the weapon switch
+        if (_mag isEqualTo "") then {[_cause] call MHWMT_jam} else {[_cause, _mag] call MHWMT_jam};
+        MHWMT_active = _letter;
+        MHWMT_activeWeapon = currentWeapon player;
+        [] call mhwm_workbench_fnc_open;
+    };
+};
+
+// Cleared on the bench or by the quick keys: the running drill is done.
+["mhwm_malfunctions_changed", {
+    params ["_unit", "_weapon", "_new"];
+
+    if (_unit != player || {count _new > 0} || {MHWMT_active isEqualTo ""} || {_weapon != MHWMT_activeWeapon}) exitWith {};
+
+    private _done = profileNamespace getVariable ["MHWMT_done", []];
+    _done pushBackUnique MHWMT_active;
+    profileNamespace setVariable ["MHWMT_done", _done];
+    saveProfileNamespace;
+    format ["Drill %1 done - %2 of %3. %4", MHWMT_active, count _done, count MHWMT_drills, (MHWMT_drills select {!((_x select 0) call MHWMT_isDone)} apply {_x select 0}) joinString " "] call MHWMT_say;
+    MHWMT_active = "";
+    call MHWMT_updateTitles;
+}] call CBA_fnc_addEventHandler;
+MHWMT_active = "";
+MHWMT_activeWeapon = "";
+
+// The action menu's titles anew, with their ticks.
+MHWMT_actionIds = [];
+MHWMT_updateTitles = {
+    {
+        _x params ["_id", "_drill"];
+        player setUserActionText [_id, format ["<t color='%1'>%2</t>", ["#ffffff", "#6fd98c"] select ((_drill select 0) call MHWMT_isDone), _drill call MHWMT_drillTitle]];
+    } forEach MHWMT_actionIds;
+};
+
 // [label, code, group] - the groups become ACE sub-menus; in the action menu they are just in order.
 MHWMT_entries = [
+    ["Reset the drill checklist", {profileNamespace setVariable ["MHWMT_done", []]; saveProfileNamespace; call MHWMT_updateTitles; "Checklist cleared." call MHWMT_say}, "Drills"],
     ["Failure to feed (magazine loose)", {["feed", "loose"] call MHWMT_jam}, "Malfunctions"],
     ["Failure to feed (magazine seated)", {["feed", "in"] call MHWMT_jam}, "Malfunctions"],
     ["Dud", {["dud"] call MHWMT_jam}, "Malfunctions"],
@@ -66,7 +139,7 @@ MHWMT_entries = [
 
     ["Open the 3D bench", {[] call mhwm_workbench_fnc_open}, "Bench"],
     ["Show the field manual on next open", {profileNamespace setVariable ["mhwm_workbench_manualSeen", false]; "Field manual comes up with the next bench." call MHWMT_say}, "Bench"],
-    ["Clear the malfunction", {[player, currentWeapon player] call mhwm_malfunctions_fnc_clear}, "Bench"],
+    ["Clear the malfunction", {MHWMT_active = ""; [player, currentWeapon player] call mhwm_malfunctions_fnc_clear}, "Bench"],
     ["Refill magazines", {player setAmmo [currentWeapon player, 1e6]; "Magazine full." call MHWMT_say}, "Bench"],
 
     ["Toggle: minigames / buttons", {["mhwm_main_minigames", "Minigames"] call MHWMT_toggle}, "Settings"],
@@ -140,8 +213,13 @@ MHWMT_entries = [
         _target setDir 180;
     };
 
-    // The action menu: a header line, then every entry.
-    player addAction ["<t color='#e0283f'>--- MHWM Test ---</t>", {}, nil, 1.6, false, false];
+    // The action menu: a header line, the drills, then every entry.
+    player addAction ["<t color='#e0283f'>--- MHWM Test ---</t>", {}, nil, 1.7, false, false];
+    {
+        private _id = player addAction ["", {(_this select 3) call MHWMT_drill}, _x, 1.65 - _forEachIndex * 0.001, false, true];
+        MHWMT_actionIds pushBack [_id, _x];
+    } forEach MHWMT_drills;
+    call MHWMT_updateTitles;
     {
         _x params ["_label", "_code", "_group"];
         player addAction [format ["<t color='#c8c8c8'>%1: </t>%2", _group, _label], _code, nil, 1.5 - _forEachIndex * 0.01, false, true];
@@ -152,9 +230,23 @@ MHWMT_entries = [
         private _root = ["MHWMT", "MHWM Test", "", {}, {true}] call ace_interact_menu_fnc_createAction;
         [player, 1, ["ACE_SelfActions"], _root] call ace_interact_menu_fnc_addActionToObject;
 
-        private _groups = [];
+        // Drills first, their names with the tick (the modifier sets it each time the menu opens).
+        private _drillMenu = ["MHWMT_Drills", "Drills (every minigame)", "", {}, {true}] call ace_interact_menu_fnc_createAction;
+        [player, 1, ["ACE_SelfActions", "MHWMT"], _drillMenu] call ace_interact_menu_fnc_addActionToObject;
+        {
+            private _action = [
+                "MHWMT_D" + (_x select 0), _x call MHWMT_drillTitle, "", {(_this select 2) call MHWMT_drill}, {true}, {}, _x, [0, 0, 0], 2, [false, false, false, false, false],
+                {params ["", "", "_drill", "_data"]; _data set [1, _drill call MHWMT_drillTitle]}
+            ] call ace_interact_menu_fnc_createAction;
+            [player, 1, ["ACE_SelfActions", "MHWMT", "MHWMT_Drills"], _action] call ace_interact_menu_fnc_addActionToObject;
+        } forEach MHWMT_drills;
+
+        private _groups = ["Drills"];
         {
             _x params ["_label", "_code", "_group"];
+
+            private _path = ["ACE_SelfActions", "MHWMT", "MHWMT_" + _group];
+            if (_group == "Drills") then {_path = ["ACE_SelfActions", "MHWMT", "MHWMT_Drills"]};
 
             if !(_group in _groups) then {
                 _groups pushBack _group;
@@ -163,11 +255,11 @@ MHWMT_entries = [
             };
 
             private _action = [format ["MHWMT_%1", _forEachIndex], _label, "", {call (_this select 2)}, {true}, {}, _code] call ace_interact_menu_fnc_createAction;
-            [player, 1, ["ACE_SelfActions", "MHWMT", "MHWMT_" + _group], _action] call ace_interact_menu_fnc_addActionToObject;
+            [player, 1, _path, _action] call ace_interact_menu_fnc_addActionToObject;
         } forEach MHWMT_entries;
     };
 
-    "Mouse wheel or ACE Self-Interaction > MHWM Test. Ctrl+Shift+J jams the weapon too." call MHWMT_say;
+    format ["Drills A-L: every minigame on rifle and pistol, ticked off when cleared (%1 of %2 done). Mouse wheel or ACE Self-Interaction > MHWM Test > Drills.", count (profileNamespace getVariable ["MHWMT_done", []]), count MHWMT_drills] call MHWMT_say;
 
     // Clipboard remote control for the unattended runs.
     private _last = "";
