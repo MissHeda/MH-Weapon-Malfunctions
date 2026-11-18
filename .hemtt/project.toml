@@ -28,7 +28,7 @@ workshop = [
 [hemtt.launch.test]
 extends = "default"
 mission = "MHWM_Test.VR"
-parameters = ["-window", "-noPause", "-showScriptErrors"]
+parameters = ["-noPause", "-showScriptErrors"]
 
 # Without ACE: hemtt launch vanilla
 [hemtt.launch.vanilla]
