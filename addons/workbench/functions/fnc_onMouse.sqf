@@ -28,6 +28,9 @@ params ["_event", "_args"];
 
 if (isNil QGVAR(wb) || {GVAR(wb) get "closing"}) exitWith {};
 
+// The manual lies over the bench: its own click closes it, nothing reaches the weapon.
+if ("manual" in GVAR(wb)) exitWith {};
+
 private _scene = GVAR(wb) getOrDefault ["scene", createHashMap];
 private _drag = GVAR(wb) get "drag";
 private _mouse = MOUSE_POS;
@@ -85,6 +88,17 @@ if (_event == "down") exitWith {
                 _spot = _id;
             };
         } forEach (GVAR(wb) getOrDefault ["spotScreen", []]);
+    };
+
+    // The middle button moves the weapon across the view, as in AIO's 3D view; a double click with it puts it back.
+    if (_button == 2) exitWith {
+        if (diag_tickTime - (GVAR(wb) getOrDefault ["lastMiddle", -1]) < 0.35 && {"origin" in _scene}) then {
+            _scene set ["target", +(_scene get "origin")];
+            call FUNC(camera);
+        };
+
+        GVAR(wb) set ["lastMiddle", diag_tickTime];
+        GVAR(wb) set ["drag", createHashMapFromArray [["kind", "pan"], ["last", _mouse], ["button", _button]]];
     };
 
     if (_spot isEqualTo "" || {count _points == 0} || {count _state == 0}) exitWith {

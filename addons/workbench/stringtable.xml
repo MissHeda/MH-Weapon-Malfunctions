@@ -47,7 +47,7 @@
             <English>Observation</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Buttons">
-            <English>Drag: turn   ·   Wheel: zoom   ·   Buttons on the right: hand movements</English>
+            <English>Drag: turn  ·  Middle: move  ·  Wheel: zoom  ·  Buttons: hand movements</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Chamber">
             <English>Hold and wiggle left and right</English>
@@ -56,7 +56,7 @@
             <English>Wiggle - left, right, left...</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Default">
-            <English>Left drag on a part: work it   ·   Drag elsewhere or right drag: turn   ·   Wheel: zoom</English>
+            <English>Left on a part: work it  ·  Right: turn  ·  Middle: move (2x: back)  ·  Wheel: zoom</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Handle">
             <English>Drag back all the way and let go: rack</English>
@@ -97,8 +97,17 @@
         <Key ID="STR_mhwm_workbench_Last_None">
             <English>Nothing done yet.</English>
         </Key>
+        <Key ID="STR_mhwm_workbench_Manual">
+            <English>Field manual</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Manual_Close">
+            <English>Click anywhere to close</English>
+        </Key>
         <Key ID="STR_mhwm_workbench_Readout">
-            <English>Inspect</English>
+            <English>Mag</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Rounds">
+            <English>rds</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Spot_Chamber">
             <English>Chamber</English>

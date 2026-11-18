@@ -198,6 +198,8 @@ _scene set ["points", _points];
 // The camera frames the weapon now.
 if (!isNull _object) then {
     _scene set ["target", _object modelToWorldVisualWorld _centre];
+    // Where moving with the middle button starts from, and where its double click puts the weapon back.
+    _scene set ["origin", _object modelToWorldVisualWorld _centre];
 };
 
 // Far enough that the whole weapon fits (1.35 cut the MX's stock and barrel off in the first test).

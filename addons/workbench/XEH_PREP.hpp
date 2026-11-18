@@ -3,6 +3,7 @@ PREP(button);
 PREP(camera);
 PREP(close);
 PREP(hotspots);
+PREP(manual);
 PREP(onFrame);
 PREP(onMouse);
 PREP(open);

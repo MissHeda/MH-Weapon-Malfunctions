@@ -102,12 +102,38 @@ if (!isNull _case) then {
     if (_port == "stovepipe") then {
         private _sweep = [0, _progress] select (_kind == "port");
         private _out = vectorNormalized (_right vectorAdd _up);
+
+        // A stovepipe's case is caught leaning out of the port, its mouth up and outwards, a little to the muzzle or the
+        // stock - never bolt upright (Mia: the upright case "looks buggy"). The lean is drawn once per malfunction; swept,
+        // the case tips further out as it goes.
+        if !("caseLean" in _scene) then {
+            _scene set ["caseLean", [0.35 + random 0.3, -0.25 + random 0.5]];
+        };
+
+        (_scene get "caseLean") params ["_outwards", "_along"];
+
+        private _axis = vectorNormalized (
+            (_up vectorMultiply ((1 - _sweep) * 0.8 + 0.15))
+            vectorAdd (_right vectorMultiply (_outwards + _sweep))
+            vectorAdd (_fwd vectorMultiply _along)
+        );
+        private _side = (_fwd vectorMultiply -1);
+        private _upVec = vectorNormalized (_side vectorDiff (_axis vectorMultiply (_side vectorDotProduct _axis)));
+
+        // Its base stays in the port: the middle of the case a third of its length out along its axis.
+        private _length = if ("caseLength" in _scene) then {_scene get "caseLength"} else {
+            (0 boundingBoxReal _case) params ["_min", "_max"];
+            private _l = ((_max select 1) - (_min select 1)) max 0.02;
+            _scene set ["caseLength", _l];
+            _l
+        };
+
         private _at = ((_points get "port") call _fnc_world)
-            vectorAdd (_right vectorMultiply 0.012)
-            vectorAdd (_up vectorMultiply 0.008)
+            vectorAdd (_axis vectorMultiply (_length * 0.3))
             vectorAdd (_out vectorMultiply (_sweep * TRAVEL_SWEEP));
 
-        [_case, _at, _up, _fwd vectorMultiply -1] call _fnc_place;
+        _case setVectorDirAndUp [_axis, _upVec];
+        _case setPosWorld (_at vectorAdd ((getPosWorld _case) vectorDiff (_case modelToWorldVisualWorld [0, 0, 0])));
         _case hideObject false;
     } else {
         _case hideObject true;

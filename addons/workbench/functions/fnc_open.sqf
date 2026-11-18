@@ -68,7 +68,7 @@ private _fx = safeZoneX + 0.06 * safeZoneW;
 private _fy = safeZoneY + 0.07 * safeZoneH;
 private _fw = 0.88 * safeZoneW;
 private _fh = 0.86 * safeZoneH;
-private _headH = 0.06 * safeZoneH;
+private _headH = 0.075 * safeZoneH;
 private _hintH = 0.036 * safeZoneH;
 private _panelW = 0.28 * _fw;
 private _bodyY = _fy + _headH + _gap;
@@ -103,11 +103,23 @@ private _fnc_line = {
 // A short accent bar at the left, as a unit marking.
 [[_fx + _pad, _fy + _headH * 0.25, 0.0035 * safeZoneH * pixelW / pixelH, _headH * 0.5], _theme get "accent"] call _fnc_line;
 
-private _title = [QGVAR(structured), [_fx + _pad * 2, _fy + _headH * 0.2, _fw * 0.6, _headH * 0.7]] call _fnc_make;
+// The weapon: its inventory picture, its name large, and under it what this is - so it is clear which weapon is open.
+private _config = configFile >> "CfgWeapons" >> _weapon;
+private _iconH = _headH * 0.8;
+private _iconW = 2 * _iconH * pixelW / pixelH;
+private _icon = [QGVAR(picture), [_fx + _pad * 2, _fy + _headH * 0.1, _iconW, _iconH]] call _fnc_make;
+_icon ctrlSetText getText (_config >> "picture");
+
+private _title = [QGVAR(structured), [_fx + _pad * 3 + _iconW, _fy + _headH * 0.06, _fw * 0.55, _headH * 0.55]] call _fnc_make;
 _title ctrlSetStructuredText parseText format [
-    "<t font='%1' size='1.2'>%2</t>   <t font='%3' size='0.8' color='%4'>%5</t>",
-    _theme get "fontBold", toUpperANSI LLSTRING(Title),
-    _theme get "fontMono", _text2Hex, toUpperANSI getText (configFile >> "CfgWeapons" >> _weapon >> "displayName")
+    "<t font='%1' size='1.35'>%2</t>",
+    _theme get "fontBold", getText (_config >> "displayName")
+];
+
+private _subtitle = [QGVAR(structured), [_fx + _pad * 3 + _iconW, _fy + _headH * 0.58, _fw * 0.55, _headH * 0.4]] call _fnc_make;
+_subtitle ctrlSetStructuredText parseText format [
+    "<t font='%1' size='0.72' color='%2'>%3 // %4</t>",
+    _theme get "fontMono", _mutedHex, toUpperANSI LLSTRING(Title), toUpperANSI _weapon
 ];
 
 // The status chip: what the weapon is now (fnc_refresh fills it).
@@ -123,6 +135,10 @@ _ctrls set ["chip", _chip];
 _ctrls set ["chipParts", _chipParts];
 
 [_display, [_fx + _fw - _pad - _closeW, _chipY, _closeW, _chipH], LLSTRING(Close), {closeDialog 0}] call FUNC(button);
+
+// The field manual: how the minigames are played (fnc_manual).
+private _manualW = 0.1 * safeZoneW;
+[_display, [_chipX - _gap - _manualW, _chipY, _manualW, _chipH], LLSTRING(Manual), {[] call FUNC(manual)}, true] call FUNC(button);
 
 // ----- The 3D view -----
 [_display, [_fx, _bodyY, _viewW, _bodyH], _theme get "panel"] call FUNC(panel);
@@ -179,11 +195,15 @@ private _by1 = _vy + _vh - _inset;
     [_bx1, _by1, -1, -1]
 ];
 
-// The readout over the view: what is inspected, and what the parts mean.
-private _readout = [QGVAR(structured), [_bx0 + _insetW * 1.5, _by0 + _inset * 0.6, _vw * 0.7, 0.03 * safeZoneH]] call _fnc_make;
+// The readout over the view, as on a sight: the magazine in the weapon and its rounds.
+(_unit weaponState _weapon) params ["", "", "", ["_magClass", ""], ["_rounds", 0]];
+
+private _readout = [QGVAR(structured), [_bx0 + _insetW * 1.5, _by0 + _inset * 0.6, _vw * 0.8, 0.03 * safeZoneH]] call _fnc_make;
 _readout ctrlSetStructuredText parseText format [
-    "<t font='%1' size='0.75' color='%2'>%3 // %4</t>",
-    _theme get "fontMono", _mutedHex, toUpperANSI LLSTRING(Readout), toUpperANSI _weapon
+    "<t font='%1' size='0.72' color='%2'>%3 // %4 // %5 %6</t>",
+    _theme get "fontMono", _mutedHex, toUpperANSI LLSTRING(Readout),
+    toUpperANSI getText (configFile >> "CfgMagazines" >> _magClass >> "displayName"),
+    _rounds, toUpperANSI LLSTRING(Rounds)
 ];
 
 // Under the view: how the mouse works.
@@ -299,5 +319,10 @@ if (isPiPEnabled) then {
 GVAR(wb) set ["pfh", [{call FUNC(onFrame)}, 0] call CBA_fnc_addPerFrameHandler];
 
 call FUNC(refresh);
+
+// The first time a player opens the bench, the manual comes up by itself.
+if !(profileNamespace getVariable [QGVAR(manualSeen), false]) then {
+    [true] call FUNC(manual);
+};
 
 true

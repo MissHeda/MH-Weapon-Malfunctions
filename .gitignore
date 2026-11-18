@@ -15,3 +15,6 @@ __pycache__/
 ## Signing keys
 .hemttprivatekey
 .biprivatekey
+
+## Field manual build output
+tools/manual/out/

@@ -23,6 +23,8 @@ A rebuild from scratch of the idea behind *dzn Extended Jamming* by 10Dozen.
 | Ejection port | Swipe out: sweep a stovepipe |
 | Chamber (bolt locked) | Hold and wiggle: clear |
 
+Right drag turns the weapon, middle drag moves it (double click: back), the wheel zooms. "Field manual" in the header shows every minigame on one page (built by `tools/manual/make_manual.py --paa` from the game's renders, `tools/test/run_auto.ps1 -Mission MHWM_Render`).
+
 Server setting "Minigames in the 3D view" off, or Picture-in-Picture off: buttons instead.
 
 ## Quick keys

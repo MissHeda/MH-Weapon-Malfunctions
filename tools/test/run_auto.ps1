@@ -6,6 +6,7 @@
 param(
     [string]$OutDir = "$env:TEMP\mhwm_auto",
     [int]$TimeoutSec = 420,
+    [string]$Mission = "MHWM_Auto",
     [switch]$NoBuild
 )
 
@@ -23,7 +24,7 @@ if (-not $NoBuild) {
 
 $missions = Join-Path $repo ".hemttout\dev\missions"
 New-Item -ItemType Directory -Force $missions | Out-Null
-Copy-Item -Recurse -Force (Join-Path $PSScriptRoot "MHWM_Auto.VR") $missions
+Copy-Item -Recurse -Force (Join-Path $PSScriptRoot "$Mission.VR") $missions
 
 Add-Type @"
 using System;
@@ -44,7 +45,7 @@ $rptDir = Join-Path $env:LOCALAPPDATA "Arma 3"
 $started = Get-Date
 $mods = @("$workshop\450814997", "$workshop\463939057", (Join-Path $repo ".hemttout\dev")) | ForEach-Object { "-mod=`"$_`"" }
 $armaArgs = $mods + @("-window", "-noPause", "-skipIntro", "-noSplash", "-filePatching", "-showScriptErrors", "-name=MHWMTest",
-    "`"-init=playMission['','\z\mhwm\missions\MHWM_Auto.VR']`"")
+    "`"-init=playMission['','\z\mhwm\missions\$Mission.VR']`"")
 $proc = Start-Process -FilePath (Join-Path $arma "arma3_x64.exe") -ArgumentList $armaArgs -PassThru
 "PID $($proc.Id)"
 

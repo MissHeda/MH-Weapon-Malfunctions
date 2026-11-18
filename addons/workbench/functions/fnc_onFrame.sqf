@@ -51,6 +51,36 @@ switch (true) do {
         };
     };
 
+    // The weapon follows the mouse: the camera and its aim move the other way, by what a screen distance is at the
+    // weapon's distance - at most the weapon's size away from where it started.
+    case (_kind == "pan"): {
+        private _last = _drag get "last";
+        private _dx = (_mouse select 0) - (_last select 0);
+        private _dy = (_mouse select 1) - (_last select 1);
+
+        _drag set ["last", _mouse];
+
+        if ("camRight" in _scene && {_dx != 0 || {_dy != 0}}) then {
+            (GVAR(wb) get "picRect") params ["", "", "_pw", "_ph"];
+
+            private _tanV = SCENE_TAN;
+            private _dist = _scene get "dist";
+            private _shift = ((_scene get "camRight") vectorMultiply (-_dx / _pw * 2 * _tanV * SCENE_ASPECT * _dist))
+                vectorAdd ((_scene get "camUp") vectorMultiply (_dy / _ph * 2 * _tanV * _dist));
+            private _target = (_scene get "target") vectorAdd _shift;
+            private _origin = _scene getOrDefault ["origin", _target];
+            private _limit = ((_scene getOrDefault ["points", createHashMap]) getOrDefault ["size", 1]) * 0.6;
+            private _offset = _target vectorDiff _origin;
+
+            if (vectorMagnitude _offset > _limit) then {
+                _target = _origin vectorAdd ((vectorNormalized _offset) vectorMultiply _limit);
+            };
+
+            _scene set ["target", _target];
+            call FUNC(camera);
+        };
+    };
+
     case (_kind == "chamber"): {
         private _mx = _mouse select 0;
         private _anchor = _drag get "anchor";

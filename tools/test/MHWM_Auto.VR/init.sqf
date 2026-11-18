@@ -128,6 +128,8 @@ MHWMT_close = {
     format ["start ace=%1 aceOverheating=%2 pip=%3 res=%4", isClass (configFile >> "CfgPatches" >> "ace_main"), isClass (configFile >> "CfgPatches" >> "ace_overheating"), isPiPEnabled, getResolution] call MHWMT_log;
 
     mhwm_main_fumble = 0;
+    // The manual would come up over the first bench; it has a section of its own (11).
+    profileNamespace setVariable ["mhwm_workbench_manualSeen", true];
     private _w = primaryWeapon player;
     player selectWeapon _w;
     sleep 1;
@@ -268,6 +270,31 @@ MHWMT_close = {
     call MHWMT_close;
     player selectWeapon _w;
     sleep 2;
+
+    // ----- 11. Moving the weapon with the middle button, and the field manual -----
+    ["dud"] call MHWMT_open;
+    private _sc = mhwm_workbench_wb get "scene";
+    private _before = +(_sc get "target");
+    mhwm_workbench_testMouse = [0.2, 0.5];
+    sleep 0.1;
+    ["down", [displayNull, 2]] call mhwm_workbench_fnc_onMouse;
+    for "_i" from 1 to 10 do {mhwm_workbench_testMouse = [0.2 + _i * 0.02, 0.5 + _i * 0.01]; sleep 0.05};
+    ["up", [displayNull, 2]] call mhwm_workbench_fnc_onMouse;
+    format ["11 pan: target moved %1 m", (_sc get "target") distance _before] call MHWMT_log;
+    "wb_panned" call MHWMT_shot;
+    ["down", [displayNull, 2]] call mhwm_workbench_fnc_onMouse;
+    ["up", [displayNull, 2]] call mhwm_workbench_fnc_onMouse;
+    sleep 0.1;
+    ["down", [displayNull, 2]] call mhwm_workbench_fnc_onMouse;
+    ["up", [displayNull, 2]] call mhwm_workbench_fnc_onMouse;
+    format ["11 double middle click: back by %1 m", (_sc get "target") distance _before] call MHWMT_log;
+    [true] call mhwm_workbench_fnc_manual;
+    sleep 0.5;
+    "wb_manual" call MHWMT_shot;
+    format ["11 manual up: %1", "manual" in mhwm_workbench_wb] call MHWMT_log;
+    [false] call mhwm_workbench_fnc_manual;
+    format ["11 manual closed: %1", !("manual" in mhwm_workbench_wb)] call MHWMT_log;
+    call MHWMT_close;
 
     // ----- 10. Buttons instead of minigames -----
     mhwm_main_minigames = false;
