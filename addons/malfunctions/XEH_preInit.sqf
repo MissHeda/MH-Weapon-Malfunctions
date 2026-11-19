@@ -15,7 +15,7 @@ if (hasInterface) then {
 
     [_cat, QGVAR(keyTapRack), [LLSTRING(Key_TapRack), LLSTRING(Key_TapRack_Desc)], {
         ["tapRack"] call FUNC(quickAction)
-    }, {}, [19, [false, true, false]]] call CBA_fnc_addKeybind; // Ctrl + R
+    }, {}, [19, [false, false, true]]] call CBA_fnc_addKeybind; // Alt + R - Ctrl + R is ACE's "Check ammo"
 
     // Ctrl + Shift + J: a malfunction now, the next cause each press - for testing (fnc_testJam).
     [_cat, QGVAR(keyTest), [LLSTRING(Key_Test), LLSTRING(Key_Test_Desc)], {

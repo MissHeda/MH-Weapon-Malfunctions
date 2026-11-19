@@ -25,8 +25,16 @@ private _cat = [CBA_SETTINGS_CAT, LLSTRING(Cat_Jamming)];
 // ----- Clearing (server) -----
 _cat = [CBA_SETTINGS_CAT, LLSTRING(Cat_Clearing)];
 
+// Numbers: how long the blind Tap-Rack takes for each malfunction, in seconds.
+[QGVAR(blindTime_feed), "SLIDER", [LSTRING(BlindTime_Feed), LSTRING(BlindTime_Desc)], _cat, [0.5, 30, 1.5, 1], 1] call CBA_fnc_addSetting;
+[QGVAR(blindTime_dud), "SLIDER", [LSTRING(BlindTime_Dud), LSTRING(BlindTime_Desc)], _cat, [0.5, 30, 3, 1], 1] call CBA_fnc_addSetting;
+[QGVAR(blindTime_stovepipe), "SLIDER", [LSTRING(BlindTime_Stovepipe), LSTRING(BlindTime_Desc)], _cat, [0.5, 30, 1.5, 1], 1] call CBA_fnc_addSetting;
+[QGVAR(blindTime_double), "SLIDER", [LSTRING(BlindTime_Double), LSTRING(BlindTime_Desc)], _cat, [0.5, 30, 8, 1], 1] call CBA_fnc_addSetting;
+[QGVAR(blindTime_extract), "SLIDER", [LSTRING(BlindTime_Extract), LSTRING(BlindTime_Desc)], _cat, [0.5, 30, 12, 1], 1] call CBA_fnc_addSetting;
+
 // Switches
 [QGVAR(quickKeys), "CHECKBOX", [LSTRING(QuickKeys), LSTRING(QuickKeys_Desc)], _cat, true, 1] call CBA_fnc_addSetting;
+[QGVAR(blindAll), "CHECKBOX", [LSTRING(BlindAll), LSTRING(BlindAll_Desc)], _cat, false, 1] call CBA_fnc_addSetting;
 [QGVAR(testKey), "CHECKBOX", [LSTRING(TestKey), LSTRING(TestKey_Desc)], _cat, false, 1] call CBA_fnc_addSetting;
 
 // ----- Fixed -----
@@ -42,8 +50,7 @@ GVAR(weight_dud) = 2;
 GVAR(weight_stovepipe) = 3;
 GVAR(weight_double) = 1;
 GVAR(weight_extract) = 1;
-// The blind Tap-Rack takes about as long as by hand and never fumbles.
-GVAR(quickTime) = 1;
+// The blind Tap-Rack never fumbles.
 GVAR(fumble) = 0;
 // The 3D view always shows what is wrong and plays its minigames (buttons only without Picture-in-Picture).
 GVAR(minigames) = true;

@@ -250,7 +250,7 @@ def build():
     d.rectangle([lx - 6, ty, lx + 506, ty + 132], fill=RED, outline=INK, width=4)
     d.rectangle([lx - 6, ty, lx + 506, ty + 132], outline=INK, width=4)
     d.text((lx + 12, ty + 10), "UNDER FIRE? NO TIME TO LOOK?", font=small, fill=(255, 245, 220))
-    tip = "Ctrl + R: Tap-Rack, blind - it clears most jams. Shift + R: this bench."
+    tip = "Alt + R: Tap-Rack, blind - it clears the simple jams. Shift + R: this bench."
     yy = ty + 46
     for line in wrap(d, tip, cap, 480):
         d.text((lx + 12, yy), line, font=cap, fill=(255, 245, 220))

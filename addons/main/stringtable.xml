@@ -7,6 +7,30 @@
         <Key ID="STR_mhwm_main_AI_Desc">
             <English>AI units clear their weapons by\nthemselves after a few seconds.</English>
         </Key>
+        <Key ID="STR_mhwm_main_BlindAll">
+            <English>Tap-Rack clears every malfunction</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindAll_Desc">
+            <English>Off: the blind Tap-Rack only clears a\nloose magazine, a dud and a stovepipe.\nThe rest needs the 3D view.\n\nOn: it clears every malfunction blind,\ntaking the times above.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindTime_Desc">
+            <English>Seconds the blind Tap-Rack takes for\nthis malfunction.\n\nA weak magazine is swapped too: it\ntakes twice the feed time.</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindTime_Double">
+            <English>Tap-Rack time: double feed</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindTime_Dud">
+            <English>Tap-Rack time: dud</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindTime_Extract">
+            <English>Tap-Rack time: stuck case</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindTime_Feed">
+            <English>Tap-Rack time: failure to feed</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindTime_Stovepipe">
+            <English>Tap-Rack time: stovepipe</English>
+        </Key>
         <Key ID="STR_mhwm_main_Cat_Clearing">
             <English>Clearing</English>
         </Key>
@@ -35,7 +59,7 @@
             <English>Allow the blind Tap-Rack</English>
         </Key>
         <Key ID="STR_mhwm_main_QuickKeys_Desc">
-            <English>Ctrl + R taps the magazine and racks\nthe bolt without the 3D view. It only\nfixes the simple malfunctions.\n\nOff: every malfunction is cleared in\nthe 3D view (Shift + R).</English>
+            <English>Alt + R clears the weapon blind,\nwithout the 3D view: tap, rack.\n\nOff: every malfunction is cleared in\nthe 3D view (Shift + R).</English>
         </Key>
         <Key ID="STR_mhwm_main_Rate">
             <English>Malfunctions per 1000 rounds</English>

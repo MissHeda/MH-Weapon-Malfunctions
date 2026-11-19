@@ -25,7 +25,7 @@ MHWMT_jam = {
         [_unit, _weapon, _state] call mhwm_malfunctions_fnc_state;
     };
 
-    format ["%1 on %2 - Shift+R or the action opens the bench, Ctrl+R tap-racks blind.", _this joinString " / ", getText (configFile >> "CfgWeapons" >> _weapon >> "displayName")] call MHWMT_say;
+    format ["%1 on %2 - Shift+R or the action opens the bench, Alt+R tap-racks blind.", _this joinString " / ", getText (configFile >> "CfgWeapons" >> _weapon >> "displayName")] call MHWMT_say;
 };
 
 MHWMT_weapon = {

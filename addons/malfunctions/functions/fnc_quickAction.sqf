@@ -1,17 +1,17 @@
 #include "..\script_component.hpp"
 /*
  * Author: Miss Heda
- * A quick key: one hand movement blind, without the 3D view. It takes its time (times the server's "Quick key time"), plays
- * the weapon's reload gesture for the bigger movements, and fumbles at the server's chance: a short stroke instead of a
- * rack, a magazine not seated, a tap or a clearing that misses. What the hand felt shows as a note.
+ * The blind Tap-Rack key: clearing without the 3D view. Its time comes from the server, one setting per malfunction
+ * (main_blindTime_<cause>); the weapon's reload gesture plays for the bigger movements and what the hand felt shows as a
+ * note (CBA's notification).
  *
- *   tapRack     the immediate action drill: tap, then rack
- *   lockToggle  lock the bolt open, or let it go when it is locked
- *   magToggle   drop the magazine, or insert it when it is out
- *   clear       clear the chamber - or sweep a stovepipe out of the port
+ * By default it is the immediate action drill only - tap, (wait out a dud,) rack: it clears a loose magazine, a dud and a
+ * stovepipe, and fails on the rest with a note of what the hands felt. With the server's "Tap-Rack clears every
+ * malfunction" it plays the whole remedy of the workbench's notebook (workbench_fnc_steps) blind instead - a double feed
+ * or a stuck case too, only slower (Mia).
  *
  * Arguments:
- * 0: Action <STRING> - tap, rack, tapRack, lockToggle, magToggle, clear
+ * 0: Action <STRING> - "tapRack"
  *
  * Return Value:
  * Handled <BOOL>
@@ -22,7 +22,7 @@
  * Public: No
  */
 
-params [["_action", "", [""]]];
+params [["_action", "tapRack", [""]]];
 
 private _unit = PLAYER_UNIT;
 private _weapon = currentWeapon _unit;
@@ -34,33 +34,42 @@ private _state = [_unit, _weapon] call FUNC(state);
 
 if (count _state == 0) exitWith {false};
 
-// The movements in order, each [action, seconds, fumbled action or "" for a miss].
-private _steps = switch (_action) do {
-    case ACT_TAP: {[[ACT_TAP, 0.5, ""]]};
-    case ACT_RACK: {[[ACT_RACK, 0.9, ACT_SHORT]]};
-    case "tapRack": {
-        // Blind, a dud is waited out too before the rack.
-        [[[ACT_TAP, 0.5, ""], [ACT_RACK, 0.9, ACT_SHORT]], [[ACT_TAP, 0.5, ""], [ACT_WAIT, 1.5, ""], [ACT_RACK, 0.9, ACT_SHORT]]] select (_state getOrDefault ["hang", false])
-    };
-    case "lockToggle": {
-        [[[ACT_LOCK, 1.2, ACT_SHORT]], [[ACT_RELEASE, 0.5, ""]]] select ((_state get "bolt") == "locked")
-    };
-    case "magToggle": {
-        [[[ACT_DROP, 0.7, ""]], [[ACT_INSERT, 1.4, ACT_INSERT_LOOSE]]] select ((_state get "mag") == "out")
-    };
-    case ACT_CLEAR: {
-        [[[ACT_CLEAR, 2.5, ""]], [[ACT_SWEEP, 1, ""]]] select ((_state get "port") == "stovepipe" && {(_state get "bolt") != "locked"})
-    };
-    default {[]};
+// How long each hand movement takes by itself; scaled so the whole drill takes the server's time for this malfunction.
+private _base = createHashMapFromArray [
+    [ACT_TAP, 0.5], [ACT_RACK, 0.9], [ACT_WAIT, 1.5], [ACT_LOCK, 1.2], [ACT_RELEASE, 0.5], [ACT_DROP, 0.7],
+    [ACT_INSERT, 1.4], [ACT_CLEAR, 2.5], [ACT_SWEEP, 1]
+];
+
+private _acts = if (EGVAR(main,blindAll)) then {
+    // The notebook's steps, as hand movements: a pulled round of a double feed is one clearing each.
+    private _map = createHashMapFromArray [
+        ["wait", ACT_WAIT], ["tap", ACT_TAP], ["rack", ACT_RACK], ["lock", ACT_LOCK], ["release", ACT_RELEASE],
+        ["drop", ACT_DROP], ["insert", ACT_INSERT], ["clear", ACT_CLEAR], ["pull", ACT_CLEAR], ["sweep", ACT_SWEEP]
+    ];
+    (([_state] call EFUNC(workbench,steps)) select {_x in _map}) apply {_map get _x}
+} else {
+    // Blind, a dud is waited out too before the rack.
+    [[ACT_TAP, ACT_RACK], [ACT_TAP, ACT_WAIT, ACT_RACK]] select (_state getOrDefault ["hang", false])
 };
 
-if (_steps isEqualTo []) exitWith {false};
+if (_acts isEqualTo []) exitWith {false};
+
+// The server's time for this malfunction; a weak magazine is swapped as well, so it takes twice the feed time.
+private _cause = _state getOrDefault ["cause", CAUSE_FEED];
+private _total = missionNamespace getVariable [format ["mhwm_main_blindTime_%1", _cause], 2];
+
+if (_cause == CAUSE_FEED && {_state getOrDefault ["weakMag", false]} && {EGVAR(main,blindAll)}) then {_total = _total * 2};
+
+private _sum = 0;
+{_sum = _sum + (_base getOrDefault [_x, 1])} forEach _acts;
+
+private _steps = _acts apply {[_x, (_base getOrDefault [_x, 1]) * _total / (_sum max 0.1), ["", ACT_SHORT] select (_x == ACT_RACK)]};
 
 _unit setVariable [QGVAR(busy), true];
 
 private _gesture = getText (configFile >> "CfgWeapons" >> _weapon >> "reloadAction");
 
-if (_gesture isNotEqualTo "" && {_steps findIf {(_x select 0) in [ACT_RACK, ACT_LOCK, ACT_INSERT, ACT_CLEAR]} >= 0}) then {
+if (_gesture isNotEqualTo "" && {_acts findIf {_x in [ACT_RACK, ACT_LOCK, ACT_INSERT, ACT_CLEAR]} >= 0}) then {
     _unit playActionNow _gesture;
 };
 
@@ -103,12 +112,13 @@ private _fnc_step = {
             _unit setVariable [QGVAR(busy), false];
         };
 
-        if (_note isNotEqualTo "" && {EGVAR(main,notify)}) then {
+        // Along the whole remedy only the last note counts - a note for every step was a flood.
+        if (_note isNotEqualTo "" && {EGVAR(main,notify)} && {!EGVAR(main,blindAll) || {_steps isEqualTo []}}) then {
             [localize format ["STR_mhwm_malfunctions_%1", _note]] call CBA_fnc_notify;
         };
 
         [_unit, _weapon, _steps, _fnc_step] call _fnc_step;
-    }, [_unit, _weapon, _steps, _fnc_step, _act, _fumbled], _seconds * EGVAR(main,quickTime)] call CBA_fnc_waitAndExecute;
+    }, [_unit, _weapon, _steps, _fnc_step, _act, _fumbled], _seconds] call CBA_fnc_waitAndExecute;
 };
 
 [_unit, _weapon, _steps, _fnc_step] call _fnc_step;
