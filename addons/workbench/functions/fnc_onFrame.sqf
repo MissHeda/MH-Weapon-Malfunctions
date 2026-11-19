@@ -277,6 +277,29 @@ if (_kind == "") then {
             _lw = ctrlTextWidth _measure + 0.012 * safeZoneW * _textZoom;
             _used = _lw;
         };
+        // The words first, at the label's width: the box is exactly as high as they are, so they sit in its middle up and
+        // down (Mia: the hover labels were not centred). A quiet label's side is set again once it is placed.
+        private _fnc_words = {
+            params ["_align"];
+            _label ctrlSetStructuredText parseText format [
+                "<t font='%4' size='%5' color='%1' shadow='2' align='%3'>%2</t>",
+                (switch (true) do {
+                    case (_over || _active): {_theme get "accent"};
+                    case (_attention): {_theme get "warn"};
+                    default {_theme get "text2"};
+                }) call BIS_fnc_colorRGBAtoHTML,
+                toUpperANSI _text,
+                [_align, "center"] select _plate,
+                _theme get "fontMono",
+                ([0.72, 0.85] select _plate) * _textZoom
+            ];
+        };
+
+        _label ctrlSetPosition [0, 0, _lw, _lh];
+        _label ctrlCommit 0;
+        ["left"] call _fnc_words;
+        _lh = ctrlTextHeight _label;
+
         private _sx = _screen select 0;
         private _cy = (_screen select 1) - _lh / 2;
         private _candidates = [
@@ -299,18 +322,7 @@ if (_kind == "") then {
 
         _label ctrlSetPosition [_lx, _ly, _lw, _lh];
         _label ctrlSetBackgroundColor ([[0, 0, 0, 0], [0.04, 0.04, 0.04, 0.8]] select _plate);
-        _label ctrlSetStructuredText parseText format [
-            "<t font='%4' size='%5' color='%1' shadow='2' align='%3'>%2</t>",
-            (switch (true) do {
-                case (_over || _active): {_theme get "accent"};
-                case (_attention): {_theme get "warn"};
-                default {_theme get "text2"};
-            }) call BIS_fnc_colorRGBAtoHTML,
-            toUpperANSI _text,
-            [_align, "center"] select _plate,
-            _theme get "fontMono",
-            ([0.72, 0.85] select _plate) * _textZoom
-        ];
+        if (_align != "left") then {[_align] call _fnc_words};
         // Quiet parts keep their names to themselves until the mouse is on them: only the step now speaks.
         private _focus = [_activeId, _hoverId] select (_activeId isEqualTo "");
         _label ctrlShow ([_attention, _id isEqualTo _focus] select (_focus isNotEqualTo ""));

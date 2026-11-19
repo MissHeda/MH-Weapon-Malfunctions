@@ -13,28 +13,14 @@ class EditorData
 	class Camera
 	{
 		pos[]={4096,25,4080};
-		dir[]={0,-0.5,0.86000001};
+		dir[]={0,-0.5,0.86};
+		aside[]={1,0,0};
 	};
 };
 binarizationWanted=0;
-sourceName="~mhwm_test";
-addons[]=
-{
-	"A3_Characters_F"
-};
+sourceName="MHWM_Test";
 class AddonsMetaData
 {
-	class List
-	{
-		items=1;
-		class Item0
-		{
-			className="A3_Characters_F";
-			name="Arma 3 Alpha - Characters and Clothing";
-			author="Bohemia Interactive";
-			url="https://www.arma3.com";
-		};
-	};
 };
 randomSeed=4242;
 class ScenarioData

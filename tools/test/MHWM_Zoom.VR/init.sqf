@@ -37,10 +37,17 @@ MHWMT_zooms = {
     waitUntil {!isNull player && {time > 1}};
     disableUserInput true;
 
+    // Rough sea: the scene stands off the map, over water (Mia's marks slipped where the test's calm sea kept them).
+    0 setWaves 1;
+    0 setWindStr 1;
+    0 setOvercast 1;
+    forceWeatherChange;
+    format ["waves %1 wind %2", waves, windStr] call MHWMT_log;
+
     player setPosATL [4096, 4096, 0];
     player allowDamage false;
     player setUnitLoadout [
-        ["arifle_MX_F", "", "", "", ["30Rnd_65x39_caseless_mag", 30], [], ""],
+        ["arifle_MX_F", "", "", "optic_Aco", ["30Rnd_65x39_caseless_mag", 30], [], ""],
         [], [], ["U_B_CombatUniform_mcam", []], [], [], "", "", [], ["", "", "", "", "", ""]
     ];
     sleep 2;
@@ -55,7 +62,7 @@ MHWMT_zooms = {
         profileNamespace setVariable ["mhwm_workbench_notesHidden", _hidden];
         profileNamespace setVariable ["mhwm_workbench_manualSeen", true];
         [player, currentWeapon player, true] call mhwm_malfunctions_fnc_clear;
-        [player, currentWeapon player, "stovepipe"] call mhwm_malfunctions_fnc_jam;
+        [player, currentWeapon player, "extract"] call mhwm_malfunctions_fnc_jam;
         [] call mhwm_workbench_fnc_open;
         sleep 4;
         [_tag] call MHWMT_zooms;

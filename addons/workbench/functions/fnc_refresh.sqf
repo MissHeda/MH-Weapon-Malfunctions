@@ -65,6 +65,13 @@ GVAR(wb) set ["pageShown", _page];
     [format ["%1/%2", (_shown + 1) min _total, _total], LLSTRING(Progress_Done)] select _final
 ];
 
+// The count centred up and down between the tabs, on its measured height.
+private _count = _ctrls get "progress";
+(_count getVariable [QGVAR(rect), ctrlPosition _count]) params ["_cx", "_cy", "_cw", "_ch"];
+private _countH = ctrlTextHeight _count;
+_count ctrlSetPosition [_cx, _cy + (_ch - _countH) / 2, _cw, _countH];
+_count ctrlCommit 0;
+
 // The page: its picture, the step's name - red for the step now, green when done, ink for one to come - what to do in
 // the words of a drill card, written in pen, and how the bench does it.
 private _pic = _ctrls get "nowPic";

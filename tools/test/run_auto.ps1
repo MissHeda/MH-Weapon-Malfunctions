@@ -8,10 +8,16 @@ param(
     [int]$TimeoutSec = 420,
     [string]$Mission = "MHWM_Auto",
     [switch]$NoBuild,
-    [string]$Profile = "MHWMTest"
+    [string]$Profile = "MHWMTest",
+    [string[]]$Workshop = @(),
+    [int]$WinW = 1936,
+    [int]$WinH = 1119,
+    [switch]$FullScreen
 )
 
 $ErrorActionPreference = "Stop"
+# -File hands "a,b" over as one string.
+$Workshop = @($Workshop | ForEach-Object { $_ -split "," } | Where-Object { $_ })
 $repo = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $arma = "C:\SteamLibrary\steamapps\common\Arma 3"
 $workshop = "C:\SteamLibrary\steamapps\workshop\content\107410"
@@ -44,8 +50,9 @@ Add-Type -AssemblyName System.Drawing
 
 $rptDir = Join-Path $env:LOCALAPPDATA "Arma 3"
 $started = Get-Date
-$mods = @("$workshop\450814997", "$workshop\463939057", (Join-Path $repo ".hemttout\dev")) | ForEach-Object { "-mod=`"$_`"" }
-$armaArgs = $mods + @("-window", "-noPause", "-skipIntro", "-noSplash", "-filePatching", "-showScriptErrors", "-name=$Profile",
+$mods = @("$workshop\450814997", "$workshop\463939057") + @($Workshop | ForEach-Object { "$workshop\$_" }) + @((Join-Path $repo ".hemttout\dev")) | ForEach-Object { "-mod=`"$_`"" }
+$display = if ($FullScreen) { @() } else { @("-window", "-x=$WinW", "-y=$WinH") }
+$armaArgs = $mods + $display + @("-noPause", "-skipIntro", "-noSplash", "-filePatching", "-showScriptErrors", "-name=$Profile",
     "`"-init=playMission['','\z\mhwm\missions\$Mission.VR']`"")
 $proc = Start-Process -FilePath (Join-Path $arma "arma3_x64.exe") -ArgumentList $armaArgs -PassThru
 "PID $($proc.Id)"
@@ -75,11 +82,11 @@ $deadline = $started.AddSeconds($TimeoutSec)
 
 while ((Get-Date) -lt $deadline -and -not $proc.HasExited) {
     Start-Sleep -Milliseconds 400
-    if (-not $placed) {
+    if (-not $placed -and -not $FullScreen) {
         $proc.Refresh()
         if ($proc.MainWindowHandle -ne [IntPtr]::Zero) {
             [MhwmWin]::ShowWindow($proc.MainWindowHandle, 9) | Out-Null
-            [MhwmWin]::SetWindowPos($proc.MainWindowHandle, [IntPtr]::Zero, 300, 140, 1936, 1119, 0x0014) | Out-Null
+            [MhwmWin]::SetWindowPos($proc.MainWindowHandle, [IntPtr]::Zero, 0, 0, $WinW, $WinH, 0x0014) | Out-Null
             $placed = $true
         }
     }

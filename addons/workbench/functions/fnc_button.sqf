@@ -43,13 +43,18 @@ if (_paper) then {
 };
 
 private _text = _display ctrlCreate [QGVAR(structured), -1];
-_text ctrlSetPosition [_rect select 0, (_rect select 1) + ((_rect select 3) - 0.026 * safeZoneH) / 2, _rect select 2, 0.03 * safeZoneH];
+_text ctrlSetPosition [_rect select 0, _rect select 1, _rect select 2, _rect select 3];
 _text ctrlSetStructuredText parseText format [
     "<t align='center' font='%1' size='0.9' color='%2'>%3</t>",
     _theme get "fontBold", _ink call BIS_fnc_colorRGBAtoHTML,
     // "<" and ">" are markup to parseText: the back arrow vanished (Mia).
     ((toUpperANSI _label) regexReplace ["&", "&amp;"] regexReplace ["<", "&lt;"] regexReplace [">", "&gt;"])
 ];
+_text ctrlCommit 0;
+
+// Centred up and down on its own measured height (Mia: the labels sat too low).
+private _textH = ctrlTextHeight _text;
+_text ctrlSetPosition [_rect select 0, (_rect select 1) + ((_rect select 3) - _textH) / 2, _rect select 2, _textH];
 _text ctrlCommit 0;
 
 private _click = _display ctrlCreate [QGVAR(click), -1];

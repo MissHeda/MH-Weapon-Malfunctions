@@ -144,7 +144,7 @@ private _manualX = _closeX - ([0, _gap * pixelW / pixelH + _manualW] select EGVA
 
 // The field manual: how the minigames are played (fnc_manual).
 if (EGVAR(main,showManual)) then {
-    [_display, [_manualX, _chipY, _manualW, _chipH], LLSTRING(Manual), {[] call FUNC(manual)}, true] call FUNC(button);
+    [_display, [_manualX, _chipY, _manualW, _chipH], LLSTRING(Manual), {[] call FUNC(manual)}] call FUNC(button);
 };
 
 // ----- The 3D view -----
@@ -228,15 +228,14 @@ private _resetW = 0.075 * safeZoneW;
     };
 }] call FUNC(button);
 
-// Under the view: how the mouse works - and at its right the field notes check, on the same line (Mia).
-private _notesW = [0, 0.125 * safeZoneW] select EGVAR(main,showNotes);
-private _hint = [QGVAR(text), [_vx, _vy + _vh + _gap * 0.5, _vw - _notesW - _gap, _hintH]] call _fnc_make;
+// Under the view: how the mouse works.
+private _hint = [QGVAR(text), [_vx, _vy + _vh + _gap * 0.5, _vw, _hintH]] call _fnc_make;
 _ctrls set ["hint", _hint];
 
+// The field notes check in the header again, left of the other buttons (Mia).
 if (EGVAR(main,showNotes)) then {
-    private _notesX = _vx + _vw - _notesW;
-    private _chipY = _vy + _vh + _gap * 0.5;
-    private _chipH = _hintH;
+    private _notesW = 0.11 * safeZoneW;
+    private _notesX = _manualX - _gap * pixelW / pixelH - _notesW;
 
     // The field notes check: off hides the notebook; the bench is built anew with the other layout.
     [_display, [_notesX, _chipY, _notesW, _chipH], "     " + LLSTRING(Notes), {
@@ -321,7 +320,8 @@ if (_showPanel) then {
         [_display, [_left, _ty, _tabW, _tabH], "<", {[-1] call FUNC(page)}, false, true] call FUNC(button);
         [_display, [_left + _tabW + _countW, _ty, _tabW, _tabH], ">", {[1] call FUNC(page)}, false, true] call FUNC(button);
 
-        private _count = [QGVAR(structured), [_left + _tabW, _ty + _rowH * 0.06, _countW, _tabH]] call _fnc_make;
+        private _count = [QGVAR(structured), [_left + _tabW, _ty, _countW, _tabH]] call _fnc_make;
+        _count setVariable [QGVAR(rect), [_left + _tabW, _ty, _countW, _tabH]];
         _ctrls set ["progress", _count];
         private _countClick = [QGVAR(click), [_left + _tabW, _ty, _countW, _tabH]] call _fnc_make;
         _countClick ctrlAddEventHandler ["ButtonClick", {[0] call FUNC(page)}];
