@@ -119,12 +119,12 @@ if (_port isEqualTo []) then {
     _port = if (_breech isNotEqualTo []) then {_breech vectorAdd (_fwd vectorMultiply -0.05)} else {[0, 0, 0]};
 };
 
-// No magazine proxy or selection (the P07): low in the grip, under the ejection port and a little behind it - the
-// model's lowest point is the magazine's base there. Before, 8 cm under the port put the mark in the trigger guard (Mia).
+// No magazine proxy or selection (the P07): at the magazine's base, low in the grip. The grip slants back, so its base
+// lies a few centimetres behind the chamber (the breech) - under the port it sat in front of the grip (Mia).
 if (_mag isEqualTo []) then {
     private _low = if (isNull _object) then {(_port select 2) - 0.08} else {((0 boundingBoxReal _object) select 0) select 2};
-    _mag = _port vectorAdd (_fwd vectorMultiply -0.015);
-    _mag set [2, _low + 0.025];
+    _mag = if (_breech isNotEqualTo []) then {_breech vectorAdd (_fwd vectorMultiply -0.035)} else {_port vectorAdd (_fwd vectorMultiply -0.05)};
+    _mag set [2, _low + 0.02];
 };
 
 private _down = _mag vectorDiff _port;
