@@ -79,12 +79,6 @@ private _names = if (isNull _object) then {[]} else {(selectionNames _object) ap
     _object hideSelection [_x, true];
 } forEach (_names select {!("proxy:" in _x) && {"zasleh" in _x || {"flash" in _x}}});
 
-// The slots' stand-in models: a simple object draws them as they are in the model, orange placeholders (Mia: RHS's PKP
-// showed an orange magazine and plate) - the real magazine is our own object (fnc_scene).
-{
-    _object hideSelection [_x, true];
-} forEach (_names select {"proxy:" in _x && {"weapon_slots" in _x || {"slot" in _x} || {"magazine" in _x}}});
-
 // The magazine: its proxy, else a selection of its own.
 private _magProxy = _names param [_names findIf {"proxy:" in _x && {"magazine" in _x}}, ""];
 private _mag = [];
@@ -112,6 +106,13 @@ if (_mag isEqualTo [] && {_magSelections isNotEqualTo []}) then {
 
     if (_at isNotEqualTo [0, 0, 0]) then {_mag = _at};
 };
+
+// The slots' stand-in models: a simple object draws them as orange placeholders (Mia: RHS's PKP showed an orange
+// magazine and plate) - the real magazine is our own object (fnc_scene). Hidden only after the magazine is found: a
+// hidden proxy has no position, and its mark fell back into the trigger guard (Mia, P07).
+{
+    _object hideSelection [_x, true];
+} forEach (_names select {"proxy:" in _x && {"weapon_slots" in _x || {"slot" in _x} || {"magazine" in _x}}});
 
 // No port: a little behind the middle of the barrel's breech end.
 if (_port isEqualTo []) then {
