@@ -2,10 +2,10 @@
 /*
  * Author: Miss Heda
  * Opens the workbench for the jammed weapon in the player's hands, in the look of AIO's Glass (fnc_theme): round-cornered
- * near-black panes, the player's own Arma colour as the accent, Purista - with a military touch: a status chip, the 3D
+ * near-black panes, the player's own Arma colour as the accent, Purista - with a military touch: the 3D
  * view framed by a sight's corner brackets with a readout over it, numbered sections in a monospace.
  *
- *   header   title, the weapon, status chip (MALFUNCTION / CLEAR), close
+ *   header   title, the weapon, field notes check, field manual, close
  *   view     the weapon in 3D (fnc_scene, filmed into a render target), its parts marked (fnc_hotspots) and worked by
  *            mouse (fnc_onMouse, fnc_onFrame); under it how the mouse works
  *   panel    a field notebook: a page per step with its comic picture taped in, every step in order, the last
@@ -129,17 +129,11 @@ _subtitle ctrlSetStructuredText parseText format [
     _theme get "fontMono", _mutedHex, toUpperANSI LLSTRING(Title), toUpperANSI _weapon
 ];
 
-// The status chip: what the weapon is now (fnc_refresh fills it).
-private _chipW = 0.11 * safeZoneW;
+// The header's buttons at the right, in a row (the status chip is gone: Mia - "MALFUNCTION" up there said nothing).
 private _closeW = 0.075 * safeZoneW;
-private _chipX = _fx + _fw - _pad - _closeW - _gap - _chipW;
+private _chipX = _fx + _fw - _pad - _closeW + _gap;
 private _chipY = _fy + _headH * 0.2;
 private _chipH = _headH * 0.6;
-private _chipParts = [_display, [_chipX, _chipY, _chipW, _chipH], _theme get "card"] call FUNC(panel);
-private _chip = [QGVAR(structured), [_chipX, _chipY + (_chipH - 0.026 * safeZoneH) / 2, _chipW, 0.03 * safeZoneH]] call _fnc_make;
-
-_ctrls set ["chip", _chip];
-_ctrls set ["chipParts", _chipParts];
 
 [_display, [_fx + _fw - _pad - _closeW, _chipY, _closeW, _chipH], LLSTRING(Close), {closeDialog 0}] call FUNC(button);
 
@@ -266,8 +260,7 @@ _ctrls set ["hint", _hint];
 if (_showPanel) then {
     private _paperInk = _theme get "paperInk";
 
-    // Its shadow on the desk, then the pad.
-    [_display, [_px + 6 * pixelW, _bodyY + 8 * pixelH, _panelW, _bodyH], [0, 0, 0, 0.45], _theme get "radius"] call FUNC(panel);
+    // The pad: its texture has the shadowless round corners, nothing behind it (Mia: the dark block showed).
     private _notebook = [QGVAR(picture), [_px, _bodyY, _panelW, _bodyH]] call _fnc_make;
     _notebook ctrlSetText QPATHTOF(ui\notebook_ca.paa);
 
@@ -277,7 +270,8 @@ if (_showPanel) then {
     private _pgT = _bodyY + 0.075 * _bodyH;
     private _pgB = _bodyY + 0.965 * _bodyH;
     private _rowH = 0.029 * safeZoneH;
-    private _lineTop = _bodyY + 0.125 * _bodyH;
+    // Below the spiral's holes (Mia: the head ran into the wire).
+    private _lineTop = _bodyY + 0.155 * _bodyH;
     private _marginX = _pgL + 0.1 * (_pgR - _pgL);
     private _innerX = _marginX + _gap;
     private _innerW = _pgR - _gap * 1.2 - _innerX;
@@ -299,26 +293,27 @@ if (_showPanel) then {
     private _rowsFree = floor ((_pgB - _buttonsH - _lineTop) / _rowH);
 
     if (GVAR(wb) get "notes") then {
-        // The head: the drill's name, the tabs to page with and the page count between them - a click on the count goes
-        // back to the step now.
-        _ctrls set ["head", [QGVAR(structured), [_innerX, 0 call _fnc_row, _innerW * 0.6, _rowH]] call _fnc_make];
+        // The head: the drill's name.
+        _ctrls set ["head", [QGVAR(structured), [_innerX, 0 call _fnc_row, _innerW, _rowH]] call _fnc_make];
 
+        // At the foot of the page: the tabs to page with, the page count between them - a click on the count goes back to
+        // the step now (Mia: the buttons at the bottom).
         private _tabW = 0.017 * safeZoneW;
         private _tabH = _rowH * 0.9;
         private _countW = 0.04 * safeZoneW;
-        private _ty = (0 call _fnc_row) - _rowH * 0.05;
-        private _right = _innerX + _innerW;
+        private _ty = (_rowsFree call _fnc_row) - _rowH * 0.05;
+        private _left = _innerX + (_innerW - 2 * _tabW - _countW) / 2;
 
-        [_display, [_right - _tabW, _ty, _tabW, _tabH], ">", {[1] call FUNC(page)}, false, true] call FUNC(button);
-        [_display, [_right - 2 * _tabW - _countW, _ty, _tabW, _tabH], "<", {[-1] call FUNC(page)}, false, true] call FUNC(button);
+        [_display, [_left, _ty, _tabW, _tabH], "<", {[-1] call FUNC(page)}, false, true] call FUNC(button);
+        [_display, [_left + _tabW + _countW, _ty, _tabW, _tabH], ">", {[1] call FUNC(page)}, false, true] call FUNC(button);
 
-        private _count = [QGVAR(structured), [_right - _tabW - _countW, _ty + _rowH * 0.06, _countW, _tabH]] call _fnc_make;
+        private _count = [QGVAR(structured), [_left + _tabW, _ty + _rowH * 0.06, _countW, _tabH]] call _fnc_make;
         _ctrls set ["progress", _count];
-        private _countClick = [QGVAR(click), [_right - _tabW - _countW, _ty, _countW, _tabH]] call _fnc_make;
+        private _countClick = [QGVAR(click), [_left + _tabW, _ty, _countW, _tabH]] call _fnc_make;
         _countClick ctrlAddEventHandler ["ButtonClick", {[0] call FUNC(page)}];
 
         // The rows the page has: the head, the step's title, three of words, the bench's hint, the sequence's head and
-        // seven steps, the last action's two - the picture takes what is left.
+        // seven steps, the last action's two, the tabs - the picture takes what is left.
         private _picRows = ((_rowsFree - 17) min 11) max 4;
         private _picH = _picRows * _rowH - _rowH * 0.5;
         private _picW = (_picH / pixelH) * (446 / 300) * pixelW;
@@ -370,8 +365,8 @@ if (_showPanel) then {
 
         _ctrls set ["rows", _rows];
 
-        // What the last hand movement did, as a note at the foot of the page.
-        _r = _r + 9;
+        // What the last hand movement did, as a note over the tabs.
+        _r = _rowsFree - 2;
         _ctrls set ["last", [QGVAR(structured), [_innerX, _r call _fnc_row, _innerW, 2 * _rowH]] call _fnc_make];
     };
 

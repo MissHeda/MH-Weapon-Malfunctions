@@ -184,12 +184,6 @@
         <Key ID="STR_mhwm_workbench_Spot_Slide">
             <English>Slide</English>
         </Key>
-        <Key ID="STR_mhwm_workbench_Status_Clear">
-            <English>Clear</English>
-        </Key>
-        <Key ID="STR_mhwm_workbench_Status_Jammed">
-            <English>Malfunction</English>
-        </Key>
         <Key ID="STR_mhwm_workbench_Step_Cleared_How">
             <English>The weapon cycles again. Resume firing.</English>
         </Key>

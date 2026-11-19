@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+- Leaner: 9 settings instead of 30 and 3 keys instead of 8 (open, Tap-Rack, test). Malfunction weights, magazine and subsonic factors, quick key time and fumbles, minigames, diagnosis, notes and sounds are fixed now; with ACE Overheating this mod always decides.
+- The side panel is a spiral field notebook: a page per step with its picture taped in, the sequence as a checklist, paged with the tabs at the bottom.
+- The status chip in the header is gone; rings and labels in the 3D view shrink when zoomed out.
+- RHS and other weapons: the orange slot placeholders of the model are hidden.
+
 ## 0.1.6
 - The bench's side panel is a page of printed field notes, as the field manual: yellowed paper, ink caption boxes with number discs, red print; the buttons are caption boxes too.
 - The hint line under the 3D view stays on one line (it shrinks to fit instead of breaking).

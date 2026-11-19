@@ -41,7 +41,7 @@ GVAR(testIndex) = _index;
 
 [
     [LLSTRING(Test_Title), 1, COLOR_DIM],
-    [localize format ["STR_mhwm_main_Weight_%1", [_cause select [0, 1], _cause select [1]] call {toUpperANSI (_this select 0) + (_this select 1)}]]
+    [localize format ["STR_mhwm_malfunctions_Cause_%1", [_cause select [0, 1], _cause select [1]] call {toUpperANSI (_this select 0) + (_this select 1)}]]
 ] call CBA_fnc_notify;
 
 true

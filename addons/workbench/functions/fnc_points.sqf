@@ -79,6 +79,12 @@ private _names = if (isNull _object) then {[]} else {(selectionNames _object) ap
     _object hideSelection [_x, true];
 } forEach (_names select {!("proxy:" in _x) && {"zasleh" in _x || {"flash" in _x}}});
 
+// The slots' stand-in models: a simple object draws them as they are in the model, orange placeholders (Mia: RHS's PKP
+// showed an orange magazine and plate) - the real magazine is our own object (fnc_scene).
+{
+    _object hideSelection [_x, true];
+} forEach (_names select {"proxy:" in _x && {"weapon_slots" in _x || {"slot" in _x} || {"magazine" in _x}}});
+
 // The magazine: its proxy, else a selection of its own.
 private _magProxy = _names param [_names findIf {"proxy:" in _x && {"magazine" in _x}}, ""];
 private _mag = [];

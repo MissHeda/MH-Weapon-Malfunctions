@@ -1,7 +1,7 @@
 #include "..\script_component.hpp"
 /*
  * Author: Miss Heda
- * The panel anew: the status chip, and the notebook's page - the step shown with its picture, every step in order as
+ * The panel anew: the notebook's page - the step shown with its picture, every step in order as
  * a checklist (fnc_steps; done ones from GVAR(wb) "done", ticked by fnc_act) and what the last hand movement did. When
  * the page shown changes, the old one turns up over the spiral.
  *
@@ -21,21 +21,6 @@ private _theme = GVAR(wb) get "theme";
 private _state = [GVAR(wb) get "unit", GVAR(wb) get "weapon"] call EFUNC(malfunctions,state);
 private _hex = {(_theme get _this) call BIS_fnc_colorRGBAtoHTML};
 private _cleared = count _state == 0;
-
-// The status chip: a red film while jammed, a green one when clear.
-private _chipColor = +(_theme get (["warn", "good"] select _cleared));
-_chipColor set [3, 0.22];
-
-{
-    if (ctrlType _x == 0 && {ctrlStyle _x == 48}) then {_x ctrlSetTextColor _chipColor} else {_x ctrlSetBackgroundColor _chipColor};
-} forEach (_ctrls get "chipParts");
-
-(_ctrls get "chip") ctrlSetStructuredText parseText format [
-    "<t align='center' font='%1' size='0.85' color='%2'>%3</t>",
-    _theme get "fontMono",
-    (["warn", "good"] select _cleared) call _hex,
-    toUpperANSI ([LLSTRING(Status_Jammed), LLSTRING(Status_Clear)] select _cleared)
-];
 
 // Without the field notes there is no page to fill.
 if !("now" in _ctrls) exitWith {};

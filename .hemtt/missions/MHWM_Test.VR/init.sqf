@@ -31,6 +31,8 @@ MHWMT_jam = {
 MHWMT_weapon = {
     params ["_weapon", "_mag", ["_handgun", false]];
 
+    if !(isClass (configFile >> "CfgWeapons" >> _weapon)) exitWith {format ["%1 is not loaded (RHS?).", _weapon] call MHWMT_say};
+
     if (_handgun) then {
         player removeWeapon handgunWeapon player;
         player addWeapon _weapon;
@@ -143,18 +145,9 @@ MHWMT_entries = [
     ["Refill magazines", {player setAmmo [currentWeapon player, 1e6]; "Magazine full." call MHWMT_say}, "Bench"],
 
     ["Toggle: minigames / buttons", {["mhwm_main_minigames", "Minigames"] call MHWMT_toggle}, "Settings"],
-    ["Toggle: show what is wrong", {["mhwm_main_diagnosis", "Show what is wrong"] call MHWMT_toggle}, "Settings"],
     ["Toggle: jam often (50 per 1000)", {
         mhwm_main_rate = [50, 2] select (mhwm_main_rate >= 50);
         format ["Malfunctions per 1000 rounds: %1", mhwm_main_rate] call MHWMT_say;
-    }, "Settings"],
-    ["Toggle: ACE Overheating decides", {
-        mhwm_main_aceMode = [1, 0] select (mhwm_main_aceMode == 1);
-        format ["With ACE Overheating: %1", ["this mod decides", "ACE decides"] select mhwm_main_aceMode] call MHWMT_say;
-    }, "Settings"],
-    ["Toggle: quick key fumbles (0 / 50 %)", {
-        mhwm_main_fumble = [0.5, 0] select (mhwm_main_fumble >= 0.5);
-        format ["Quick key fumble chance: %1 %%", round (mhwm_main_fumble * 100)] call MHWMT_say;
     }, "Settings"],
 
     ["Weapon: MX (6.5 mm)", {["arifle_MX_F", "30Rnd_65x39_caseless_mag"] call MHWMT_weapon}, "Weapons"],
@@ -162,6 +155,9 @@ MHWMT_entries = [
     ["Weapon: AKM (7.62)", {["arifle_AKM_F", "30Rnd_762x39_Mag_F"] call MHWMT_weapon}, "Weapons"],
     ["Weapon: Mk200 (LMG, large magazine)", {["LMG_Mk200_F", "200Rnd_65x39_cased_Box"] call MHWMT_weapon}, "Weapons"],
     ["Weapon: Vermin (.45, built for subsonic)", {["SMG_01_F", "30Rnd_45ACP_Mag_SMG_01"] call MHWMT_weapon}, "Weapons"],
+    ["Weapon: RHS PKP (belt)", {["rhs_weap_pkp", "rhs_100Rnd_762x54mmR"] call MHWMT_weapon}, "Weapons"],
+    ["Weapon: RHS AK-74M", {["rhs_weap_ak74m", "rhs_30Rnd_545x39_7N10_AK"] call MHWMT_weapon}, "Weapons"],
+    ["Weapon: RHS M4A1", {["rhs_weap_m4a1", "rhs_mag_30Rnd_556x45_M855A1_Stanag"] call MHWMT_weapon}, "Weapons"],
     ["Pistol: P07", {["hgun_P07_F", "16Rnd_9x21_Mag", true] call MHWMT_weapon}, "Weapons"],
     ["Pistol: ACP-C2", {["hgun_ACPC2_F", "9Rnd_45ACP_Mag", true] call MHWMT_weapon}, "Weapons"],
 

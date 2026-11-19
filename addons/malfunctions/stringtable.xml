@@ -115,6 +115,21 @@
         <Key ID="STR_mhwm_malfunctions_Act_WaitNothing">
             <English>Nothing to wait for.</English>
         </Key>
+        <Key ID="STR_mhwm_malfunctions_Cause_Double">
+            <English>Double feed</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Cause_Dud">
+            <English>Dud</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Cause_Extract">
+            <English>Failure to extract</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Cause_Feed">
+            <English>Failure to feed</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Cause_Stovepipe">
+            <English>Stovepipe</English>
+        </Key>
         <Key ID="STR_mhwm_malfunctions_Cleared">
             <English>Weapon cleared</English>
         </Key>
@@ -124,41 +139,11 @@
         <Key ID="STR_mhwm_malfunctions_Jammed_Hint">
             <English>Tap, rack, or open the weapon to inspect it.</English>
         </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Clear">
-            <English>Clear the chamber</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Clear_Desc">
-            <English>Clear the chamber with the bolt locked, or sweep a stovepipe out of the port - blind.</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Lock">
-            <English>Lock / release the bolt</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Lock_Desc">
-            <English>Lock the bolt open, or let it go when it is locked - blind.</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Mag">
-            <English>Drop / insert the magazine</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Mag_Desc">
-            <English>Drop the magazine, or put it back in when it is out - blind.</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Rack">
-            <English>Rack the bolt</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Rack_Desc">
-            <English>Pull the bolt all the way back and let it go - blind.</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Tap">
-            <English>Tap the magazine</English>
-        </Key>
         <Key ID="STR_mhwm_malfunctions_Key_TapRack">
             <English>Tap-Rack (immediate action)</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_Key_TapRack_Desc">
             <English>Tap the magazine, then rack the bolt - blind, the first thing to try.</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_Tap_Desc">
-            <English>Push the magazine home - blind.</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_Key_Test">
             <English>Test: malfunction now</English>

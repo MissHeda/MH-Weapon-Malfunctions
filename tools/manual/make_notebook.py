@@ -63,20 +63,33 @@ def notebook():
     img.alpha_composite(page)
     d = ImageDraw.Draw(img)
 
-    # The punched holes and the wire spiral through them.
-    n = 15
-    step = (x1 - x0 - 40) / (n - 1)
+    # The wire binding: pairs of loops, each one piece - out of its punched hole on the page, up over the top edge and
+    # down behind the pages (Mia: the old spiral read as two rows of hooks).
+    n = 14
+    step = (x1 - x0 - 44) / (n - 1)
+    hole_y = y0 + 20
+    top = 12
+    dark, metal, shine = (26, 26, 26), (128, 130, 134), (215, 217, 220)
+
+    def loop(cx):
+        r = 6
+        # Back leg, behind the pages: only seen above the page's top edge.
+        for width, colour in ((6, dark), (3, metal)):
+            d.line([(cx + r, top + r), (cx + r, y0 + 1)], fill=colour, width=width)
+        # Front leg into the hole, and the bend over the top.
+        for width, colour in ((6, dark), (3, metal)):
+            d.line([(cx - r, top + r), (cx - r, hole_y)], fill=colour, width=width)
+            d.arc([cx - r, top, cx + r, top + 2 * r], start=180, end=360, fill=colour, width=width // 2 + 1)
+        d.line([(cx - r - 1, top + r + 2), (cx - r - 1, hole_y - 6)], fill=shine, width=1)
+
     for k in range(n):
-        cx = x0 + 20 + k * step
-        d.ellipse([cx - 7, y0 + 14, cx + 7, y0 + 28], fill=(40, 40, 38))
+        cx = x0 + 22 + k * step
+        for dx in (-4, 5):
+            d.ellipse([cx + dx - 6 - 5, hole_y - 5, cx + dx - 6 + 5, hole_y + 5], fill=(36, 34, 30))
     for k in range(n):
-        cx = x0 + 20 + k * step
-        # A loop: from behind the cover's top edge over the page into the hole.
-        d.arc([cx - 13, 6, cx + 13, y0 + 26], start=200, end=340, fill=(28, 28, 28), width=9)
-        d.arc([cx - 13, 6, cx + 13, y0 + 26], start=200, end=340, fill=(120, 122, 124), width=5)
-        d.arc([cx - 11, 8, cx + 9, y0 + 22], start=225, end=280, fill=(205, 207, 210), width=2)
-        d.line([(cx - 11, y0 - 8), (cx - 6, y0 + 20)], fill=(28, 28, 28), width=8)
-        d.line([(cx - 11, y0 - 8), (cx - 6, y0 + 20)], fill=(120, 122, 124), width=4)
+        cx = x0 + 22 + k * step
+        for dx in (-4, 5):
+            loop(cx + dx)
     return img
 
 
