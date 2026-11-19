@@ -34,6 +34,14 @@ private _file = switch (_kind) do {
     default {""};
 };
 
+// A sound with a lead-in comes as [file, second to start at].
+private _offset = 0;
+
+if (_file isEqualType []) then {
+    _offset = _file select 1;
+    _file = _file select 0;
+};
+
 if (_file isEqualTo "") exitWith {};
 
-playSound3D [_file, objNull, insideBuilding _unit >= 0.5, eyePos _unit, 1.4, 1, 20];
+playSound3D [_file, objNull, insideBuilding _unit >= 0.5, eyePos _unit, 1.4, 1, 20, _offset];

@@ -65,7 +65,8 @@
 // sounds_f_arsenal.pbo has the prefix a3\sounds_f\arsenal.
 #define SOUND_BOLT "A3\Sounds_F\arsenal\weapons\LongRangeRifles\M320\M320_bolt_01.wss"
 #define SOUND_BOLT_2 "A3\Sounds_F\arsenal\weapons\LongRangeRifles\M320\M320_bolt_02.wss"
-// The bolt pulled back, and let go: it snaps home (Mia: a sound for each half of the stroke).
-#define SOUND_BOLT_BACK "A3\Sounds_F\weapons\Warfare50\bolt_action_open1.wss"
-#define SOUND_BOLT_HOME ["A3\Sounds_F\weapons\Warfare50\bolt_action_close1.wss", "A3\Sounds_F\weapons\Warfare50\bolt_action_close2.wss", "A3\Sounds_F\weapons\Warfare50\bolt_action_close3.wss"]
+// The bolt pulled back, and let go: it snaps home (Mia: a sound for each half of the stroke). Each with the second its hit
+// starts at in the file: played from there, the snap lands when the bolt does (Mia: it came late).
+#define SOUND_BOLT_BACK ["A3\Sounds_F\weapons\Warfare50\bolt_action_open1.wss", 0.25]
+#define SOUND_BOLT_HOME [["A3\Sounds_F\weapons\Warfare50\bolt_action_close1.wss", 0.52], ["A3\Sounds_F\weapons\Warfare50\bolt_action_close2.wss", 0.08], ["A3\Sounds_F\weapons\Warfare50\bolt_action_close3.wss", 0.16]]
 #define SOUND_DRY"A3\Sounds_F\arsenal\weapons\Rifles\Mk20\dry_Mk20.wss"
