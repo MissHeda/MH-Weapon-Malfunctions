@@ -137,7 +137,7 @@
             <English>Weapon malfunction</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_Jammed_Hint">
-            <English>Shift + R: Tap-Rack. Hold Shift + R: open the weapon.</English>
+            <English>Shift + R: Tap-Rack. Ctrl + Shift + R: open the weapon.</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_See_BoltClosed">
             <English>The bolt is closed.</English>

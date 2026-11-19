@@ -85,6 +85,9 @@ private _fnc_step = {
 
     (_steps deleteAt 0) params ["_act", "_seconds", "_fumbled"];
 
+    // The bolt pulled back as the step begins; it snaps home when the step is done (fnc_act).
+    if (_act in [ACT_RACK, ACT_LOCK]) then {[_unit, "boltBack"] call FUNC(playSound)};
+
     [{
         params ["_unit", "_weapon", "_steps", "_fnc_step", "_act", "_fumbled", "_fixes"];
 

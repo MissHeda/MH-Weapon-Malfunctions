@@ -82,7 +82,7 @@ switch (_action) do {
     };
 
     case ACT_RACK: {
-        _sound = "bolt";
+        _sound = "boltHome";
 
         if (_state getOrDefault ["hang", false]) exitWith {
             _sound = "";
@@ -134,12 +134,13 @@ switch (_action) do {
     };
 
     case ACT_SHORT: {
-        _sound = "bolt";
+        _sound = "boltHome";
         _result = "Act_Short";
     };
 
     case ACT_LOCK: {
-        _sound = "bolt";
+        // The pull back sounded already (the bench at full stroke, the blind key at the step's start): the catch clicks.
+        _sound = "click_1";
 
         if (_bolt == "locked") exitWith {
             _result = "Act_AlreadyLocked";
@@ -161,7 +162,7 @@ switch (_action) do {
     };
 
     case ACT_RELEASE: {
-        _sound = "bolt";
+        _sound = "boltHome";
 
         if (_bolt != "locked") exitWith {
             _sound = "";

@@ -76,7 +76,7 @@ if (_event == "down") exitWith {
 
     // The part under the mouse, the nearest within reach.
     private _spot = "";
-    private _best = HOTSPOT_RADIUS * ((GVAR(wb) getOrDefault ["zoom", 1]) max 0.7);
+    private _best = HOTSPOT_RADIUS * ((GVAR(wb) getOrDefault ["zoom", 1]) max 0.5);
 
     if (_button == 0 && {!(GVAR(wb) get "buttons")}) then {
         {

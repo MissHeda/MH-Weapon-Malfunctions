@@ -95,10 +95,16 @@
             <English>Drag the round up and out of the port</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Key_Open">
-            <English>Clear malfunction (tap: Tap-Rack, hold: 3D view)</English>
+            <English>Open the 3D view</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Key_Open_Desc">
-            <English>Tap: tap the magazine and rack, blind. Hold: open the jammed weapon in the 3D view and clear it by hand. ACE's own Unjam key.</English>
+            <English>Open the jammed weapon in the 3D view and clear it by hand.</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Key_TapRack">
+            <English>Tap-Rack (clear blind)</English>
+        </Key>
+        <Key ID="STR_mhwm_workbench_Key_TapRack_Desc">
+            <English>Tap the magazine and rack, without the 3D view. ACE's own Unjam key. What it clears and how long it takes is set by the server.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Last_None">
             <English>Nothing done yet.</English>

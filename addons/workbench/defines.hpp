@@ -54,6 +54,3 @@
 // from the dark panes (luminance) - as AIO's fnc_accentColour.
 #define ACCENT_FALLBACK [0.84, 0.54, 0.1]
 #define ACCENT_MIN_LUMA 0.12
-
-// Seconds Shift + R is held before the 3D view opens; let go sooner, it is the blind Tap-Rack.
-#define KEY_HOLD_OPEN 0.35

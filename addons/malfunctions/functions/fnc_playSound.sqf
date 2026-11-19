@@ -6,7 +6,8 @@
  *
  * Arguments:
  * 0: Unit <OBJECT>
- * 1: Kind <STRING> - "bolt", "dry", "seat", "drop_1", "rattle", "click_1"
+ * 1: Kind <STRING> - "bolt", "boltBack" (pulled to the rear), "boltHome" (let go, it snaps forward), "dry", "seat",
+ *    "drop_1", "rattle", "click_1"
  *
  * Return Value:
  * None
@@ -23,6 +24,8 @@ if (!EGVAR(main,sounds) || {isNull _unit}) exitWith {};
 
 private _file = switch (_kind) do {
     case "bolt": {selectRandom [SOUND_BOLT, SOUND_BOLT_2]};
+    case "boltBack": {SOUND_BOLT_BACK};
+    case "boltHome": {selectRandom SOUND_BOLT_HOME};
     case "dry": {SOUND_DRY};
     case "seat": {SOUND_PATH(seat)};
     case "drop_1": {SOUND_PATH(drop_1)};

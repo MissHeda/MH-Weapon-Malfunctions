@@ -1,7 +1,10 @@
 # Changelog
 
-## 0.2.6
-- One key, ACE's own Unjam key: tap Shift + R for the blind Tap-Rack, hold it for the 3D view (Ctrl + R stays ACE's "Check ammo").
+## 0.2.7
+- Tap-Rack on Shift + R (ACE's own Unjam key), the 3D view on a key of its own: Ctrl + Shift + R.
+- Sounds: the bolt pulled back, and a snap when it goes home.
+- Zoomed out, only the part nearest the mouse lights up.
+- Player settings: show the field notebook, show the field manual.
 - Server settings per malfunction: whether Tap-Rack clears it (default: feed, dud, stovepipe) and how long it takes.
 - Test key (Ctrl + Shift + J) and its setting removed; the field manual no longer mentions it.
 

@@ -11,7 +11,7 @@
  *   panel    a field notebook: a page per step with its comic picture taped in, every step in order, the last
  *            hand movement (fnc_steps, fnc_refresh) - and with the server's minigames off, or without
  *            Picture-in-Picture, a button for every hand movement. The "Field notes" check in the header hides
- *            the three cards for players who know the drill (profileNamespace mhwm_workbench_notesHidden): the view then
+ *            the notebook for players who know the drill (client setting main_showNotes, as in the CBA settings): the view then
  *            takes the whole width, or with buttons the panel keeps only them.
  *
  * GVAR(wb), while open:
@@ -54,7 +54,7 @@ GVAR(wb) = createHashMapFromArray [
     ["closing", false],
     ["openTime", diag_tickTime],
     ["buttons", !EGVAR(main,minigames) || {!isPiPEnabled}],
-    ["notes", !(profileNamespace getVariable [QGVAR(notesHidden), false])],
+    ["notes", EGVAR(main,showNotes)],
     ["done", []],
     ["view", -1]
 ];
@@ -136,18 +136,20 @@ private _notesW = 0.1 * safeZoneW;
 private _chipY = _fy + _headH * 0.2;
 private _chipH = _headH * 0.6;
 private _closeX = _fx + _fw - _pad * pixelW / pixelH - _closeW;
-private _manualX = _closeX - _gap * pixelW / pixelH - _manualW;
+// The field manual's button only when the player wants it (client setting main_showManual).
+private _manualX = _closeX - ([0, _gap * pixelW / pixelH + _manualW] select EGVAR(main,showManual));
 private _notesX = _manualX - _gap * pixelW / pixelH - _notesW;
 
 [_display, [_closeX, _chipY, _closeW, _chipH], LLSTRING(Close), {closeDialog 0}] call FUNC(button);
 
 // The field manual: how the minigames are played (fnc_manual).
-[_display, [_manualX, _chipY, _manualW, _chipH], LLSTRING(Manual), {[] call FUNC(manual)}, true] call FUNC(button);
+if (EGVAR(main,showManual)) then {
+    [_display, [_manualX, _chipY, _manualW, _chipH], LLSTRING(Manual), {[] call FUNC(manual)}, true] call FUNC(button);
+};
 
 // The field notes check: off hides the notebook; the bench is built anew with the other layout.
 [_display, [_notesX, _chipY, _notesW, _chipH], "     " + LLSTRING(Notes), {
-    profileNamespace setVariable [QGVAR(notesHidden), GVAR(wb) get "notes"];
-    saveProfileNamespace;
+    [QEGVAR(main,showNotes), !(GVAR(wb) get "notes")] call CBA_settings_fnc_set;
     closeDialog 0;
     [{[] call FUNC(open)}] call CBA_fnc_execNextFrame;
 }] call FUNC(button);
@@ -471,7 +473,7 @@ GVAR(wb) set ["pfh", [{call FUNC(onFrame)}, 0] call CBA_fnc_addPerFrameHandler];
 call FUNC(refresh);
 
 // The first time a player opens the bench, the manual comes up by itself.
-if !(profileNamespace getVariable [QGVAR(manualSeen), false]) then {
+if (EGVAR(main,showManual) && {!(profileNamespace getVariable [QGVAR(manualSeen), false])}) then {
     [true] call FUNC(manual);
 };
 

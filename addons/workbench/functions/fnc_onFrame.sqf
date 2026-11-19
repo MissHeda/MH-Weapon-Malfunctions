@@ -154,7 +154,11 @@ switch (true) do {
         // The bolt held all the way back: after a moment the catch locks it open.
         if (_kind == "handle") then {
             if ((_along max 0) >= RACK_FULL) then {
-                if !("heldSince" in _drag) then {_drag set ["heldSince", diag_tickTime]};
+                // At the rear: the pull back sounds once a stroke; letting go snaps it home (fnc_act).
+                if !("heldSince" in _drag) then {
+                    _drag set ["heldSince", diag_tickTime];
+                    [GVAR(wb) get "unit", "boltBack"] call EFUNC(malfunctions,playSound);
+                };
 
                 private _hold = (diag_tickTime - (_drag get "heldSince")) / LOCK_HOLD;
                 _drag set ["hold", _hold min 1];
@@ -186,6 +190,22 @@ private _zoom = ((_homeDist / ((_scene getOrDefault ["dist", _homeDist]) max 0.0
 private _textZoom = _zoom max 0.65;
 GVAR(wb) set ["zoom", _zoom];
 
+// Only the part nearest the mouse is under it: zoomed out the parts lie close, and every one in reach lit up (Mia).
+private _hoverId = "";
+
+if (_kind == "") then {
+    private _best = HOTSPOT_RADIUS * (_zoom max 0.5);
+
+    {
+        private _screen = [_x select 1] call FUNC(project);
+
+        if (_screen isNotEqualTo [] && {(_mouse distance2D _screen) < _best}) then {
+            _best = _mouse distance2D _screen;
+            _hoverId = _x select 0;
+        };
+    } forEach _spots;
+};
+
 (GVAR(wb) get "viewRect") params ["_vx", "_vy", "_vw", "_vh"];
 
 {
@@ -202,7 +222,7 @@ GVAR(wb) set ["zoom", _zoom];
 
         _spotScreen pushBack [_id, _screen];
 
-        private _over = (_mouse distance2D _screen) < HOTSPOT_RADIUS * (_zoom max 0.7) && {_kind == ""};
+        private _over = _id isEqualTo _hoverId;
         private _active = switch (_id) do {
             case "handle": {_kind in ["handle", "handleLocked"]};
             case "mag": {_kind in ["magPress", "magInsert"]};
