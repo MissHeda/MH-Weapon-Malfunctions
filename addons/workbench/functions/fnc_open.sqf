@@ -229,7 +229,7 @@ private _resetW = 0.075 * safeZoneW;
 }] call FUNC(button);
 
 // Under the view: how the mouse works - and at its right the field notes check, on the same line (Mia).
-private _notesW = [0, 0.095 * safeZoneW] select EGVAR(main,showNotes);
+private _notesW = [0, 0.125 * safeZoneW] select EGVAR(main,showNotes);
 private _hint = [QGVAR(text), [_vx, _vy + _vh + _gap * 0.5, _vw - _notesW - _gap, _hintH]] call _fnc_make;
 _ctrls set ["hint", _hint];
 

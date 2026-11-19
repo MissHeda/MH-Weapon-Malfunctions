@@ -7,7 +7,8 @@ param(
     [string]$OutDir = "$env:TEMP\mhwm_auto",
     [int]$TimeoutSec = 420,
     [string]$Mission = "MHWM_Auto",
-    [switch]$NoBuild
+    [switch]$NoBuild,
+    [string]$Profile = "MHWMTest"
 )
 
 $ErrorActionPreference = "Stop"
@@ -44,7 +45,7 @@ Add-Type -AssemblyName System.Drawing
 $rptDir = Join-Path $env:LOCALAPPDATA "Arma 3"
 $started = Get-Date
 $mods = @("$workshop\450814997", "$workshop\463939057", (Join-Path $repo ".hemttout\dev")) | ForEach-Object { "-mod=`"$_`"" }
-$armaArgs = $mods + @("-window", "-noPause", "-skipIntro", "-noSplash", "-filePatching", "-showScriptErrors", "-name=MHWMTest",
+$armaArgs = $mods + @("-window", "-noPause", "-skipIntro", "-noSplash", "-filePatching", "-showScriptErrors", "-name=$Profile",
     "`"-init=playMission['','\z\mhwm\missions\$Mission.VR']`"")
 $proc = Start-Process -FilePath (Join-Path $arma "arma3_x64.exe") -ArgumentList $armaArgs -PassThru
 "PID $($proc.Id)"
