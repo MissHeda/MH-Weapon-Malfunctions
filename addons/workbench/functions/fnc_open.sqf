@@ -264,14 +264,14 @@ if (_showPanel) then {
     private _notebook = [QGVAR(picture), [_px, _bodyY, _panelW, _bodyH]] call _fnc_make;
     _notebook ctrlSetText QPATHTOF(ui\notebook_ca.paa);
 
-    // The top page on the texture: left 0.035, top 0.075, right 0.945, bottom 0.965.
-    private _pgL = _px + 0.035 * _panelW;
-    private _pgR = _px + 0.945 * _panelW;
-    private _pgT = _bodyY + 0.075 * _bodyH;
-    private _pgB = _bodyY + 0.965 * _bodyH;
+    // The top page on the texture (make_notebook.py): left 0.012, top 0.03, right 0.975, bottom 0.975; holes to 0.06.
+    private _pgL = _px + 0.012 * _panelW;
+    private _pgR = _px + 0.975 * _panelW;
+    private _pgT = _bodyY + 0.03 * _bodyH;
+    private _pgB = _bodyY + 0.975 * _bodyH;
     private _rowH = 0.029 * safeZoneH;
     // Below the spiral's holes (Mia: the head ran into the wire).
-    private _lineTop = _bodyY + 0.155 * _bodyH;
+    private _lineTop = _bodyY + 0.11 * _bodyH;
     private _marginX = _pgL + 0.1 * (_pgR - _pgL);
     private _innerX = _marginX + _gap;
     private _innerW = _pgR - _gap * 1.2 - _innerX;
