@@ -137,13 +137,7 @@
             <English>Weapon malfunction</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_Jammed_Hint">
-            <English>Tap, rack, or open the weapon to inspect it.</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_TapRack">
-            <English>Tap-Rack (immediate action)</English>
-        </Key>
-        <Key ID="STR_mhwm_malfunctions_Key_TapRack_Desc">
-            <English>Clear the weapon blind: tap the magazine, then rack the bolt. What it clears and how long it takes is set by the server.</English>
+            <English>Shift + R: Tap-Rack. Hold Shift + R: open the weapon.</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_See_BoltClosed">
             <English>The bolt is closed.</English>

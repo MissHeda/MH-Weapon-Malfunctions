@@ -1,7 +1,7 @@
 # Changelog
 
-## 0.2.5
-- Blind Tap-Rack moved to Alt + R (Ctrl + R is ACE's "Check ammo").
+## 0.2.6
+- One key, ACE's own Unjam key: tap Shift + R for the blind Tap-Rack, hold it for the 3D view (Ctrl + R stays ACE's "Check ammo").
 - Server settings per malfunction: whether Tap-Rack clears it (default: feed, dud, stovepipe) and how long it takes.
 - Test key (Ctrl + Shift + J) and its setting removed; the field manual no longer mentions it.
 

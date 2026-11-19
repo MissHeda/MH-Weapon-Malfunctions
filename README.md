@@ -14,7 +14,7 @@ A rebuild from scratch of the idea behind *dzn Extended Jamming* by 10Dozen.
 | Double feed | Two rounds wedged in the chamber | Lock bolt, drop magazine, clear chamber, insert, release |
 | Failure to extract | Spent case stuck in the chamber | Lock bolt, drop magazine, pry case out, insert, release |
 
-## 3D view (Shift + R, ACE self-interaction or action menu)
+## 3D view (hold Shift + R, ACE self-interaction or action menu)
 
 | Part | Mouse |
 |---|---|
@@ -31,8 +31,10 @@ Without Picture-in-Picture: buttons instead.
 
 | Key | |
 |---|---|
-| Shift + R | Open the 3D view |
-| Alt + R | Blind Tap-Rack: the server sets for each malfunction whether it clears it and how long it takes (default: feed, dud, stovepipe). Not Ctrl + R: that is ACE's "Check ammo" |
+| Shift + R (tap) | Blind Tap-Rack: the server sets for each malfunction whether it clears it and how long it takes (default: feed, dud, stovepipe) |
+| Shift + R (hold) | Open the 3D view |
+
+Shift + R is ACE's own Unjam key; ACE only acts on its own jams, which this mod takes over at once, so the two never clash.
 
 ## Settings
 

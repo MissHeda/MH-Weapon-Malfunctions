@@ -8,7 +8,7 @@
             <English>AI units clear their weapons by\nthemselves after a few seconds.</English>
         </Key>
         <Key ID="STR_mhwm_main_BlindFix_Desc">
-            <English>On: Alt + R clears this malfunction\nblind - the whole drill, in the time\nset above.\n\nOff: Tap-Rack fails on it, the player\nhas to open the 3D view (Shift + R).</English>
+            <English>On: Tap-Rack (tap Shift + R) clears\nthis malfunction blind - the whole\ndrill, in the time set above.\n\nOff: Tap-Rack fails on it, the player\nhas to open the 3D view (hold\nShift + R).</English>
         </Key>
         <Key ID="STR_mhwm_main_BlindFix_Double">
             <English>Tap-Rack clears: double feed</English>
@@ -71,7 +71,7 @@
             <English>Allow the blind Tap-Rack</English>
         </Key>
         <Key ID="STR_mhwm_main_QuickKeys_Desc">
-            <English>Alt + R clears the weapon blind,\nwithout the 3D view: tap, rack.\n\nOff: every malfunction is cleared in\nthe 3D view (Shift + R).</English>
+            <English>Tapping Shift + R clears the weapon\nblind, without the 3D view: tap, rack.\nHolding it opens the 3D view.\n\nOff: every malfunction is cleared in\nthe 3D view.</English>
         </Key>
         <Key ID="STR_mhwm_main_Rate">
             <English>Malfunctions per 1000 rounds</English>
