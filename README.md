@@ -31,14 +31,14 @@ Without Picture-in-Picture: buttons instead.
 
 | Key | |
 |---|---|
-| Shift + R | Blind Tap-Rack: the server sets for each malfunction whether it clears it and how long it takes (default: feed, dud, stovepipe) |
+| Ctrl + R | Blind Tap-Rack: the server sets for each malfunction whether it clears it and how long it takes (default: feed, dud, stovepipe) |
 | Ctrl + Shift + R | Open the 3D view |
 
-Shift + R is ACE's own Unjam key; ACE only acts on its own jams, which this mod takes over at once, so the two never clash.
+Ctrl + R is ACE's Check ammo too: while the weapon is jammed the mod holds ACE's ammo hint back, so the key is Tap-Rack.
 
 ## Settings
 
-Enable, malfunctions per 1000 rounds, heat factor (ACE), handguns, AI, weapon reliability, more subsonic magazines, allow the blind Tap-Rack, per malfunction: Tap-Rack clears it, Tap-Rack time. Each player: show the field notebook, show the field manual.
+Enable, malfunctions per 1000 rounds, heat factor (ACE), handguns, AI, weapon reliability, more subsonic magazines, allow the blind Tap-Rack, per malfunction: Tap-Rack clears it, Tap-Rack time. Each player: field notebook (off: gone; on: the check box under the view, remembered), show the field manual.
 
 ## ACE
 

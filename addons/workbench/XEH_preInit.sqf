@@ -14,13 +14,26 @@ if (hasInterface) then {
         false
     }, {}, [19, [true, true, false]]] call CBA_fnc_addKeybind;
 
-    // Tap-Rack on ACE's own "Unjam weapon" key (Shift + R): ACE's handler there only acts on ACE's jams, and those become
-    // this mod's at once (fnc_onAceJammed) - the two never both fire. Ctrl + R is ACE's "Check ammo", and CBA runs every
-    // handler of a key, none can go first. With Tap-Rack off on the server it opens the 3D view instead.
+    // Tap-Rack on Ctrl + R (Mia). That is ACE's "Check ammo" too, and CBA runs every handler of a key - none can go first.
+    // ACE's check plays the reload gesture (fits the Tap-Rack) and shows its ammo hint a second later: while the weapon is
+    // jammed that hint is taken down again as it comes up. With Tap-Rack off on the server it opens the 3D view instead.
     [CBA_SETTINGS_CAT, QEGVAR(malfunctions,keyTapRack), [LLSTRING(Key_TapRack), LLSTRING(Key_TapRack_Desc)], {
+        private _unit = PLAYER_UNIT;
+
+        if (count ([_unit, currentWeapon _unit] call EFUNC(malfunctions,state)) == 0) exitWith {false};
+
         if !(["tapRack"] call EFUNC(malfunctions,quickAction)) then {[] call FUNC(open)};
-        false
-    }, {}, [19, [true, false, false]]] call CBA_fnc_addKeybind;
+
+        if (!isNil "ace_reload_fnc_checkAmmo") then {
+            [{
+                ctrlShown (uiNamespace getVariable ["ACE_ctrlHint", controlNull])
+            }, {
+                ("ACE_RscHint" call BIS_fnc_rscLayer) cutText ["", "PLAIN"];
+            }, [], 2] call CBA_fnc_waitUntilAndExecute;
+        };
+
+        true
+    }, {}, [19, [false, true, false]]] call CBA_fnc_addKeybind;
 };
 
 ADDON = true;

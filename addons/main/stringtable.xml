@@ -8,7 +8,7 @@
             <English>AI units clear their weapons by\nthemselves after a few seconds.</English>
         </Key>
         <Key ID="STR_mhwm_main_BlindFix_Desc">
-            <English>On: Tap-Rack (Shift + R) clears this\nmalfunction blind - the whole drill,\nin the time set above.\n\nOff: Tap-Rack fails on it, the player\nhas to open the 3D view\n(Ctrl + Shift + R).</English>
+            <English>On: Tap-Rack (Ctrl + R) clears this\nmalfunction blind - the whole drill,\nin the time set above.\n\nOff: Tap-Rack fails on it, the player\nhas to open the 3D view\n(Ctrl + Shift + R).</English>
         </Key>
         <Key ID="STR_mhwm_main_BlindFix_Double">
             <English>Tap-Rack clears: double feed</English>
@@ -74,7 +74,7 @@
             <English>Allow the blind Tap-Rack</English>
         </Key>
         <Key ID="STR_mhwm_main_QuickKeys_Desc">
-            <English>Shift + R clears the weapon blind,\nwithout the 3D view: tap, rack.\n\nOff: every malfunction is cleared in\nthe 3D view (Ctrl + Shift + R).</English>
+            <English>Ctrl + R clears the weapon blind,\nwithout the 3D view: tap, rack.\nWhile jammed, ACE's Check ammo hint\nis held back.\n\nOff: every malfunction is cleared in\nthe 3D view (Ctrl + Shift + R).</English>
         </Key>
         <Key ID="STR_mhwm_main_Rate">
             <English>Malfunctions per 1000 rounds</English>
@@ -89,10 +89,10 @@
             <English>The Field manual button in the 3D\nview's header, and the manual page\nthe first time the view opens.\n\nOff: neither.</English>
         </Key>
         <Key ID="STR_mhwm_main_ShowNotes">
-            <English>Show the field notebook</English>
+            <English>Field notebook</English>
         </Key>
         <Key ID="STR_mhwm_main_ShowNotes_Desc">
-            <English>The notebook beside the 3D view: the\nsteps one page each, the checklist.\n\nOff: the 3D view takes the whole\nwidth. The check box in the 3D view's\nheader sets this too.</English>
+            <English>The notebook beside the 3D view: the\nsteps one page each, the checklist.\n\nOn: the Field notes check box under\nthe view shows or hides it, and is\nremembered.\n\nOff: no notebook and no check box.</English>
         </Key>
         <Key ID="STR_mhwm_main_SubsonicMags">
             <English>More subsonic magazines</English>

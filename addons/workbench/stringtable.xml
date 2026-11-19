@@ -104,7 +104,7 @@
             <English>Tap-Rack (clear blind)</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Key_TapRack_Desc">
-            <English>Tap the magazine and rack, without the 3D view. ACE's own Unjam key. What it clears and how long it takes is set by the server.</English>
+            <English>Tap the magazine and rack, without the 3D view. While the weapon is jammed it takes over ACE's Check ammo on the same key. What it clears and how long it takes is set by the server.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Last_None">
             <English>Nothing done yet.</English>

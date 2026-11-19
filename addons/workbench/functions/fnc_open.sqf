@@ -54,7 +54,9 @@ GVAR(wb) = createHashMapFromArray [
     ["closing", false],
     ["openTime", diag_tickTime],
     ["buttons", !EGVAR(main,minigames) || {!isPiPEnabled}],
-    ["notes", EGVAR(main,showNotes)],
+    // The notebook: allowed by the player's setting (off: gone, check box too), shown or hidden with the check box under
+    // the view - kept for the next time (Mia).
+    ["notes", EGVAR(main,showNotes) && {!(profileNamespace getVariable [QGVAR(notesHidden), false])}],
     ["done", []],
     ["view", -1]
 ];
@@ -132,44 +134,17 @@ _subtitle ctrlSetStructuredText parseText format [
 // The header's buttons at the right, in a row with even gaps (the status chip is gone: Mia - "MALFUNCTION" said nothing).
 private _closeW = 0.075 * safeZoneW;
 private _manualW = 0.1 * safeZoneW;
-private _notesW = 0.1 * safeZoneW;
 private _chipY = _fy + _headH * 0.2;
 private _chipH = _headH * 0.6;
 private _closeX = _fx + _fw - _pad * pixelW / pixelH - _closeW;
 // The field manual's button only when the player wants it (client setting main_showManual).
 private _manualX = _closeX - ([0, _gap * pixelW / pixelH + _manualW] select EGVAR(main,showManual));
-private _notesX = _manualX - _gap * pixelW / pixelH - _notesW;
 
 [_display, [_closeX, _chipY, _closeW, _chipH], LLSTRING(Close), {closeDialog 0}] call FUNC(button);
 
 // The field manual: how the minigames are played (fnc_manual).
 if (EGVAR(main,showManual)) then {
     [_display, [_manualX, _chipY, _manualW, _chipH], LLSTRING(Manual), {[] call FUNC(manual)}, true] call FUNC(button);
-};
-
-// The field notes check: off hides the notebook; the bench is built anew with the other layout.
-[_display, [_notesX, _chipY, _notesW, _chipH], "     " + LLSTRING(Notes), {
-    [QEGVAR(main,showNotes), !(GVAR(wb) get "notes")] call CBA_settings_fnc_set;
-    closeDialog 0;
-    [{[] call FUNC(open)}] call CBA_fnc_execNextFrame;
-}] call FUNC(button);
-
-// The check box at the button's left, as a settings check box: off a round-cornered ring, on filled with the accent and
-// a tick in it (Mia: the dot in a ring looked odd).
-private _boxH = _chipH * 0.44;
-private _boxW = _boxH * pixelW / pixelH;
-private _boxX = _notesX + _pad * pixelW / pixelH;
-private _boxY = _chipY + (_chipH - _boxH) / 2;
-private _ring = 2;
-
-[_display, [_boxX, _boxY, _boxW, _boxH], _theme get "accent", _boxH * 0.25] call FUNC(panel);
-
-if (GVAR(wb) get "notes") then {
-    private _tick = [QGVAR(picture), [_boxX + _boxW * 0.12, _boxY + _boxH * 0.12, _boxW * 0.76, _boxH * 0.76]] call _fnc_make;
-    _tick ctrlSetText QPATHTOF(ui\check_ca.paa);
-    _tick ctrlSetTextColor (_theme get "onAccent");
-} else {
-    [_display, [_boxX + _ring * pixelW, _boxY + _ring * pixelH, _boxW - 2 * _ring * pixelW, _boxH - 2 * _ring * pixelH], [0.09, 0.09, 0.09, 1], _boxH * 0.25 - _ring * pixelH] call FUNC(panel);
 };
 
 // ----- The 3D view -----
@@ -253,9 +228,42 @@ private _resetW = 0.075 * safeZoneW;
     };
 }] call FUNC(button);
 
-// Under the view: how the mouse works.
-private _hint = [QGVAR(text), [_vx, _vy + _vh + _gap * 0.5, _vw, _hintH]] call _fnc_make;
+// Under the view: how the mouse works - and at its right the field notes check, on the same line (Mia).
+private _notesW = [0, 0.095 * safeZoneW] select EGVAR(main,showNotes);
+private _hint = [QGVAR(text), [_vx, _vy + _vh + _gap * 0.5, _vw - _notesW - _gap, _hintH]] call _fnc_make;
 _ctrls set ["hint", _hint];
+
+if (EGVAR(main,showNotes)) then {
+    private _notesX = _vx + _vw - _notesW;
+    private _chipY = _vy + _vh + _gap * 0.5;
+    private _chipH = _hintH;
+
+    // The field notes check: off hides the notebook; the bench is built anew with the other layout.
+    [_display, [_notesX, _chipY, _notesW, _chipH], "     " + LLSTRING(Notes), {
+        profileNamespace setVariable [QGVAR(notesHidden), GVAR(wb) get "notes"];
+        saveProfileNamespace;
+        closeDialog 0;
+        [{[] call FUNC(open)}] call CBA_fnc_execNextFrame;
+    }] call FUNC(button);
+
+    // The check box at the button's left, as a settings check box: off a round-cornered ring, on filled with the accent and
+    // a tick in it (Mia: the dot in a ring looked odd).
+    private _boxH = _chipH * 0.44;
+    private _boxW = _boxH * pixelW / pixelH;
+    private _boxX = _notesX + _pad * pixelW / pixelH;
+    private _boxY = _chipY + (_chipH - _boxH) / 2;
+    private _ring = 2;
+
+    [_display, [_boxX, _boxY, _boxW, _boxH], _theme get "accent", _boxH * 0.25] call FUNC(panel);
+
+    if (GVAR(wb) get "notes") then {
+        private _tick = [QGVAR(picture), [_boxX + _boxW * 0.12, _boxY + _boxH * 0.12, _boxW * 0.76, _boxH * 0.76]] call _fnc_make;
+        _tick ctrlSetText QPATHTOF(ui\check_ca.paa);
+        _tick ctrlSetTextColor (_theme get "onAccent");
+    } else {
+        [_display, [_boxX + _ring * pixelW, _boxY + _ring * pixelH, _boxW - 2 * _ring * pixelW, _boxH - 2 * _ring * pixelH], [0.09, 0.09, 0.09, 1], _boxH * 0.25 - _ring * pixelH] call FUNC(panel);
+    };
+};
 
 // ----- Panel: a field notebook lying open beside the weapon -----
 // Mia: "als ob man da wirklich ein notebook nebenbei offen hat". A spiral pad (ui\notebook_ca.paa, make_notebook.py):

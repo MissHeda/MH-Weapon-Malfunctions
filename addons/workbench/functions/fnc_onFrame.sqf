@@ -190,6 +190,15 @@ private _zoom = ((_homeDist / ((_scene getOrDefault ["dist", _homeDist]) max 0.0
 private _textZoom = _zoom max 0.65;
 GVAR(wb) set ["zoom", _zoom];
 
+// One label at a time (Mia: they kept overlapping): the part held, else the part under the mouse, else the step's part.
+private _activeId = switch (true) do {
+    case (_kind in ["handle", "handleLocked"]): {"handle"};
+    case (_kind in ["magPress", "magInsert"]): {"mag"};
+    case (_kind in ["chamber", "pull"]): {"chamber"};
+    case (_kind in ["port", "muzzle"]): {_kind};
+    default {""};
+};
+
 // Only the part nearest the mouse is under it: zoomed out the parts lie close, and every one in reach lit up (Mia).
 private _hoverId = "";
 
@@ -303,7 +312,8 @@ if (_kind == "") then {
             ([0.72, 0.85] select _plate) * _textZoom
         ];
         // Quiet parts keep their names to themselves until the mouse is on them: only the step now speaks.
-        _label ctrlShow (_attention || {_over} || {_active});
+        private _focus = [_activeId, _hoverId] select (_activeId isEqualTo "");
+        _label ctrlShow ([_attention, _id isEqualTo _focus] select (_focus isNotEqualTo ""));
         _label ctrlCommit 0;
     };
 } forEach _marks;
