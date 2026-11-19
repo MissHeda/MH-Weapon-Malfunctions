@@ -4,6 +4,9 @@
         <Key ID="STR_mhwm_workbench_Action_Open">
             <English>Clear malfunction</English>
         </Key>
+        <Key ID="STR_mhwm_workbench_Bench">
+            <English>On the bench:</English>
+        </Key>
         <Key ID="STR_mhwm_workbench_Btn_Clear">
             <English>CLEAR CHAMBER</English>
         </Key>
@@ -29,16 +32,16 @@
             <English>TAP</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Btn_Wait">
-            <English>WAIT (HANG FIRE)</English>
+            <English>WAIT (HANGFIRE)</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Close">
             <English>Close</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Head_Last">
-            <English>Last action</English>
+            <English>Last</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Head_Steps">
-            <English>All steps</English>
+            <English>Sequence</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Buttons">
             <English>Drag: turn  ·  Middle: move  ·  Wheel: zoom  ·  Buttons: hand movements</English>
@@ -47,7 +50,7 @@
             <English>Hold and wiggle left and right</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_ChamberHeld">
-            <English>Wiggle - left, right, left...</English>
+            <English>Work it loose: left, right, left...</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Default">
             <English>Left: work the red part  ·  Right drag: turn  ·  Hold middle: move  ·  Wheel: zoom</English>
@@ -56,7 +59,7 @@
             <English>Drag back all the way and let go: rack</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_HandleHeld">
-            <English>Let go to rack   ·   Hold at the back: lock it open   ·   Only part way: short stroke</English>
+            <English>Let go: rack  ·  Hold at the rear: lock  ·  Part way: short stroke</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_HandleLocked">
             <English>Click: let the bolt go</English>
@@ -71,16 +74,16 @@
             <English>Down all the way: drop   ·   Let go here: tap</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_MagInsertHeld">
-            <English>Up into the well, straight - off the line it will not click</English>
+            <English>Straight up into the well. Off the line it will not lock.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_MagOut">
             <English>Drag it up into the well</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Muzzle">
-            <English>Hold: keep the muzzle safe a moment</English>
+            <English>Hold: wait out a possible hangfire</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_MuzzleHeld">
-            <English>Keep holding - a hang fire can still go off</English>
+            <English>Keep holding. A hangfire can still go off.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Hint_Port">
             <English>Swipe the case out of the port</English>
@@ -110,13 +113,10 @@
             <English>Field notes</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Paper_Title">
-            <English>What to do</English>
-        </Key>
-        <Key ID="STR_mhwm_workbench_Progress">
-            <English>Step %1 of %2</English>
+            <English>Stoppage drill</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Progress_Done">
-            <English>All done</English>
+            <English>Clear</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Readout">
             <English>Mag</English>
@@ -191,76 +191,76 @@
             <English>Malfunction</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_Cleared_How">
-            <English>The weapon works again.</English>
+            <English>The weapon cycles again. Resume firing.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_clear">
-            <English>Clear the chamber</English>
+            <English>Remove the stuck case</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_clear_How">
-            <English>Hold on the chamber and wiggle left and right.</English>
+            <English>Work the case loose and out of the chamber. Do not force it.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_drop">
-            <English>Drop the magazine</English>
+            <English>Remove the magazine</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_drop_How">
-            <English>Drag the magazine down.</English>
+            <English>Press the magazine release and pull the magazine clear of the well.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_insert">
-            <English>Insert the magazine</English>
+            <English>Insert a magazine</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_insert_How">
-            <English>Drag it straight up into the well.</English>
+            <English>Push the magazine straight up into the well until it locks. Tug down to check.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_lock">
-            <English>Lock the bolt open</English>
+            <English>Lock the bolt to the rear</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_lock_How">
-            <English>Drag the handle all the way back and hold it there until the bar is full.</English>
+            <English>Pull the charging handle to the rear and engage the bolt catch. The action stays open.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_look">
-            <English>Look inside</English>
+            <English>Inspect the chamber</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_look_How">
-            <English>With the bolt open you see what is stuck - the next steps show then.</English>
+            <English>Look through the ejection port into the chamber. Identify the stoppage before you go on.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_pull">
-            <English>Pull out a round</English>
+            <English>Remove the double feed</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_pull_How">
-            <English>Grab the chamber and drag the round up and out of the port. Two are wedged in.</English>
+            <English>Pull each round out through the ejection port. Two rounds are in the receiver.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_rack">
-            <English>Rack the charging handle</English>
+            <English>Pull and release the charging handle</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_rackSlide">
             <English>Rack the slide</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_rack_How">
-            <English>Drag the handle all the way back and let go.</English>
+            <English>Pull it fully to the rear and let go. Do not ride it forward.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_release">
-            <English>Send the bolt home</English>
+            <English>Release the bolt</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_release_How">
-            <English>Click the locked bolt.</English>
+            <English>Press the bolt catch. Let the bolt go forward on its own.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_sweep">
-            <English>Sweep the case out</English>
+            <English>Clear the ejection port</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_sweep_How">
-            <English>Swipe the stuck case out of the port.</English>
+            <English>Sweep the case out of the port with your hand.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_tap">
             <English>Tap the magazine</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_tap_How">
-            <English>Click the magazine once.</English>
+            <English>Push the magazine up hard until it locks. Tug it down to check it is seated.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_wait">
-            <English>Wait - muzzle safe</English>
+            <English>Wait out a hangfire</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Step_wait_How">
-            <English>A dud may still be a hang fire. Hold on the muzzle until the bar is full.</English>
+            <English>Keep the muzzle pointed in a safe direction. Do not open the action yet.</English>
         </Key>
         <Key ID="STR_mhwm_workbench_Tag_Done">
             <English>Done</English>

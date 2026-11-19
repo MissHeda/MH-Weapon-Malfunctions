@@ -180,6 +180,12 @@ private _spotScreen = [];
 private _hovered = "";
 private _placed = [];
 
+// Rings and labels shrink as the camera backs off: zoomed out they covered the weapon (Mia). 1 at the start view.
+private _homeDist = (_scene getOrDefault ["home", [0, 0, 1]]) param [2, 1];
+private _zoom = ((_homeDist / ((_scene getOrDefault ["dist", _homeDist]) max 0.01)) min 1.1) max 0.4;
+private _textZoom = _zoom max 0.65;
+GVAR(wb) set ["zoom", _zoom];
+
 (GVAR(wb) get "viewRect") params ["_vx", "_vy", "_vw", "_vh"];
 
 {
@@ -196,7 +202,7 @@ private _placed = [];
 
         _spotScreen pushBack [_id, _screen];
 
-        private _over = (_mouse distance2D _screen) < HOTSPOT_RADIUS && {_kind == ""};
+        private _over = (_mouse distance2D _screen) < HOTSPOT_RADIUS * (_zoom max 0.7) && {_kind == ""};
         private _active = switch (_id) do {
             case "handle": {_kind in ["handle", "handleLocked"]};
             case "mag": {_kind in ["magPress", "magInsert"]};
@@ -206,7 +212,7 @@ private _placed = [];
 
         if (_over) then {_hovered = _id};
 
-        private _size = HOTSPOT_SIZE * (switch (true) do {
+        private _size = HOTSPOT_SIZE * _zoom * (switch (true) do {
             case (_over || _active): {1.35};
             case (_attention): {1.2 + 0.15 * sin (diag_tickTime * 360)};
             default {0.6};
@@ -226,16 +232,16 @@ private _placed = [];
         // Labels of parts close together kept apart (the first test had "Bolt (locked)" across "Chamber"): right of the
         // ring, else left of it (right-aligned), else above or below it - never further, pushing them down only put
         // "Chamber" two labels below its ring. Each label takes about the first 60 % of its box.
-        private _lw = 0.16 * safeZoneW;
-        private _lh = 0.032 * safeZoneH;
+        private _lw = 0.16 * safeZoneW * _textZoom;
+        private _lh = 0.032 * safeZoneH * _textZoom;
         private _used = _lw * 0.6;
 
         // The step's label is one line on a dark plate as wide as its words: red on the tan MX was cut and hard to read.
         if (_attention) then {
             private _measure = _ctrls get "measure";
-            _measure ctrlSetFontHeight (0.03 * safeZoneH * 0.85);
+            _measure ctrlSetFontHeight (0.03 * safeZoneH * 0.85 * _textZoom);
             _measure ctrlSetText toUpperANSI _text;
-            _lw = ctrlTextWidth _measure + 0.012 * safeZoneW;
+            _lw = ctrlTextWidth _measure + 0.012 * safeZoneW * _textZoom;
             _used = _lw;
         };
         private _sx = _screen select 0;
@@ -270,7 +276,7 @@ private _placed = [];
             toUpperANSI _text,
             [_align, "center"] select _attention,
             _theme get "fontMono",
-            [0.72, 0.85] select _attention
+            ([0.72, 0.85] select _attention) * _textZoom
         ];
         // Quiet parts keep their names to themselves until the mouse is on them: only the step now speaks.
         _label ctrlShow (_attention || {_over} || {_active});

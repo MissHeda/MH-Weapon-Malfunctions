@@ -10,7 +10,7 @@
  * None
  *
  * Return Value:
- * Theme <HASHMAP>: accent, accentSoft, accentHover, onAccent, panel, card, cardHover, line, text, text2, muted, warn, good,
+ * Theme <HASHMAP>: pen, paper*, accent, accentSoft, accentHover, onAccent, panel, card, cardHover, line, text, text2, muted, warn, good,
  * dim, radius, font, fontBold, fontMono
  *
  * Example:
@@ -69,6 +69,8 @@ createHashMapFromArray [
     ["paperRed", [0.84, 0.2, 0.15, 1]],
     ["paperGood", [0.13, 0.45, 0.2, 1]],
     ["paperBox", [0.98, 0.965, 0.91, 0.9]],
+    // The notebook's ballpoint: what is written by hand on its pages.
+    ["pen", [0.12, 0.2, 0.47, 1]],
     ["radius", 0.012 * safeZoneH],
     ["font", "PuristaMedium"],
     ["fontBold", "PuristaSemibold"],

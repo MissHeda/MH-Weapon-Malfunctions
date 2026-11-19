@@ -147,31 +147,31 @@ On: every player may use it.</English>
             <English>Double feed</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Double_Desc">
-            <English>Two rounds are wedged in the chamber.\n\nClear: lock the bolt, drop the\nmagazine, clear the chamber, insert\nthe magazine, rack.\n\n0 = never.</English>
+            <English>Two rounds are wedged in the receiver.\n\nClear: lock the bolt, remove the\nmagazine, pull both rounds out,\ninsert a magazine, release the bolt.\n\n0 = never.</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Dud">
             <English>Dud</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Dud_Desc">
-            <English>The round in the chamber did not fire.\n\nClear: rack.\n\n0 = never.</English>
+            <English>The round in the chamber did not fire.\n\nClear: wait out a hangfire, rack.\n\n0 = never.</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Extract">
             <English>Failure to extract</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Extract_Desc">
-            <English>The spent case is stuck in the chamber.\n\nClear: lock the bolt, drop the\nmagazine, pry the case out, insert\nthe magazine, rack.\n\n0 = never.</English>
+            <English>The spent case is stuck in the chamber.\n\nClear: lock the bolt, remove the\nmagazine, work the case out, insert\na magazine, release the bolt.\n\n0 = never.</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Feed">
             <English>Failure to feed</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Feed_Desc">
-            <English>No round went into the chamber,\noften a magazine not seated.\n\nClear: tap the magazine, rack.\n\n0 = never.</English>
+            <English>No round went into the chamber.\n\nClear: tap the magazine, rack. A weak\nmagazine has to be replaced.\n\n0 = never.</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Stovepipe">
             <English>Stovepipe</English>
         </Key>
         <Key ID="STR_mhwm_main_Weight_Stovepipe_Desc">
-            <English>The spent case is caught in the\nejection port.\n\nClear: rack, or sweep the case out.\n\n0 = never.</English>
+            <English>The spent case is caught in the\nejection port.\n\nClear: sweep the case out.\n\n0 = never.</English>
         </Key>
     </Package>
 </Project>

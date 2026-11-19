@@ -34,23 +34,10 @@ if (_paper) then {
 
     _rect params ["_bx", "_by", "_bw", "_bh"];
 
-    private _fill = _display ctrlCreate [QGVAR(rect), -1];
-    _fill ctrlSetPosition _rect;
-    _fill ctrlSetBackgroundColor _base;
-    _fill ctrlCommit 0;
-    _parts pushBack _fill;
-
-    {
-        private _line = _display ctrlCreate [QGVAR(rect), -1];
-        _line ctrlSetPosition _x;
-        _line ctrlSetBackgroundColor _ink;
-        _line ctrlCommit 0;
-    } forEach [
-        [_bx, _by, _bw, 2 * pixelH],
-        [_bx, _by + _bh - 2 * pixelH, _bw, 2 * pixelH],
-        [_bx, _by, 2 * pixelW, _bh],
-        [_bx + _bw - 2 * pixelW, _by, 2 * pixelW, _bh]
-    ];
+    // An ink ring with the paper inside, round-cornered as everything else (Mia: the square boxes stood out).
+    private _radius = _bh * 0.3;
+    [_display, _rect, _ink, _radius] call FUNC(panel);
+    _parts = [_display, [_bx + 2 * pixelW, _by + 2 * pixelH, _bw - 4 * pixelW, _bh - 4 * pixelH], _base, _radius - 2 * pixelH] call FUNC(panel);
 } else {
     _parts = [_display, _rect, _base] call FUNC(panel);
 };
@@ -59,7 +46,9 @@ private _text = _display ctrlCreate [QGVAR(structured), -1];
 _text ctrlSetPosition [_rect select 0, (_rect select 1) + ((_rect select 3) - 0.026 * safeZoneH) / 2, _rect select 2, 0.03 * safeZoneH];
 _text ctrlSetStructuredText parseText format [
     "<t align='center' font='%1' size='0.9' color='%2'>%3</t>",
-    _theme get "fontBold", _ink call BIS_fnc_colorRGBAtoHTML, toUpperANSI _label
+    _theme get "fontBold", _ink call BIS_fnc_colorRGBAtoHTML,
+    // "<" and ">" are markup to parseText: the back arrow vanished (Mia).
+    ((toUpperANSI _label) regexReplace ["&", "&amp;"] regexReplace ["<", "&lt;"] regexReplace [">", "&gt;"])
 ];
 _text ctrlCommit 0;
 
