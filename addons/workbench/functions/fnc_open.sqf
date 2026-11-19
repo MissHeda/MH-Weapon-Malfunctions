@@ -129,21 +129,22 @@ _subtitle ctrlSetStructuredText parseText format [
     _theme get "fontMono", _mutedHex, toUpperANSI LLSTRING(Title), toUpperANSI _weapon
 ];
 
-// The header's buttons at the right, in a row (the status chip is gone: Mia - "MALFUNCTION" up there said nothing).
+// The header's buttons at the right, in a row with even gaps (the status chip is gone: Mia - "MALFUNCTION" said nothing).
 private _closeW = 0.075 * safeZoneW;
-private _chipX = _fx + _fw - _pad - _closeW + _gap;
+private _manualW = 0.1 * safeZoneW;
+private _notesW = 0.1 * safeZoneW;
 private _chipY = _fy + _headH * 0.2;
 private _chipH = _headH * 0.6;
+private _closeX = _fx + _fw - _pad * pixelW / pixelH - _closeW;
+private _manualX = _closeX - _gap * pixelW / pixelH - _manualW;
+private _notesX = _manualX - _gap * pixelW / pixelH - _notesW;
 
-[_display, [_fx + _fw - _pad - _closeW, _chipY, _closeW, _chipH], LLSTRING(Close), {closeDialog 0}] call FUNC(button);
+[_display, [_closeX, _chipY, _closeW, _chipH], LLSTRING(Close), {closeDialog 0}] call FUNC(button);
 
 // The field manual: how the minigames are played (fnc_manual).
-private _manualW = 0.1 * safeZoneW;
-[_display, [_chipX - _gap - _manualW, _chipY, _manualW, _chipH], LLSTRING(Manual), {[] call FUNC(manual)}, true] call FUNC(button);
+[_display, [_manualX, _chipY, _manualW, _chipH], LLSTRING(Manual), {[] call FUNC(manual)}, true] call FUNC(button);
 
-// The field notes check: off hides the side panel's cards; the bench is built anew with the other layout.
-private _notesW = 0.1 * safeZoneW;
-private _notesX = _chipX - 2 * _gap - _manualW - _notesW;
+// The field notes check: off hides the notebook; the bench is built anew with the other layout.
 [_display, [_notesX, _chipY, _notesW, _chipH], "     " + LLSTRING(Notes), {
     profileNamespace setVariable [QGVAR(notesHidden), GVAR(wb) get "notes"];
     saveProfileNamespace;
@@ -151,19 +152,22 @@ private _notesX = _chipX - 2 * _gap - _manualW - _notesW;
     [{[] call FUNC(open)}] call CBA_fnc_execNextFrame;
 }] call FUNC(button);
 
-// The check box at the button's left, round-cornered as the panes: an accent ring, filled while the notes show.
-private _boxH = _chipH * 0.42;
+// The check box at the button's left, as a settings check box: off a round-cornered ring, on filled with the accent and
+// a tick in it (Mia: the dot in a ring looked odd).
+private _boxH = _chipH * 0.44;
 private _boxW = _boxH * pixelW / pixelH;
 private _boxX = _notesX + _pad * pixelW / pixelH;
 private _boxY = _chipY + (_chipH - _boxH) / 2;
 private _ring = 2;
 
-[_display, [_boxX, _boxY, _boxW, _boxH], _theme get "accent", _boxH * 0.3] call FUNC(panel);
-[_display, [_boxX + _ring * pixelW, _boxY + _ring * pixelH, _boxW - 2 * _ring * pixelW, _boxH - 2 * _ring * pixelH], [0.08, 0.08, 0.08, 1], _boxH * 0.22] call FUNC(panel);
+[_display, [_boxX, _boxY, _boxW, _boxH], _theme get "accent", _boxH * 0.25] call FUNC(panel);
 
 if (GVAR(wb) get "notes") then {
-    _ring = 4;
-    [_display, [_boxX + _ring * pixelW, _boxY + _ring * pixelH, _boxW - 2 * _ring * pixelW, _boxH - 2 * _ring * pixelH], _theme get "accent", _boxH * 0.16] call FUNC(panel);
+    private _tick = [QGVAR(picture), [_boxX + _boxW * 0.12, _boxY + _boxH * 0.12, _boxW * 0.76, _boxH * 0.76]] call _fnc_make;
+    _tick ctrlSetText QPATHTOF(ui\check_ca.paa);
+    _tick ctrlSetTextColor (_theme get "onAccent");
+} else {
+    [_display, [_boxX + _ring * pixelW, _boxY + _ring * pixelH, _boxW - 2 * _ring * pixelW, _boxH - 2 * _ring * pixelH], [0.09, 0.09, 0.09, 1], _boxH * 0.25 - _ring * pixelH] call FUNC(panel);
 };
 
 // ----- The 3D view -----

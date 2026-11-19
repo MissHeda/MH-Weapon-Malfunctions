@@ -213,9 +213,10 @@ GVAR(wb) set ["zoom", _zoom];
         if (_over) then {_hovered = _id};
 
         private _size = HOTSPOT_SIZE * _zoom * (switch (true) do {
-            case (_over || _active): {1.35};
-            case (_attention): {1.2 + 0.15 * sin (diag_tickTime * 360)};
-            default {0.6};
+            // Small, as AIO's marks (Mia: under the mouse they were huge).
+            case (_over || _active): {1.15};
+            case (_attention): {1 + 0.08 * sin (diag_tickTime * 360)};
+            default {0.7};
         });
         private _w = _size * pixelW / pixelH;
 
@@ -237,7 +238,10 @@ GVAR(wb) set ["zoom", _zoom];
         private _used = _lw * 0.6;
 
         // The step's label is one line on a dark plate as wide as its words: red on the tan MX was cut and hard to read.
-        if (_attention) then {
+        // Under the mouse a label gets the plate too: "Bolt (locked)" over the red was unreadable (Mia).
+        private _plate = _attention || {_over} || {_active};
+
+        if (_plate) then {
             private _measure = _ctrls get "measure";
             _measure ctrlSetFontHeight (0.03 * safeZoneH * 0.85 * _textZoom);
             _measure ctrlSetText toUpperANSI _text;
@@ -265,7 +269,7 @@ GVAR(wb) set ["zoom", _zoom];
         _placed pushBack [_occupied, _ly];
 
         _label ctrlSetPosition [_lx, _ly, _lw, _lh];
-        _label ctrlSetBackgroundColor ([[0, 0, 0, 0], [0.04, 0.04, 0.04, 0.8]] select _attention);
+        _label ctrlSetBackgroundColor ([[0, 0, 0, 0], [0.04, 0.04, 0.04, 0.8]] select _plate);
         _label ctrlSetStructuredText parseText format [
             "<t font='%4' size='%5' color='%1' shadow='2' align='%3'>%2</t>",
             (switch (true) do {
@@ -274,9 +278,9 @@ GVAR(wb) set ["zoom", _zoom];
                 default {_theme get "text2"};
             }) call BIS_fnc_colorRGBAtoHTML,
             toUpperANSI _text,
-            [_align, "center"] select _attention,
+            [_align, "center"] select _plate,
             _theme get "fontMono",
-            ([0.72, 0.85] select _attention) * _textZoom
+            ([0.72, 0.85] select _plate) * _textZoom
         ];
         // Quiet parts keep their names to themselves until the mouse is on them: only the step now speaks.
         _label ctrlShow (_attention || {_over} || {_active});

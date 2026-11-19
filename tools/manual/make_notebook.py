@@ -4,8 +4,8 @@ the pages under it peeking out at the right and bottom, small square punched hol
 binding whose loops only just clear the top edge, round bottom corners. The ruled lines, the margin and every word are
 drawn in the game (fnc_open), so they sit on the text rows.
 
-    python tools/manual/make_notebook.py   -> tools/manual/out/notebook.png, flip.png, box.png, tick.png
-                                              and addons/workbench/ui/notebook_ca.paa, flip_co.paa, box_ca.paa, tick_ca.paa
+    python tools/manual/make_notebook.py   -> tools/manual/out/notebook.png, flip.png, box.png, tick.png, check.png
+                                              and addons/workbench/ui/notebook_ca.paa, flip_co.paa, box_ca.paa, tick_ca.paa, check_ca.paa
 
 The top page's place on the texture (fractions, used in fnc_open): left 0.012, top 0.03, right 0.975, bottom 0.975.
 The holes end at 0.06.
@@ -113,6 +113,15 @@ def boxes():
     return box, tick
 
 
+def check():
+    """The header's check mark: a clean tick, white, tinted in the game - drawn large and scaled down for smooth edges."""
+    big = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
+    ImageDraw.Draw(big).line([(52, 132), (106, 186), (206, 72)], fill=(255, 255, 255, 255), width=34, joint="curve")
+    for x, y in ((52, 132), (206, 72)):
+        ImageDraw.Draw(big).ellipse([x - 17, y - 17, x + 17, y + 17], fill=(255, 255, 255, 255))
+    return big.resize((64, 64), Image.LANCZOS)
+
+
 def export(img, name):
     png = OUT / f"{name}.png"
     img.save(png)
@@ -129,6 +138,7 @@ def main():
     box, tick = boxes()
     export(box, "box")
     export(tick, "tick")
+    export(check(), "check")
 
 
 if __name__ == "__main__":

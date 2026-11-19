@@ -42,7 +42,7 @@
 
 // Hotspots on the picture: how near the mouse has to be, their size.
 #define HOTSPOT_RADIUS (0.024 * safeZoneH)
-#define HOTSPOT_SIZE (0.03 * safeZoneH)
+#define HOTSPOT_SIZE (0.021 * safeZoneH)
 #define TEX_CIRCLE "\A3\ui_f\data\map\markers\military\circle_CA.paa"
 #define TEX_DOT "\A3\ui_f\data\map\markers\military\dot_CA.paa"
 #define TRACK_DOTS 10
