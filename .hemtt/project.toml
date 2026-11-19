@@ -22,6 +22,9 @@ workshop = [
     "450814997",  # CBA_A3
     "463939057",  # ACE3
     "3499977893", # Advanced Developer Tools
+    "843425103",  # RHSAFRF - weapons to test
+    "843577117",  # RHSUSAF
+    "843593391",  # RHSGREF
 ]
 
 # With the test mission in Eden: hemtt launch test
