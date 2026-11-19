@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.2.4
+## 0.2.5
 - Blind Tap-Rack moved to Alt + R (Ctrl + R is ACE's "Check ammo").
-- Server settings: "Tap-Rack clears every malfunction" (off: only a loose magazine, a dud and a stovepipe) and a Tap-Rack time per malfunction.
+- Server settings per malfunction: whether Tap-Rack clears it (default: feed, dud, stovepipe) and how long it takes.
+- Test key (Ctrl + Shift + J) and its setting removed; the field manual no longer mentions it.
 
 ## 0.2.0
 - Leaner: 9 settings instead of 30 and 3 keys instead of 8 (open, Tap-Rack, test). Malfunction weights, magazine and subsonic factors, quick key time and fumbles, minigames, diagnosis, notes and sounds are fixed now; with ACE Overheating this mod always decides.

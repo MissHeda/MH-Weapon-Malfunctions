@@ -7,14 +7,26 @@
         <Key ID="STR_mhwm_main_AI_Desc">
             <English>AI units clear their weapons by\nthemselves after a few seconds.</English>
         </Key>
-        <Key ID="STR_mhwm_main_BlindAll">
-            <English>Tap-Rack clears every malfunction</English>
+        <Key ID="STR_mhwm_main_BlindFix_Desc">
+            <English>On: Alt + R clears this malfunction\nblind - the whole drill, in the time\nset above.\n\nOff: Tap-Rack fails on it, the player\nhas to open the 3D view (Shift + R).</English>
         </Key>
-        <Key ID="STR_mhwm_main_BlindAll_Desc">
-            <English>Off: the blind Tap-Rack only clears a\nloose magazine, a dud and a stovepipe.\nThe rest needs the 3D view.\n\nOn: it clears every malfunction blind,\ntaking the times above.</English>
+        <Key ID="STR_mhwm_main_BlindFix_Double">
+            <English>Tap-Rack clears: double feed</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindFix_Dud">
+            <English>Tap-Rack clears: dud</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindFix_Extract">
+            <English>Tap-Rack clears: stuck case</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindFix_Feed">
+            <English>Tap-Rack clears: failure to feed</English>
+        </Key>
+        <Key ID="STR_mhwm_main_BlindFix_Stovepipe">
+            <English>Tap-Rack clears: stovepipe</English>
         </Key>
         <Key ID="STR_mhwm_main_BlindTime_Desc">
-            <English>Seconds the blind Tap-Rack takes for\nthis malfunction.\n\nA weak magazine is swapped too: it\ntakes twice the feed time.</English>
+            <English>Seconds the blind Tap-Rack takes for\nthis malfunction, when it may clear it.\n\nA weak magazine is swapped too: it\ntakes twice the feed time.</English>
         </Key>
         <Key ID="STR_mhwm_main_BlindTime_Double">
             <English>Tap-Rack time: double feed</English>
@@ -72,19 +84,6 @@
         </Key>
         <Key ID="STR_mhwm_main_SubsonicMags_Desc">
             <English>Subsonic rounds in a weapon made for\nfaster ones jam twice as often. They\nare found by themselves.\n\nAdd more magazine classes here,\nseparated by commas.\n\nWildcards work: *_SD_*, rhs_mag_9x39*</English>
-        </Key>
-        <Key ID="STR_mhwm_main_TestKey">
-            <English>Allow the test key for everyone</English>
-        </Key>
-        <Key ID="STR_mhwm_main_TestKey_Desc">
-            <English>The test key (Ctrl + Shift + J) makes
-the weapon in the hands malfunction at
-once, the next type each press.
-
-It always works in singleplayer, in the
-editor and for a logged-in admin.
-
-On: every player may use it.</English>
         </Key>
         <Key ID="STR_mhwm_main_WeaponRates">
             <English>Weapon reliability</English>

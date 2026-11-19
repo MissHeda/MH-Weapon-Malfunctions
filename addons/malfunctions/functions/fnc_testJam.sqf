@@ -1,10 +1,9 @@
 #include "..\script_component.hpp"
 /*
  * Author: Miss Heda
- * The test key: the weapon in the player's hands malfunctions at once, without shooting a magazine empty. Each press
- * takes the next of the five causes in turn (feed, dud, stovepipe, double feed, extraction), a malfunction there is now
- * is cleared first. Works in singleplayer and the editor's preview, for a logged-in admin, or for everyone when the
- * server allows it ("Allow the test key").
+ * For testing only, no key and no setting (Mia: it has no place in a release): the weapon in the player's hands
+ * malfunctions at once, the next of the five causes each call, a malfunction there is now cleared first. Called by the
+ * test missions or from the debug console; singleplayer, the editor's preview or a logged-in admin.
  *
  * Arguments:
  * None
@@ -24,12 +23,9 @@ private _weapon = currentWeapon _unit;
 if (!EGVAR(main,enabled) || {!alive _unit} || {!isNull objectParent _unit}) exitWith {false};
 if !(_weapon in [primaryWeapon _unit, handgunWeapon _unit] && {_weapon isNotEqualTo ""}) exitWith {false};
 
-private _allowed = !isMultiplayer || {is3DENPreview} || {serverCommandAvailable "#kick"} || {EGVAR(main,testKey)};
+private _allowed = !isMultiplayer || {is3DENPreview} || {serverCommandAvailable "#kick"};
 
-if (!_allowed) exitWith {
-    [LLSTRING(Test_NotAllowed)] call CBA_fnc_notify;
-    true
-};
+if (!_allowed) exitWith {false};
 
 private _index = (missionNamespace getVariable [QGVAR(testIndex), -1]) + 1;
 private _cause = CAUSES select (_index % count CAUSES);

@@ -167,7 +167,7 @@ MHWMT_entries = [
         } forEach MHWMT_entries;
     };
 
-    "Mouse wheel or ACE Self-Interaction > MHWM Test. Ctrl+Shift+J jams the weapon too." call MHWMT_say;
+    "Mouse wheel or ACE Self-Interaction > MHWM Test." call MHWMT_say;
 
     // Clipboard remote control for the unattended runs.
     private _last = "";

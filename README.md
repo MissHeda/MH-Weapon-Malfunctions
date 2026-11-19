@@ -32,12 +32,11 @@ Without Picture-in-Picture: buttons instead.
 | Key | |
 |---|---|
 | Shift + R | Open the 3D view |
-| Alt + R | Blind Tap-Rack: clears a loose magazine, a dud and a stovepipe - or, with the server setting, every malfunction (time per malfunction set by the server). Not Ctrl + R: that is ACE's "Check ammo" |
-| Ctrl + Shift + J | Test: malfunction now, the next type each press (singleplayer, editor, admins, or everyone with the server setting) |
+| Alt + R | Blind Tap-Rack: the server sets for each malfunction whether it clears it and how long it takes (default: feed, dud, stovepipe). Not Ctrl + R: that is ACE's "Check ammo" |
 
 ## Settings
 
-Enable, malfunctions per 1000 rounds, heat factor (ACE), handguns, AI, weapon reliability, more subsonic magazines, allow the blind Tap-Rack, Tap-Rack clears every malfunction, Tap-Rack time per malfunction, test key for everyone.
+Enable, malfunctions per 1000 rounds, heat factor (ACE), handguns, AI, weapon reliability, more subsonic magazines, allow the blind Tap-Rack, per malfunction: Tap-Rack clears it, Tap-Rack time.
 
 ## ACE
 

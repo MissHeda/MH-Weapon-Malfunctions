@@ -364,7 +364,7 @@ def build():
 
     # The strip at the bottom.
     d.line([640, H - 54, W - 40, H - 54], fill=INK, width=3)
-    d.text((640, H - 46), "MH WEAPON MALFUNCTIONS  //  FIELD NOTES  //  TEST A JAM ANY TIME: CTRL + SHIFT + J", font=small, fill=INK)
+    d.text((640, H - 46), "MH WEAPON MALFUNCTIONS  //  FIELD NOTES", font=small, fill=INK)
 
     page = roughen(page)
     return page

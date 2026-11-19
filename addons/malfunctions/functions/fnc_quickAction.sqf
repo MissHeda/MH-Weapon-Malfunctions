@@ -5,10 +5,10 @@
  * (main_blindTime_<cause>); the weapon's reload gesture plays for the bigger movements and what the hand felt shows as a
  * note (CBA's notification).
  *
- * By default it is the immediate action drill only - tap, (wait out a dud,) rack: it clears a loose magazine, a dud and a
- * stovepipe, and fails on the rest with a note of what the hands felt. With the server's "Tap-Rack clears every
- * malfunction" it plays the whole remedy of the workbench's notebook (workbench_fnc_steps) blind instead - a double feed
- * or a stuck case too, only slower (Mia).
+ * The server says, for each malfunction, whether Tap-Rack clears it (main_blindFix_<cause>, Mia). If it does, the key
+ * plays the whole remedy of the workbench's notebook (workbench_fnc_steps) blind - a double feed or a stuck case too,
+ * only slower. If not, it is the plain drill - tap, (wait out a dud,) rack - and fails with a note of what the hands felt:
+ * that one needs the 3D view.
  *
  * Arguments:
  * 0: Action <STRING> - "tapRack"
@@ -40,7 +40,10 @@ private _base = createHashMapFromArray [
     [ACT_INSERT, 1.4], [ACT_CLEAR, 2.5], [ACT_SWEEP, 1]
 ];
 
-private _acts = if (EGVAR(main,blindAll)) then {
+private _cause = _state getOrDefault ["cause", CAUSE_FEED];
+private _fixes = missionNamespace getVariable [format ["mhwm_main_blindFix_%1", _cause], false];
+
+private _acts = if (_fixes) then {
     // The notebook's steps, as hand movements: a pulled round of a double feed is one clearing each.
     private _map = createHashMapFromArray [
         ["wait", ACT_WAIT], ["tap", ACT_TAP], ["rack", ACT_RACK], ["lock", ACT_LOCK], ["release", ACT_RELEASE],
@@ -55,10 +58,9 @@ private _acts = if (EGVAR(main,blindAll)) then {
 if (_acts isEqualTo []) exitWith {false};
 
 // The server's time for this malfunction; a weak magazine is swapped as well, so it takes twice the feed time.
-private _cause = _state getOrDefault ["cause", CAUSE_FEED];
 private _total = missionNamespace getVariable [format ["mhwm_main_blindTime_%1", _cause], 2];
 
-if (_cause == CAUSE_FEED && {_state getOrDefault ["weakMag", false]} && {EGVAR(main,blindAll)}) then {_total = _total * 2};
+if (_cause == CAUSE_FEED && {_state getOrDefault ["weakMag", false]} && {_fixes}) then {_total = _total * 2};
 
 private _sum = 0;
 {_sum = _sum + (_base getOrDefault [_x, 1])} forEach _acts;
@@ -75,7 +77,7 @@ if (_gesture isNotEqualTo "" && {_acts findIf {_x in [ACT_RACK, ACT_LOCK, ACT_IN
 
 // One step after the other; the next waits for the one before.
 private _fnc_step = {
-    params ["_unit", "_weapon", "_steps", "_fnc_step"];
+    params ["_unit", "_weapon", "_steps", "_fnc_step", "_fixes"];
 
     if (_steps isEqualTo [] || {!alive _unit} || {currentWeapon _unit != _weapon}) exitWith {
         _unit setVariable [QGVAR(busy), false];
@@ -84,7 +86,7 @@ private _fnc_step = {
     (_steps deleteAt 0) params ["_act", "_seconds", "_fumbled"];
 
     [{
-        params ["_unit", "_weapon", "_steps", "_fnc_step", "_act", "_fumbled"];
+        params ["_unit", "_weapon", "_steps", "_fnc_step", "_act", "_fumbled", "_fixes"];
 
         if (!alive _unit || {currentWeapon _unit != _weapon}) exitWith {
             _unit setVariable [QGVAR(busy), false];
@@ -113,14 +115,14 @@ private _fnc_step = {
         };
 
         // Along the whole remedy only the last note counts - a note for every step was a flood.
-        if (_note isNotEqualTo "" && {EGVAR(main,notify)} && {!EGVAR(main,blindAll) || {_steps isEqualTo []}}) then {
+        if (_note isNotEqualTo "" && {EGVAR(main,notify)} && {!_fixes || {_steps isEqualTo []}}) then {
             [localize format ["STR_mhwm_malfunctions_%1", _note]] call CBA_fnc_notify;
         };
 
-        [_unit, _weapon, _steps, _fnc_step] call _fnc_step;
-    }, [_unit, _weapon, _steps, _fnc_step, _act, _fumbled], _seconds] call CBA_fnc_waitAndExecute;
+        [_unit, _weapon, _steps, _fnc_step, _fixes] call _fnc_step;
+    }, [_unit, _weapon, _steps, _fnc_step, _act, _fumbled, _fixes], _seconds] call CBA_fnc_waitAndExecute;
 };
 
-[_unit, _weapon, _steps, _fnc_step] call _fnc_step;
+[_unit, _weapon, _steps, _fnc_step, _fixes] call _fnc_step;
 
 true

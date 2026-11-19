@@ -34,8 +34,12 @@ _cat = [CBA_SETTINGS_CAT, LLSTRING(Cat_Clearing)];
 
 // Switches
 [QGVAR(quickKeys), "CHECKBOX", [LSTRING(QuickKeys), LSTRING(QuickKeys_Desc)], _cat, true, 1] call CBA_fnc_addSetting;
-[QGVAR(blindAll), "CHECKBOX", [LSTRING(BlindAll), LSTRING(BlindAll_Desc)], _cat, false, 1] call CBA_fnc_addSetting;
-[QGVAR(testKey), "CHECKBOX", [LSTRING(TestKey), LSTRING(TestKey_Desc)], _cat, false, 1] call CBA_fnc_addSetting;
+// What the blind Tap-Rack clears, each malfunction on its own (Mia): on, it plays the whole remedy blind in its time.
+[QGVAR(blindFix_feed), "CHECKBOX", [LSTRING(BlindFix_Feed), LSTRING(BlindFix_Desc)], _cat, true, 1] call CBA_fnc_addSetting;
+[QGVAR(blindFix_dud), "CHECKBOX", [LSTRING(BlindFix_Dud), LSTRING(BlindFix_Desc)], _cat, true, 1] call CBA_fnc_addSetting;
+[QGVAR(blindFix_stovepipe), "CHECKBOX", [LSTRING(BlindFix_Stovepipe), LSTRING(BlindFix_Desc)], _cat, true, 1] call CBA_fnc_addSetting;
+[QGVAR(blindFix_double), "CHECKBOX", [LSTRING(BlindFix_Double), LSTRING(BlindFix_Desc)], _cat, false, 1] call CBA_fnc_addSetting;
+[QGVAR(blindFix_extract), "CHECKBOX", [LSTRING(BlindFix_Extract), LSTRING(BlindFix_Desc)], _cat, false, 1] call CBA_fnc_addSetting;
 
 // ----- Fixed -----
 // Subsonic rounds in a weapon made for faster ones jam twice as often; drums and casket magazines (60+, no belts) 1.5x.
