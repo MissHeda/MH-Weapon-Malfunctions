@@ -4,6 +4,7 @@ PREP(camera);
 PREP(close);
 PREP(hotspots);
 PREP(manual);
+PREP(modelBox);
 PREP(onFrame);
 PREP(onMouse);
 PREP(open);

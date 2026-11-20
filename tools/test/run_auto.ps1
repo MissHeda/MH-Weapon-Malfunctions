@@ -20,7 +20,8 @@ $ErrorActionPreference = "Stop"
 $Workshop = @($Workshop | ForEach-Object { $_ -split "," } | Where-Object { $_ })
 $repo = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $arma = "C:\SteamLibrary\steamapps\common\Arma 3"
-$workshop = "C:\SteamLibrary\steamapps\workshop\content\107410"
+# Not $workshop: PowerShell names ignore case, it overwrote the -Workshop list.
+$wsRoot = "C:\SteamLibrary\steamapps\workshop\content\107410"
 New-Item -ItemType Directory -Force $OutDir | Out-Null
 
 if (-not $NoBuild) {
@@ -50,7 +51,7 @@ Add-Type -AssemblyName System.Drawing
 
 $rptDir = Join-Path $env:LOCALAPPDATA "Arma 3"
 $started = Get-Date
-$mods = @("$workshop\450814997", "$workshop\463939057") + @($Workshop | ForEach-Object { "$workshop\$_" }) + @((Join-Path $repo ".hemttout\dev")) | ForEach-Object { "-mod=`"$_`"" }
+$mods = @("$wsRoot\450814997", "$wsRoot\463939057") + @($Workshop | ForEach-Object { "$wsRoot\$_" }) + @((Join-Path $repo ".hemttout\dev")) | ForEach-Object { "-mod=`"$_`"" }
 $display = if ($FullScreen) { @() } else { @("-window", "-x=$WinW", "-y=$WinH") }
 $armaArgs = $mods + $display + @("-noPause", "-skipIntro", "-noSplash", "-filePatching", "-showScriptErrors", "-name=$Profile",
     "`"-init=playMission['','\z\mhwm\missions\$Mission.VR']`"")

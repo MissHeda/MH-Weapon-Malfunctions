@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.13
+- Mod and DLC weapons in the 3D view: framed by the model's real shape (as AIO does), not its proxy-blown box - the DMR-03's and LMG-03's magazine mark lay 1.9 m under the weapon.
+- Magazine slots found in any case and in the first LOD that has them (MCC's weapons); rifles without a magazine slot get the magazine model in the well.
+- Pistol magazine mark at the grip's base.
+
 ## 0.2.9
 - Tap-Rack on Ctrl + R; while the weapon is jammed it takes over ACE's Check ammo (its hint is held back). The 3D view: Ctrl + Shift + R.
 - One label at a time in the 3D view.

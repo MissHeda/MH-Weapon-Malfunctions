@@ -81,7 +81,8 @@ if (!isNull _magObject) then {
     };
 
     [_magObject, _at, _points get "magDir", _points get "magUp"] call _fnc_place;
-    _magObject hideObject false;
+    // Without a magazine proxy our model would hang off a guessed place: the weapon's own magazine shows instead.
+    _magObject hideObject !(_points getOrDefault ["magProxy", true]);
 };
 
 // A magazine built into the model: hidden while it is out.

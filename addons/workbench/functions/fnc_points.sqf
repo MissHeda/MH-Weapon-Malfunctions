@@ -72,37 +72,67 @@ private _up = [0, 0, 1];
 private _right = vectorNormalized (_fwd vectorCrossProduct _up);
 _up = vectorNormalized (_right vectorCrossProduct _fwd);
 
-private _names = if (isNull _object) then {[]} else {(selectionNames _object) apply {toLowerANSI _x}};
+// The model's selections as it names them - matched in lower case, but asked for in its own: MCC's magazine slot was not
+// found by a lower-case name (0.2.12). With the first visual LOD the engine finds proxies in by its resolution, as AIO
+// does: not every model has them in LOD 0 (the DMR-03).
+private _original = [];
+private _proxyLod = 0;
+
+if (!isNull _object) then {
+    _original = selectionNames _object;
+
+    {
+        _x params ["", "", ["_resolution", -1]];
+
+        if (_resolution >= 0.5 && {_resolution < 900}) then {
+            private _inLod = _object selectionNames _resolution;
+
+            if (_inLod findIf {"proxy:" in toLowerANSI _x} >= 0) exitWith {
+                _proxyLod = _resolution;
+                {_original pushBackUnique _x} forEach _inLod;
+            };
+        };
+    } forEach (allLODs _object);
+};
+
+private _names = _original apply {toLowerANSI _x};
+private _fnc_real = {_original param [_names find _this, _this]};
 
 // The muzzle flash is part of the model: hidden (the first test showed it burning in front of the barrel).
 {
-    _object hideSelection [_x, true];
+    _object hideSelection [_x call _fnc_real, true];
 } forEach (_names select {!("proxy:" in _x) && {"zasleh" in _x || {"flash" in _x}}});
 
 // The magazine: its proxy, else a selection of its own.
+// Named for a magazine in most models; some only say "mag" (proxy:...\mag_..., ...\mag.001).
 private _magProxy = _names param [_names findIf {"proxy:" in _x && {"magazine" in _x}}, ""];
+
+if (_magProxy isEqualTo "") then {
+    _magProxy = _names param [_names findIf {"proxy:" in _x && {"\mag" in _x || {"_mag" in _x}} && {!("weapon_slots" in _x)}}, ""];
+};
 private _mag = [];
 private _magDir = _fwd;
 private _magUp = _up;
 
 if (_magProxy isNotEqualTo "") then {
     {
-        private _at = _object selectionPosition [_magProxy, _x];
+        private _at = _object selectionPosition [_magProxy call _fnc_real, _x];
 
         if (_at isNotEqualTo [0, 0, 0]) exitWith {
             _mag = _at;
             // Only now, with the LOD loaded: selectionVectorDirAndUp on an unloaded LOD crashes the game (AIO 0.7.10).
-            (_object selectionVectorDirAndUp [_magProxy, _x]) params [["_d", _fwd], ["_u", _up]];
+            (_object selectionVectorDirAndUp [_magProxy call _fnc_real, _x]) params [["_d", _fwd], ["_u", _up]];
             _magDir = _d;
             _magUp = _u;
         };
-    } forEach [0, 1];
+    } forEach ([_proxyLod, 0, 1] arrayIntersect [_proxyLod, 0, 1]);
 };
 
+private _magFromProxy = _mag isNotEqualTo [];
 private _magSelections = _names select {!("proxy:" in _x) && {"magazine" in _x || {_x in ["mag", "zasobnik"]}}};
 
 if (_mag isEqualTo [] && {_magSelections isNotEqualTo []}) then {
-    private _at = _object selectionPosition [_magSelections select 0, 0];
+    private _at = _object selectionPosition [(_magSelections select 0) call _fnc_real, 0];
 
     if (_at isNotEqualTo [0, 0, 0]) then {_mag = _at};
 };
@@ -111,8 +141,8 @@ if (_mag isEqualTo [] && {_magSelections isNotEqualTo []}) then {
 // magazine and plate) - the real magazine is our own object (fnc_scene). Hidden only after the magazine is found: a
 // hidden proxy has no position, and its mark fell back into the trigger guard (Mia, P07).
 {
-    _object hideSelection [_x, true];
-} forEach (_names select {"proxy:" in _x && {"weapon_slots" in _x || {"slot" in _x} || {"magazine" in _x}}});
+    _object hideSelection [_x call _fnc_real, true];
+} forEach (_names select {"proxy:" in _x && {"weapon_slots" in _x || {"slot" in _x} || {"magazine" in _x} || {_x isEqualTo _magProxy}}});
 
 // No port: a little behind the middle of the barrel's breech end.
 if (_port isEqualTo []) then {
@@ -122,9 +152,16 @@ if (_port isEqualTo []) then {
 // No magazine proxy or selection (the P07): at the magazine's base, low in the grip. The grip slants back, so its base
 // lies a few centimetres behind the chamber (the breech) - under the port it sat in front of the grip (Mia).
 if (_mag isEqualTo []) then {
-    private _low = if (isNull _object) then {(_port select 2) - 0.08} else {((0 boundingBoxReal _object) select 0) select 2};
+    private _low = if (isNull _object) then {(_port select 2) - 0.08} else {(([_object] call FUNC(modelBox)) select 0) select 2};
     _mag = if (_breech isNotEqualTo []) then {_breech vectorAdd (_fwd vectorMultiply -0.035)} else {_port vectorAdd (_fwd vectorMultiply -0.05)};
     _mag set [2, _low + 0.02];
+};
+
+// A rifle without a magazine proxy (the DMR-03 has only a "magazine" selection and shows none as a simple object): our own magazine model in
+// the well - its origin is its top, as a proxy would set it, just under the receiver. A handgun keeps its own.
+if (!_magFromProxy && {getNumber (_config >> "type") != 2}) then {
+    _mag = [_mag select 0, _mag select 1, (_port select 2) - 0.04];
+    _magFromProxy = true;
 };
 
 private _down = _mag vectorDiff _port;
@@ -140,7 +177,7 @@ private _handleName = _names param [_names findIf {
 private _handle = [];
 
 if (_handleName isNotEqualTo "") then {
-    private _at = _object selectionPosition [_handleName, 0];
+    private _at = _object selectionPosition [_handleName call _fnc_real, 0];
 
     if (_at isNotEqualTo [0, 0, 0]) then {_handle = _at};
 };
@@ -168,10 +205,12 @@ _points set ["boltAnims", _anims select {
     !("mag" in _name) && {["bolt", "charging", "handle", "slide", "cocking", "zaver", "carrier"] findIf {_x in _name} >= 0}
 }];
 
-_points set ["magSelections", _magSelections];
+_points set ["magSelections", _magSelections apply {_x call _fnc_real}];
 _points set ["muzzle", [_muzzle, _port vectorAdd (_fwd vectorMultiply 0.4)] select (_muzzle isEqualTo [])];
 _points set ["port", _port];
 _points set ["mag", _mag];
+// Only a proxy's place fits our own magazine model; a guessed place has it hanging under the weapon (the DMR-03).
+_points set ["magProxy", _magFromProxy];
 _points set ["magDir", _magDir];
 _points set ["magUp", _magUp];
 _points set ["handle", _handle];
@@ -180,8 +219,8 @@ _points set ["up", _up];
 _points set ["right", _right];
 _points set ["down", _down];
 
-// The frame: the visual box, which proxies blow up - so held to what the points say the weapon is.
-private _box = if (isNull _object) then {[[-0.4, -0.4, -0.15], [0.4, 0.4, 0.15], 0.5]} else {0 boundingBoxReal _object};
+// The frame: the model's box without its proxies' far corners (fnc_modelBox, as AIO) - still held to what the points say.
+private _box = if (isNull _object) then {[[-0.4, -0.4, -0.15], [0.4, 0.4, 0.15]]} else {[_object] call FUNC(modelBox)};
 
 _box params ["_min", "_max"];
 
