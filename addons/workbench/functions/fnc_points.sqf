@@ -264,9 +264,7 @@ _scene set ["dist", _dist];
 // From the weapon's right side, where the ejection port mostly is (compass bearing of "right").
 _scene set ["az", (_right select 0) atan2 (_right select 1)];
 _scene set ["near", _dist * 0.3];
-// Not farther out than 1.6 times: beyond that the marks slid off the picture on some setups (Mia, AK-74M) - not
-// reproduced in test, the zoom is held where it was still right.
-_scene set ["far", _dist * 1.6];
+_scene set ["far", _dist * 2.5];
 _scene set ["home", [_scene get "az", _scene get "pitch", _dist]];
 
 call FUNC(camera);

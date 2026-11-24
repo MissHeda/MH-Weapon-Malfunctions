@@ -31,6 +31,13 @@ private _kind = _drag getOrDefault ["kind", ""];
 private _mouse = MOUSE_POS;
 private _theme = GVAR(wb) get "theme";
 
+// The picture's group never scrolls (fnc_open).
+private _viewGroup = _ctrls getOrDefault ["view", controlNull];
+
+if (!isNull _viewGroup && {ctrlScrollValues _viewGroup isNotEqualTo (GVAR(wb) get "viewScroll")}) then {
+    _viewGroup ctrlSetScrollValues (GVAR(wb) get "viewScroll");
+};
+
 if ("weapon" in _scene && {!("points" in _scene)}) then {
     call FUNC(points);
 };

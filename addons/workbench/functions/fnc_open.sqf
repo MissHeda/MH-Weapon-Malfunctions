@@ -177,6 +177,11 @@ _picture ctrlSetText SCENE_TEXTURE;
 GVAR(wb) set ["viewRect", [_vx, _vy, _vw, _vh]];
 GVAR(wb) set ["picRect", [_vx + _picX, _vy + _picY, _picW, _picH]];
 
+// The group holds a picture taller than itself, so the real mouse wheel scrolled it: the picture slid up under its marks
+// as the player zoomed (Mia; a test calling the zoom directly never scrolled). Held where it starts (fnc_onFrame).
+_ctrls set ["view", _view];
+GVAR(wb) set ["viewScroll", ctrlScrollValues _view];
+
 // The sight's corner brackets, in the accent.
 private _arm = 0.035 * safeZoneH;
 private _armW = _arm * pixelW / pixelH;
