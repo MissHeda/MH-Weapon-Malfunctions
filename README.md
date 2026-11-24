@@ -8,20 +8,22 @@ A rebuild from scratch of the idea behind *dzn Extended Jamming* by 10Dozen.
 
 | Malfunction | What is seen | Drill |
 |---|---|---|
-| Failure to feed | Bolt closed, chamber empty, magazine often not seated | Tap, rack |
-| Dud | Hammer falls, round does not fire | Rack |
-| Stovepipe | Spent case caught in the ejection port | Rack, or sweep the case out |
-| Double feed | Two rounds wedged in the chamber | Lock bolt, drop magazine, clear chamber, insert, release |
-| Failure to extract | Spent case stuck in the chamber | Lock bolt, drop magazine, pry case out, insert, release |
+| Failure to feed, loose magazine | Bolt closed, chamber empty, magazine not seated | Tap, rack |
+| Failure to feed, weak magazine | Magazine seated but not feeding | Drop, insert a new one, rack |
+| Dud | Hammer falls, round does not fire | Wait out a possible hangfire, rack |
+| Stovepipe | Spent case caught in the ejection port | Sweep the case out |
+| Double feed | Two rounds wedged in the receiver | Lock bolt, drop magazine, pull both rounds out, insert, release |
+| Failure to extract | Spent case stuck in the chamber | Lock bolt, drop magazine, work the case loose, insert, release |
 
 ## 3D view (Ctrl + Shift + R, ACE self-interaction or action menu)
 
 | Part | Mouse |
 |---|---|
-| Charging handle | Drag back fully and let go: rack. Part way: short stroke. Right click at the end: lock open. Click when locked: release |
-| Magazine | Click on the ring's beat: tap. Drag down: drop. Drag up straight: insert (off the line: not seated) |
+| Charging handle / slide | Drag back fully and let go: rack. Part way: short stroke. Hold at the rear until the bar is full: lock open. Click when locked: release |
+| Magazine | Click: tap. Drag down: drop. Drag up straight: insert (off the line: not seated) |
+| Muzzle (dud) | Hold until the bar is full: wait out a hangfire |
 | Ejection port | Swipe out: sweep a stovepipe |
-| Chamber (bolt locked) | Hold and wiggle: clear |
+| Chamber (bolt locked) | Hold and wiggle: work a stuck case loose. Drag up: pull a double-fed round out |
 
 Right drag turns the weapon, holding the middle button moves it, the wheel zooms. The side panel is a field notebook: one page per step, the whole sequence as a checklist. "Field manual" in the header shows every minigame on one page (built by `tools/manual/make_manual.py --paa` from the game's renders, `tools/test/run_auto.ps1 -Mission MHWM_Render`).
 
@@ -38,7 +40,7 @@ Ctrl + R is ACE's Check ammo too: while the weapon is jammed the mod holds ACE's
 
 ## Settings
 
-Enable, malfunctions per 1000 rounds, heat factor (ACE), handguns, AI, weapon reliability, more subsonic magazines, allow the blind Tap-Rack, per malfunction: Tap-Rack clears it, Tap-Rack time. Each player: field notebook (off: gone; on: the check box under the view, remembered), show the field manual.
+Enable, malfunctions per 1000 rounds, heat factor (ACE), handguns, AI, weapon reliability, more subsonic magazines, allow the blind Tap-Rack, per malfunction: Tap-Rack clears it, Tap-Rack time. Each player: show the field notebook (check box in the 3D view, remembered), show the field manual, show the malfunction notice.
 
 ## ACE
 
@@ -47,6 +49,10 @@ With ACE Overheating loaded this mod decides when a weapon jams; ACE's own jams 
 ## Weapon configs
 
 `mhwm_reliability` in a weapon's CfgWeapons class multiplies the rate (0 = never jams). The server's "Weapon reliability" list overrides it.
+
+## Credits
+
+The idea of *dzn Extended Jamming* by 10Dozen - none of its files are used. Magazine sounds from BigSoundBank (CC0), bolt sounds are Arma's own.
 
 ## Development
 
