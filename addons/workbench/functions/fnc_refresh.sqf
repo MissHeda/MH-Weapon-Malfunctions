@@ -101,10 +101,17 @@ if (_final) then {
     private _benchKey = format ["STR_mhwm_workbench_Spot_Do_%1", _step];
 
     _pic ctrlSetText format [QPATHTOF(ui\step_%1_co.paa), _pictures get _step];
-    (_ctrls get "nowTitle") ctrlSetStructuredText parseText format [
-        "<t font='%1' size='1.05' color='%2'>%3. %4</t>%5",
-        _theme get "fontBold", _tone call _hex, _shown + 1, toUpperANSI (_step call _fnc_title), _note
-    ];
+    // Smaller until it fits on its line: "Remove the double feed" broke onto a second one and was cut (shots for 1.0.0).
+    private _titleCtrl = _ctrls get "nowTitle";
+    private _lineH = (ctrlPosition _titleCtrl) select 3;
+    {
+        _titleCtrl ctrlSetStructuredText parseText format [
+            "<t font='%1' size='%6' color='%2'>%3. %4</t>%5",
+            _theme get "fontBold", _tone call _hex, _shown + 1, toUpperANSI (_step call _fnc_title), _note, _x
+        ];
+        _titleCtrl ctrlCommit 0;
+        if (ctrlTextHeight _titleCtrl <= _lineH * 1.3) exitWith {};
+    } forEach [1.05, 0.92, 0.8, 0.7];
     (_ctrls get "now") ctrlSetStructuredText parseText format [
         "<t size='0.88' color='%1'>%2</t>", "pen" call _hex, localize format ["STR_mhwm_workbench_Step_%1_How", _step]
     ];

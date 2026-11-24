@@ -104,6 +104,12 @@ while ((Get-Date) -lt $deadline -and -not $proc.HasExited) {
     for ($i = 0; $i -lt $new.Count; $i++) {
         $line = $new[$i]
         if ($line -match "MHWMTEST SHOT (\S+)") { Save-Shot $Matches[1] }
+        # A burst for a GIF: "MHWMTEST BURST <name> <frames>" - as fast as PrintWindow goes, numbered frames.
+        elseif ($line -match "MHWMTEST BURST (\S+) (\d+)") {
+            $bn = $Matches[1]; $bc = [int]$Matches[2]
+            for ($f = 0; $f -lt $bc; $f++) { Save-Shot ("{0}_{1:D3}" -f $bn, $f) | Out-Null; Start-Sleep -Milliseconds 40 }
+            "  BURST $bn $bc"
+        }
         elseif ($line -match "MHWMTEST") { $line -replace "^.*MHWMTEST ", "" ; if ($line -match "MHWMTEST DONE") { $done = $true } }
         elseif ($line -match "Error|error in expression|Undefined variable|Bad conversion|Missing ;|Type .*, expected") {
             "RPT: $line"
