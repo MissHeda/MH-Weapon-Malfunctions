@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0
+First public release.
+- Five real malfunctions: failure to feed (loose or weak magazine), dud with possible hangfire, stovepipe, double feed, stuck case.
+- 3D view (Ctrl + Shift + R): turn, move and zoom the weapon and clear it by hand - each malfunction with its own movements.
+- Field notebook beside it: the drill step by step, a page per step, the sequence as a checklist. Field manual page with every minigame.
+- Blind Tap-Rack on Ctrl + R; the server sets per malfunction whether it clears it and how long it takes.
+- Works with mod and DLC weapons (RHS, MCC tested), ACE Overheating and without ACE. AI clears its own weapons.
+- Mouse wheel no longer scrolls the 3D view's picture under its marks (0.2.16); belt-fed weapons keep their own box (0.2.14).
+
 ## 0.2.13
 - Mod and DLC weapons in the 3D view: framed by the model's real shape (as AIO does), not its proxy-blown box - the DMR-03's and LMG-03's magazine mark lay 1.9 m under the weapon.
 - Magazine slots found in any case and in the first LOD that has them (MCC's weapons); rifles without a magazine slot get the magazine model in the well.
