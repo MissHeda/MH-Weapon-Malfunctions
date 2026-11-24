@@ -158,8 +158,13 @@ if (_mag isEqualTo []) then {
 };
 
 // A rifle without a magazine proxy (the DMR-03 has only a "magazine" selection and shows none as a simple object): our own magazine model in
-// the well - its origin is its top, as a proxy would set it, just under the receiver. A handgun keeps its own.
-if (!_magFromProxy && {getNumber (_config >> "type") != 2}) then {
+// the well - its origin is its top, as a proxy would set it, just under the receiver. A handgun keeps its own, and so does a
+// belt-fed weapon: its box is in its model, and RHS's PKP got an orange stand-in magazine under it (Mia).
+private _magClass = ((GVAR(wb) get "unit") weaponState _weapon) param [3, ""];
+private _magConfig = configFile >> "CfgMagazines" >> _magClass;
+private _belt = getNumber (_magConfig >> "count") > 60 || {getNumber (_magConfig >> "ACE_isBelt") == 1} || {"belt" in toLowerANSI _magClass};
+
+if (!_magFromProxy && {getNumber (_config >> "type") != 2} && {!_belt}) then {
     _mag = [_mag select 0, _mag select 1, (_port select 2) - 0.04];
     _magFromProxy = true;
 };
