@@ -56,6 +56,8 @@ MHWMT_drag = {
         [], "H_HelmetB", "", [], ["ItemMap", "", "ItemRadio", "ItemCompass", "ItemWatch", ""]
     ];
     profileNamespace setVariable ["mhwm_workbench_manualSeen", true];
+    // The brand's red as the UI accent for the pictures (the test profile's default is orange).
+    {profileNamespace setVariable [format ["GUI_BCG_RGB_%1", _x select 0], _x select 1]} forEach [["R", 0.878], ["G", 0.157], ["B", 0.247]];
     profileNamespace setVariable ["mhwm_workbench_notesHidden", false];
     sleep 2;
 
