@@ -123,7 +123,8 @@ if ((_unit getVariable [QGVAR(blockUnit), objNull]) != _unit) then {
     _unit setVariable [QGVAR(blockUnit), _unit];
 };
 
-if (EGVAR(main,notify) && {_unit == PLAYER_UNIT}) then {
+// The notice with the keys: each player may switch it off (Mia).
+if (EGVAR(main,jamNotice) && {_unit == PLAYER_UNIT}) then {
     [
         [LLSTRING(Jammed), 1.2, COLOR_RED],
         [LLSTRING(Jammed_Hint)]

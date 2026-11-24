@@ -70,6 +70,12 @@
         <Key ID="STR_mhwm_main_HeatFactor_Desc">
             <English>With ACE Overheating loaded, a hot\nbarrel makes malfunctions likelier.\n\nAt 500 degrees the rate is multiplied\nby 1 + this.\n\n0 = heat does not matter.</English>
         </Key>
+        <Key ID="STR_mhwm_main_JamNotice">
+            <English>Show the malfunction notice</English>
+        </Key>
+        <Key ID="STR_mhwm_main_JamNotice_Desc">
+            <English>The note when the weapon jams, with\nthe keys to clear it.\n\nOff: no note, the weapon just stops.</English>
+        </Key>
         <Key ID="STR_mhwm_main_QuickKeys">
             <English>Allow the blind Tap-Rack</English>
         </Key>
@@ -89,7 +95,7 @@
             <English>The Field manual button in the 3D\nview's header, and the manual page\nthe first time the view opens.\n\nOff: neither.</English>
         </Key>
         <Key ID="STR_mhwm_main_ShowNotes">
-            <English>Field notebook</English>
+            <English>Show the field notebook</English>
         </Key>
         <Key ID="STR_mhwm_main_ShowNotes_Desc">
             <English>The notebook beside the 3D view: the\nsteps one page each, the checklist.\n\nOn: the Field notes check box under\nthe view shows or hides it, and is\nremembered.\n\nOff: no notebook and no check box.</English>

@@ -47,6 +47,7 @@ _cat = [CBA_SETTINGS_CAT, LLSTRING(Cat_Display)];
 // Switches
 [QGVAR(showNotes), "CHECKBOX", [LSTRING(ShowNotes), LSTRING(ShowNotes_Desc)], _cat, true, 0] call CBA_fnc_addSetting;
 [QGVAR(showManual), "CHECKBOX", [LSTRING(ShowManual), LSTRING(ShowManual_Desc)], _cat, true, 0] call CBA_fnc_addSetting;
+[QGVAR(jamNotice), "CHECKBOX", [LSTRING(JamNotice), LSTRING(JamNotice_Desc)], _cat, true, 0] call CBA_fnc_addSetting;
 
 // ----- Fixed -----
 // Subsonic rounds in a weapon made for faster ones jam twice as often; drums and casket magazines (60+, no belts) 1.5x.
