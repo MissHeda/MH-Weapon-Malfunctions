@@ -52,6 +52,9 @@
         <Key ID="STR_mhwm_main_Cat_Jamming">
             <English>Jamming</English>
         </Key>
+        <Key ID="STR_mhwm_main_Cat_Practice">
+            <English>Practice</English>
+        </Key>
         <Key ID="STR_mhwm_main_Enabled">
             <English>Enable MH Weapon Malfunctions</English>
         </Key>
@@ -105,6 +108,15 @@
         </Key>
         <Key ID="STR_mhwm_main_SubsonicMags_Desc">
             <English>Subsonic rounds in a weapon made for\nfaster ones jam twice as often. They\nare found by themselves.\n\nAdd more magazine classes here,\nseparated by commas.\n\nWildcards work: *_SD_*, rhs_mag_9x39*</English>
+        </Key>
+        <Key ID="STR_mhwm_main_TestCause">
+            <English>Practice key malfunction</English>
+        </Key>
+        <Key ID="STR_mhwm_main_TestCause_Desc">
+            <English>Which malfunction the practice key\nputs on your weapon.\n\nSet the key in CBA's keybinds (none\nby default).</English>
+        </Key>
+        <Key ID="STR_mhwm_main_TestCause_Random">
+            <English>Random</English>
         </Key>
         <Key ID="STR_mhwm_main_WeaponRates">
             <English>Weapon reliability</English>

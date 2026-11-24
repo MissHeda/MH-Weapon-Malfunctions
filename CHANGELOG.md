@@ -7,6 +7,7 @@ First public release.
 - Field notebook beside it: the drill step by step, a page per step, the sequence as a checklist. Field manual page with every minigame.
 - Blind Tap-Rack on Ctrl + R; the server sets per malfunction whether it clears it and how long it takes.
 - Works with mod and DLC weapons (RHS, MCC tested), ACE Overheating and without ACE. AI clears its own weapons.
+- Practice key (no key by default): jams your own weapon, the kind chosen in the settings or random.
 - Mouse wheel no longer scrolls the 3D view's picture under its marks (0.2.16); belt-fed weapons keep their own box (0.2.14).
 
 ## 0.2.13

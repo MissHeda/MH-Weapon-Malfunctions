@@ -139,6 +139,12 @@
         <Key ID="STR_mhwm_malfunctions_Jammed_Hint">
             <English>Ctrl + R: Tap-Rack. Ctrl + Shift + R: open the weapon.</English>
         </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Test">
+            <English>Practice: jam my weapon</English>
+        </Key>
+        <Key ID="STR_mhwm_malfunctions_Key_Test_Desc">
+            <English>Your weapon malfunctions at once - the kind set in the settings, or a random one.</English>
+        </Key>
         <Key ID="STR_mhwm_malfunctions_See_BoltClosed">
             <English>The bolt is closed.</English>
         </Key>
@@ -179,7 +185,7 @@
             <English>The weapon is ready.</English>
         </Key>
         <Key ID="STR_mhwm_malfunctions_Test_Title">
-            <English>Test malfunction</English>
+            <English>Practice malfunction</English>
         </Key>
     </Package>
 </Project>

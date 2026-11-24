@@ -23,14 +23,10 @@ private _weapon = currentWeapon _unit;
 if (!EGVAR(main,enabled) || {!alive _unit} || {!isNull objectParent _unit}) exitWith {false};
 if !(_weapon in [primaryWeapon _unit, handgunWeapon _unit] && {_weapon isNotEqualTo ""}) exitWith {false};
 
-private _allowed = !isMultiplayer || {is3DENPreview} || {serverCommandAvailable "#kick"};
+// The player's own choice (setting main_testCause), else a random one. Only the player's own weapon - no harm to others.
+private _cause = EGVAR(main,testCause);
 
-if (!_allowed) exitWith {false};
-
-private _index = (missionNamespace getVariable [QGVAR(testIndex), -1]) + 1;
-private _cause = CAUSES select (_index % count CAUSES);
-
-GVAR(testIndex) = _index;
+if !(_cause in CAUSES) then {_cause = selectRandom CAUSES};
 
 [_unit, _weapon, true] call FUNC(clear);
 [_unit, _weapon, _cause] call FUNC(jam);

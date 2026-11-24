@@ -49,6 +49,18 @@ _cat = [CBA_SETTINGS_CAT, LLSTRING(Cat_Display)];
 [QGVAR(showManual), "CHECKBOX", [LSTRING(ShowManual), LSTRING(ShowManual_Desc)], _cat, true, 0] call CBA_fnc_addSetting;
 [QGVAR(jamNotice), "CHECKBOX", [LSTRING(JamNotice), LSTRING(JamNotice_Desc)], _cat, true, 0] call CBA_fnc_addSetting;
 
+// ----- Practice (each player for themselves) -----
+_cat = [CBA_SETTINGS_CAT, LLSTRING(Cat_Practice)];
+
+// Lists
+[
+    QGVAR(testCause), "LIST", [LSTRING(TestCause), LSTRING(TestCause_Desc)], _cat,
+    [["random", "feed", "dud", "stovepipe", "double", "extract"], [
+        LSTRING(TestCause_Random), ELSTRING(malfunctions,Cause_Feed), ELSTRING(malfunctions,Cause_Dud),
+        ELSTRING(malfunctions,Cause_Stovepipe), ELSTRING(malfunctions,Cause_Double), ELSTRING(malfunctions,Cause_Extract)
+    ], 0], 0
+] call CBA_fnc_addSetting;
+
 // ----- Fixed -----
 // Subsonic rounds in a weapon made for faster ones jam twice as often; drums and casket magazines (60+, no belts) 1.5x.
 GVAR(subsonicFactor) = 2;
